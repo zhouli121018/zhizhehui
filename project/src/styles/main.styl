@@ -1,0 +1,106 @@
+for num in 1..300
+  .wid{num}
+    width: num * 1%
+  .br{num}
+    border-radius: num * 1px
+  .imgWid{num}
+    width: num * 1px
+  .imgHei{num}
+    height: num * 1px
+
+.text-center{
+  text-align center
+}
+
+.container {
+  position: relative;
+  padding: 0.1px;
+  font-size: 28px;
+  width: 100vw
+  height: 100vh
+  background: #fff
+  overflow-y: auto
+  overflow-x: hidden
+  -webkit-overflow-scrolling: touch
+}
+
+.grey_bar {
+  width: 100%;
+  padding: 7.5px 0;
+}
+
+.grey_line {
+  position: relative
+  display: block
+  width: calc(100% - 32px);
+  margin-left: 16px;
+  background: #e7e7e7;
+  height: 1px;
+}
+
+.grey_line:before, .grey_line:after {
+  content: ' '
+  position: absolute;
+  display: inline-block;
+  background: white;
+  width: 16px;
+  height: 1px;
+}
+
+.grey_line:before {
+  left: -16px;
+}
+
+.grey_line:after {
+  right: -16px;
+}
+
+.colorful_back {
+  background: linear-gradient(to right, #63bb54, #0099c2)
+}
+
+.arrow {
+  position: absolute
+  right: 10px;
+  top: calc(50% - 6px);
+  width: 8px;
+  height: 12px;
+}
+
+input {
+  background: rgba(0, 0, 0, 0)
+}
+
+button {
+  padding: 0;
+  border: none;
+}
+
+.disabled {
+  background: #999999 !important
+}
+
+.public_pop {
+  text-align: center
+  width: 250px;
+  font-size: 32px;
+  color: #333333;
+  border-radius: 10px
+}
+
+.public_pop .public_content {
+  border-bottom: 1px solid #cccccc;
+}
+
+.public_pop .public_footer {
+  display: flex;
+  justify-content: space-around
+  padding: 20px 0;
+  color: #3ab347;
+}
+
+  .bfff{
+    background: #fff
+  }
+
+
