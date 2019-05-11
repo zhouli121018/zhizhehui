@@ -8,8 +8,9 @@
             <van-field label="密码" maxlength="11" type="number" class="van_field" clearable v-model="code" placeholder="请输入密码" />
             <!-- <CutDown @click="codeVerify" :disabled="disabled" :moble="mobile"></CutDown> -->
         </div>
-        <router-link tag="div" to="/login/verification" class="red van_box_right">验证码登录</router-link>
-        <van-button type="danger" @click="loginbypass">登录</van-button>
+        <router-link tag="div" to="/login/verification" class="van_box_right">验证码登录</router-link>
+        <van-button  style="background:#FC7953;color:#fff"  @click="loginbypass">登录</van-button>
+        <router-link tag="div" to="/register/index" class="van_box_right">注册</router-link>
     </div>
 </template>
 
@@ -72,7 +73,7 @@ export default {
     text-align left
 button 
     width 90%
-    margin-top 1rem
+    margin-top .5rem
 .van_box
     border 1px solid #cccccc
     width 94%
@@ -85,4 +86,6 @@ button
     text-align right
     padding .3rem
     box-sizing border-box
+    color #14ADFF
+    padding-right .8rem
 </style>

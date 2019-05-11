@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <a href="http://freessq.com/h/pred.apk" download v-show="false" id="download_btn">1</a>
+    <a href="http://sscby.cn/zzh/pred.apk" download v-show="false" id="download_btn">1</a>
     <router-view v-if="!is_qqorwx"/>
     <div class="container" v-if="is_qqorwx" style="padding-top:0 !important;">
         <img src="./assets/jumpborwser.png" alt="" style="width:100%">

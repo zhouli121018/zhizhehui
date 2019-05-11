@@ -22,7 +22,7 @@
       },
       color: {
         type: String,
-        default: 'red'
+        default: '#01A8FF'
       },
       toStart: {
         type: Boolean,

@@ -14,7 +14,7 @@
         <div class="van_box">
             <van-field label="邀请码" maxlength="11" type="number" :disabled="has_pid" class="van_field_code" clearable v-model="pid" placeholder="输入邀请码双方可得4金币" />
         </div>
-        <van-button type="danger" @click="regist">注册</van-button>
+        <van-button style="background:#FC7953;color:#fff" @click="regist">注册</van-button>
     </div>
 </template>
 
@@ -40,11 +40,7 @@ export default {
     methods: {
         async codeVerify() {
             const { data } = await getvcode({
-                phone: this.phone,
-                // pass: this.password,
-                // vcode: this.vcode,
-                // icode: this.code,
-                // device: this.device
+                phone: this.phone
             })
             if(data.errorcode == 0){
                 this.$refs.codeEl.isStart = true;
@@ -138,7 +134,7 @@ export default {
     width 76%
 .van_field_code
     /deep/ .van-field__control::-webkit-input-placeholder {
-        color: orange
+        color: #FC8D6D
     }
 button 
     width 90%

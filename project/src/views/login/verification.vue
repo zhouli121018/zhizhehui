@@ -8,7 +8,7 @@
             <van-field label="验证码" maxlength="11" type="number" class="van_field" clearable v-model="code" placeholder="请输入验证码" />
             <CutDown ref="codeEl" @click="getvcode" :disabled="disabled" :mobile="mobile"></CutDown>
         </div>
-        <van-button type="danger" @click="loginbyvcode">登录</van-button>
+        <van-button style="background:#FC7953;color:#fff" @click="loginbyvcode">登录</van-button>
     </div>
 </template>
 

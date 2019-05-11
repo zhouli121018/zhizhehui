@@ -15,7 +15,7 @@
                     <p><span>粉丝: </span><span class="red">{{info.fans}}</span></p>
                 </div>
             </div>
-            <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通特权会员</van-button>
+            <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通会员</van-button>
         </div>
         <div class="my_title">
             <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
@@ -31,21 +31,14 @@
         </div>
         <div class="xian"></div>        
         <div>
-            <van-cell title="我的关注" is-link icon="shop" @click="jumpTo('/personal/myFocus')"/>
-            <van-cell title="我的查看" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
-            <!-- <van-cell title="我的消息" is-link icon="message" />  -->
-            <van-cell icon="message" is-link @click="jumpTo('/personal/message/index')">
-                <template slot="title">
-                    <span class="custom-text">我的消息</span>
-                    <van-tag type="danger" v-if="info && info.unread" style="background-color:#DB3030;margin-left:0.1rem;top:-0.18rem;position:relative;border-radius:0.6rem">{{info.unread}}</van-tag>
-                </template>
-            </van-cell>
-            
+            <van-cell title="我的推荐页" is-link icon="shop" @click="jumpTo('/personal/myFocus')"/>
+            <van-cell title="代理赚钱" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
+            <van-cell title="开奖提醒设置" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
+            <van-cell title="免费使用" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
         </div>
         <div class="xian"></div>
         <div>
-            <van-cell title="意见反馈" is-link icon="feedback" @click="jumpTo('/home/feedback')"/>
-            <van-cell title="关于彩票选号助手" is-link  icon="about" @click="goAbout"/>
+            <van-cell title="关于智者汇" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
         </div>
     </div>
 </template>
@@ -157,7 +150,7 @@ export default {
         margin 0 .4rem
 .orange_btn
     border-radius .6rem
-    background orange
+    background #FFC131
     color #ffffff
     height 1rem
     line-height 1rem
