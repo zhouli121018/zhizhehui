@@ -27,6 +27,57 @@ export default [
                     cache: true
                 }
             },
+            {//开通会员
+                path: 'openingMember',
+                name: 'openingMember',
+                component: _import('home/openingMember'),
+                meta: {
+                    title: '开通会员',
+                    cache: true
+                }
+            },
+            {//方案列表
+                path: 'planList',
+                name: 'planList',
+                component: _import('home/planList'),
+                meta: {
+                    title: '方案列表',
+                    cache: true
+                }
+            },
+            {//方案计划
+                path: 'aPlan',
+                name: 'aPlan',
+                component: _import('home/aPlan'),
+                meta: {
+                    title: '方案计划',
+                    cache: true
+                }
+            },
+            {//公告
+                path: 'announcement',
+                component: layout,
+                children: [
+                    {
+                        path: 'index',
+                        name: 'announcementIndex',
+                        component: _import('home/announcement/index'),
+                        meta: {
+                            title: '公告',
+                            cache: true
+                        }
+                    },
+                    {//消息详情页
+                        path: 'detail',
+                        name: 'announcementDetail',
+                        component: _import('home/announcement/detail'),
+                        meta: {
+                            title: '公告详情',
+                            cache: false
+                        }
+                    }
+                ]
+            },
         ]
     },
     {
@@ -48,6 +99,15 @@ export default [
                 component: _import('personal/index'),
                 meta: {
                     title: '用户中心',
+                    cache: true
+                }
+            },
+            {//微信支付页面
+                path: 'pay',
+                name:'pay',
+                component: _import('personal/pay'),
+                meta:{
+                    title:'微信二维码支付',
                     cache: true
                 }
             },

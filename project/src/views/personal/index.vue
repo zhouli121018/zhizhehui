@@ -6,28 +6,31 @@
             <div class="my_title_center">
                 <div>
                     <span style="font-weight:bold;font-size:0.45rem;color:#4D4D4C;">{{info.uname}}</span>
-                    <!-- $isvip='1';//是否VIP 1是vip，0不是vip -->
-                    <img v-if="info.isvip == 1" class="my_title_center_img" src="~@/assets/vip.png" alt="">
-                    <span v-if="info.isvip == 1" class="red">(剩余{{info.vipdate}}天)</span>
                 </div>
                 <div class="goldcoins_fans">
-                    <p><span>金币: </span><span class="red">{{info.coin}}</span></p>
-                    <p><span>粉丝: </span><span class="red">{{info.fans}}</span></p>
+                    <!-- <p><span>金币: </span><span class="red">{{info.coin}}</span></p>
+                    <p><span>粉丝: </span><span class="red">{{info.fans}}</span></p> -->
+                    <!-- $isvip='1';//是否VIP 1是vip，0不是vip -->
+                    <img v-if="info.isvip == 1" class="my_title_center_img" src="~@/assets/vip.png" alt="">
+                    <img v-else class="my_title_center_img" src="~@/assets/vip-gary.png" alt="">
+                    <span v-if="info.isvip == 1" class="red">(剩余{{info.vipdate}}天)</span>
+                    <span v-else class="red">(非会员)</span>
                 </div>
             </div>
             <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通会员</van-button>
+            <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button>
         </div>
-        <div class="my_title">
+        <div class="my_title" style="border:none">
             <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
             <div class="my_title_center my_centers">
                 <p>
-                    金币充值
+                    {{info.income_cur}}元
                 </p>
                 <p class="goldcoins_fans">
-                    可看预测推荐文章详情
+                    佣金金额
                 </p>
             </div>
-            <van-button type="danger" size="small" @click="jumpTo('/home/topUp')">前往充值</van-button>
+            <van-button type="danger" size="small" @click="jumpTo('/home/topUp')">返佣提款</van-button>
         </div>
         <div class="xian"></div>        
         <div>
@@ -83,6 +86,8 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+.container
+    background #F5F5F5
 .my_centers
     width 60%!important
     p 
@@ -91,7 +96,6 @@ export default {
             color #666
 /deep/ .van-cell
     line-height .88rem
-    border-bottom 1px solid #cccccc
 /deep/ .van-icon-shop::before
     content ''
     width .88rem
@@ -128,7 +132,7 @@ export default {
     box-sizing border-box 
     display flex
     align-items center
-    border-bottom 1px solid #cccccc
+    border-bottom 1px solid #f0f0f0
     .my_title_center
         width 53%
         span 
@@ -142,19 +146,22 @@ export default {
     .goldcoins_fans
         display flex
         padding-top .2rem
+        align-items center
+        span 
+            font-size .26rem
         p
             padding-right .3rem
     .my_title_center_img
-        width .6rem
-        height .5rem
-        margin 0 .4rem
+        width .8rem
+        height .7rem
+        margin 0 .2rem 0 0
 .orange_btn
     border-radius .6rem
     background #FFC131
-    color #ffffff
+    color #FF3858
     height 1rem
     line-height 1rem
-    padding 0 .2rem
+    padding 0 .3rem
 .title_photo
     width .88rem!important
     height .88rem!important
