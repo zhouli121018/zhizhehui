@@ -26,6 +26,22 @@
           </div>
         </van-col>
       </van-row>
+
+      <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
+        <!-- <span class="left_border_ori">方案</span> -->
+        <van-cell value="更多"  is-link>
+          <template slot="title">
+            <span class=""><span class="left_border_ori"></span> 方案</span>
+          </template>
+        </van-cell>
+        <div class="fangan_item_box" v-for="(fa,k) in fa_list" :key="k">
+          <span>{{fa.title}} </span> 
+          <p>{{fa.text}}</p>
+        </div>
+      </div>
+
+    
+
     </div>
 
     <div class="container" v-if="false" style="background:#F6F5F5;padding-top:0.4rem !important;position:absolute;top:0;z-index:1001;padding-bottom:2rem;">
@@ -68,7 +84,12 @@ export default {
       left_path:'/login/index',
       banner_url:'#',
       is_ios:false,
-      isFirstEnter:false
+      isFirstEnter:false,
+      fa_list:[
+        {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提'},
+        {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案'},
+        {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供'},
+      ]
     }
   },
   methods: {
@@ -124,6 +145,44 @@ export default {
 </script>
 
 <style scoped>
+.fangan_item_box{
+  background:#fff;
+  border-radius:0.2rem;
+  box-shadow: 0 0 0.2rem #ddd;
+  padding:0.4rem .2rem;
+  line-height:1.6;
+  margin-bottom:0.4rem;
+}
+.fangan_item_box>span{
+  color:#6C6361;
+  font-size:0.3rem;
+}
+.van-cell .van-cell__title span{
+  font-size:0.4rem;
+  color:#7D7D7D;
+}
+.van-cell__value span{
+  font-size:0.36rem;
+}
+.van-cell{
+  background:none;
+  padding:0;
+  padding-bottom:0.1rem;
+}
+.left_border_ori{
+  /* border-left:0.1rem solid #FC7953; */
+  display:inline-block;
+  /* padding:0; */
+  /* padding-left:0.2rem; */
+  /* font-size:0.4rem; */
+  /* color:#7D7D7D; */
+  background:#FC7953;
+  width:0.08rem;
+  height:0.4rem;
+  position:relative;
+  top:0.08rem;
+  margin-right:0.1rem;
+}
 .max_width_100{
   margin-bottom: .15rem;
   width:1.4rem;
@@ -202,7 +261,7 @@ export default {
   }
   .item_box span{
     display: block;
-    color: #666;
+    color: #767676;
     font-size:.38rem
   }
   .rank_item{
