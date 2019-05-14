@@ -1,7 +1,7 @@
 
-import { 
-  getUserInfo
- } from '@/api/user'
+// import { 
+//   getUserInfo
+//  } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 const user = {
   state: {

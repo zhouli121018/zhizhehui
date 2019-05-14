@@ -1,39 +1,78 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="info">
         <title-bar title_name="免费使用" />
         <div class="freeUse_box">
             <div class="free_use_title"><i></i><span>免费使用说明</span><i></i></div>
-            <p>邀请好友搞见哦按非农时候第四届防泼水减低 手动减肥是嗽平解释道交发票数据拍摄爱拍等级分配设计费大家分配时间破飞机票三审批单机票时间哦</p>
+            <p>{{info.freeshuoming}}</p>
             <div class="free_use_coupon"><i></i> 会员券</div>
             <div class="free_use_coupon">
-                <p>会员券: <span class="free_use_font">10张</span></p>
-                <van-button click="warning_btn" @click="exchangeDay">兑换会员天数</van-button>
+                <p>会员券: <span class="free_use_font">{{info.vipticket}}张</span></p>
+                <van-button class="warning_btn" @click="exchangeDay">兑换会员天数</van-button>
             </div>
-            <p>说明:1张【会员券】可兑换4天会员天数</p>
+            <p>{{info.vipticketdes}}</p>
         </div>
         <div class="xian"></div>
         <div class="freeUse_box">
             <div class="free_use_title"><i></i><span>邀请内容</span><i></i></div>
-            <p>邀请好友搞见哦按非农时候第四届防泼水减低 手动减肥是嗽平解释道交发票数据拍摄爱拍等级分配设计费大家分配时间破飞机票三审批单机票时间哦</p>
+            <p>{{info.invitecontent}}</p>
             <div class="free_use_coupon" style="justify-content:center">
-                <van-button click="warning_btn">兑换会员天数</van-button>
+                <van-button class="warning_btn" @click="doCopy(info.invitecontent)">复制分享内容</van-button>
             </div>
         </div>
+        <div class="xian"></div>
+        <div class="freeUse_box">
+            <div class="free_use_title"><i></i><span>我的推荐页</span><i></i></div>
+            <p>{{info.tuijian}}</p>
+            <div class="free_use_coupon" style="justify-content:center">
+                <van-button class="warning_btn" @click="toJump('/personal/recommend')">我的推荐页</van-button>
+            </div>
+        </div>
+        <p class="contact">如有疑问请联系微信:SNSN889922</p>
     </div>
 </template>
 
 <script>
 import { Dialog } from 'vant'
+import { getfreeusedesc } from '@/api/home'
+import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 export default {
     components: {
         Dialog
     },
     data() {
         return {
-            
+            info: null
         }
     },
     methods: {
+        //复制
+        doCopy (text) {
+            this.$copyText(text).then(function (e) {
+                Dialog.alert({
+                    title: '提示',
+                    message: '复制成功，请粘贴到微信QQ或其他地方'
+                }).then(() => {
+                // on close
+                });
+            }, function (e) {
+                Dialog.alert({
+                    title: '提示',
+                    message: '复制失败，请手动复制！'
+                }).then(() => {
+                // on close
+                });
+                console.log(e)
+            })
+        },
+        async getfreeusedesc() {
+            const { data } = await getfreeusedesc({
+                sid: localStorage.getItem('sid'),
+                uid: localStorage.getItem('uid')
+            })
+            this.info = data
+        },
         exchangeDay() {
             Dialog.confirm({
                 title: '兑换会员天数',
@@ -48,18 +87,34 @@ export default {
                     localStorage['isdownload'] = true;
                     // on cancel
                 });
+        },
+        toJump(url) {
+            this.$router.push(url)
         }
+    },
+    created() {
+        this.getfreeusedesc()
     }
 }
 </script>
 <style lang="stylus" scoped>
+.warning_btn
+    margin-top .2rem
+.contact
+    width 100%
+    height 1.2rem
+    line-height 1.2rem
+    background #F5F5F5
+    font-size .3rem
+    color #6C6C6C
+    text-align center
 .free_use_font
     color #232323
 .container
     background #EEEEEE
 .freeUse_box
     width 100%
-    padding .3rem 
+    padding .4rem .3rem 
     box-sizing border-box
     background #ffffff
     line-height .8rem

@@ -68,7 +68,7 @@ export function gettuijiancode (data) {
 //8、获取开奖提醒 getkjtixing.php
 export function getkjtixing (data) {
   return request({
-    url: '/getkjtixing.php ',
+    url: '/getkjtixing.php',
     method: 'post',
     data:{
       ...data
@@ -79,7 +79,7 @@ export function getkjtixing (data) {
 //9、设置开奖提醒 setkjtixing.php 
 export function setkjtixing (data) {
   return request({
-    url: '/setkjtixing.php ',
+    url: '/setkjtixing.php',
     method: 'post',
     data:{
       ...data
@@ -90,7 +90,17 @@ export function setkjtixing (data) {
 //13、获取方案 getfangan.php
 export function getfangan (data) {
   return request({
-    url: '/getfangan.php ',
+    url: '/getfangan.php',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}
+//免费使用
+export function getfreeusedesc (data) {
+  return request({
+    url: '/getfreeusedesc.php',
     method: 'post',
     data:{
       ...data
