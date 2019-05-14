@@ -7,7 +7,7 @@
             <div class="free_use_coupon"><i></i> 会员券</div>
             <div class="free_use_coupon">
                 <p>会员券: <span class="free_use_font">10张</span></p>
-                <van-button click="warning_btn">兑换会员天数</van-button>
+                <van-button click="warning_btn" @click="exchangeDay">兑换会员天数</van-button>
             </div>
             <p>说明:1张【会员券】可兑换4天会员天数</p>
         </div>
@@ -15,19 +15,41 @@
         <div class="freeUse_box">
             <div class="free_use_title"><i></i><span>邀请内容</span><i></i></div>
             <p>邀请好友搞见哦按非农时候第四届防泼水减低 手动减肥是嗽平解释道交发票数据拍摄爱拍等级分配设计费大家分配时间破飞机票三审批单机票时间哦</p>
-            <div class="free_use_coupon"><i></i> 会员券</div>
-            <div class="free_use_coupon">
-                <p>会员券: <span class="free_use_font">10张</span></p>
+            <div class="free_use_coupon" style="justify-content:center">
                 <van-button click="warning_btn">兑换会员天数</van-button>
             </div>
-            <p>说明:1张【会员券】可兑换4天会员天数</p>
         </div>
     </div>
 </template>
 
 <script>
+import { Dialog } from 'vant'
 export default {
-
+    components: {
+        Dialog
+    },
+    data() {
+        return {
+            
+        }
+    },
+    methods: {
+        exchangeDay() {
+            Dialog.confirm({
+                title: '兑换会员天数',
+                confirmButtonText:'兑换',
+                cancelButtonText:'取消',
+                className: 'dialog_content_input',
+                message: `会员券: <input class="dialog_input" type="text"/>`
+                }).then(() => {
+                    // on confirm
+                document.getElementById('download_btn').click();
+                }).catch(() => {
+                    localStorage['isdownload'] = true;
+                    // on cancel
+                });
+        }
+    }
 }
 </script>
 <style lang="stylus" scoped>

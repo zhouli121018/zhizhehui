@@ -36,7 +36,7 @@
         <div>
             <van-cell title="我的推荐页" is-link icon="shop" @click="jumpTo('/personal/recommend')"/>
             <van-cell title="代理赚钱" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
-            <van-cell title="开奖提醒设置" is-link icon="look"  @click="jumpTo('/personal/myLook')"/>
+            <van-cell title="开奖提醒设置" is-link icon="look"  @click="jumpTo('/home/openRemind')"/>
             <van-cell title="免费使用" is-link icon="look"  @click="jumpTo('/personal/freeUse')"/>
         </div>
         <div class="xian"></div>
