@@ -35,7 +35,7 @@ export default {
             this.list = data.list
         },
         async setkjtixing() {
-            let str = 0;
+            let str = '';
             this.list.forEach(val => {
                 str += val.lottype+','+val.status+';'
             });

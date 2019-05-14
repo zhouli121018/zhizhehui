@@ -76,3 +76,14 @@ export function setkjtixing (data) {
     }
   })
 }
+
+//13、获取方案 getfangan.php
+export function getfangan (data) {
+  return request({
+    url: '/getfangan.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}
