@@ -7,6 +7,7 @@
           :left-text="left_text"
           right-text="关于"
           @click-left="onClickLeft"
+          @click-right="onClickRight"
         />
       </div>
       <van-swipe :autoplay="3000" indicator-color="#007BC2">
@@ -29,7 +30,7 @@
 
       <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
         <!-- <span class="left_border_ori">方案</span> -->
-        <van-cell value="更多"  is-link class="diy_font">
+        <van-cell value="更多"  is-link class="diy_font"  @click="jumpTo('/home/planList')">
           <template slot="title">
             <span class=""><span class="left_border_ori"></span> 方案</span>
           </template>
@@ -41,12 +42,12 @@
       </div>
 
       <div class="msg_box" style="padding:0.2rem 0.4rem 0.1rem">
-        <van-cell value="更多"  is-link class="diy_font">
+        <van-cell value="更多"  is-link class="diy_font" @click="jumpTo('/home/announcement/index')">
           <template slot="title">
             <span class=""><span class="left_border_ori"></span> 信息</span>
           </template>
         </van-cell>
-        <van-cell class="msg_item" v-for="(m,k) in notices" :key="k" :title="m.title" :value="m.createtime" />
+        <van-cell class="msg_item" v-for="(m,k) in notices" :key="k" :title="m.title" :value="m.createtime" @click="goDetail(m)"/>
       </div>
 
       <div style="background:#F5F5F5;height:0.6rem;"></div>
@@ -83,7 +84,7 @@ export default {
         {src:require('../../assets/fajh.png'),title:'方案计划',link:'/home/aPlan',islink: false},
         {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/openRemind',islink: false},
         {src:require('../../assets/gg.png'),title:'公告',link:'/home/announcement/index',islink: localStorage.getItem('uid')?false:true},
-        {src:require('../../assets/mfsy.png'),title:'免费使用',link:'/home/charts',islink: false},
+        {src:require('../../assets/mfsy.png'),title:'免费使用',link:'/personal/freeUse',islink: false},
         {src:require('../../assets/dlzq.png'),title:'代理赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
         
       ],
@@ -99,6 +100,15 @@ export default {
     }
   },
   methods: {
+    goDetail(data){
+        this.$router.push({
+            path: '/home/announcement/detail', 
+            query: {
+                // title: data.title, 
+                noticeid: data.noticeid
+            }
+        })
+    },
     addfn(){
       localStorage['isadd'] = true;
       this.is_ios = false;
@@ -108,6 +118,9 @@ export default {
     },
     onClickLeft() {
       this.$router.push(this.left_path)
+    },
+    onClickRight(){
+      this.$router.push('/personal/about')
     },
     jumpTo( path, islink ){
       if(path.indexOf('/')==0){
@@ -120,7 +133,6 @@ export default {
       }
     },
     goSinglePlan(p){
-      console.log(p)
       this.$router.push({
         path:'/home/singlePlan',
         query:{
