@@ -29,7 +29,7 @@
 
       <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
         <!-- <span class="left_border_ori">方案</span> -->
-        <van-cell value="更多"  is-link>
+        <van-cell value="更多"  is-link class="diy_font">
           <template slot="title">
             <span class=""><span class="left_border_ori"></span> 方案</span>
           </template>
@@ -40,11 +40,22 @@
         </div>
       </div>
 
+      <div class="msg_box" style="padding:0.2rem 0.4rem 0.1rem">
+        <van-cell value="更多"  is-link class="diy_font">
+          <template slot="title">
+            <span class=""><span class="left_border_ori"></span> 信息</span>
+          </template>
+        </van-cell>
+        <van-cell class="msg_item" v-for="(m,k) in msg_list" :key="k" :title="m.title" :value="m.time" />
+      </div>
+
+      <div style="background:#F5F5F5;height:0.6rem;"></div>
+
     
 
     </div>
 
-    <div class="container" v-if="false" style="background:#F6F5F5;padding-top:0.4rem !important;position:absolute;top:0;z-index:1001;padding-bottom:2rem;">
+    <div class="container" v-if="false" style="background:#F5F5F5;padding-top:0.4rem !important;position:absolute;top:0;z-index:1001;padding-bottom:2rem;">
         <!-- <title-bar title_name="添加到主屏幕" /> -->
         <div style="background:#EFEFEF;padding:0.2rem 0.15rem;margin:0 0.3rem 0.2rem;">
             <div style="text-align:center;font-size:0.5rem;color:#DB3030;font-weight:bold;padding:0.2rem 0;">温馨提示</div>
@@ -89,6 +100,11 @@ export default {
         {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提'},
         {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案'},
         {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供'},
+      ],
+      msg_list:[
+        {title:'时时彩停止开奖公告dd多发点撒',time:'2019-10-10'},
+        {title:'时时彩停止开奖公告',time:'2019-10-10'},
+        {title:'时时彩停止开奖公告',time:'2019-10-10'},
       ]
     }
   },
@@ -145,6 +161,24 @@ export default {
 </script>
 
 <style scoped>
+.msg_box .van-cell{
+  padding:0.12rem 0;
+}
+.msg_box .msg_item .van-cell__title span{
+  color:#363636;
+  font-size:0.45rem;
+}
+.van-cell:not(:last-child)::after{
+  content:"";
+  border:none;
+}
+.van-cell__value{
+  flex:unset;
+  padding-left:0.1rem;
+}
+.diy_font .van-cell__right-icon{
+  font-size:0.3rem;
+}
 .fangan_item_box{
   background:#fff;
   border-radius:0.2rem;
@@ -162,7 +196,7 @@ export default {
   color:#7D7D7D;
 }
 .van-cell__value span{
-  font-size:0.36rem;
+  font-size:0.3rem;
 }
 .van-cell{
   background:none;
