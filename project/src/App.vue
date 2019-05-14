@@ -69,6 +69,12 @@ export default {
 </script>
 
 <style lang='stylus'>
+.dis_flex{
+  display:flex;
+}
+.dis_flex .flex_grow_1{
+  flex-grow:1;
+}
 .full_sc
   background-color: rgba(25, 25, 25, .6);
   position: fixed;

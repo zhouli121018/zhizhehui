@@ -54,3 +54,25 @@ export function gethome (data) {
     }
   })
 }
+
+//8、获取开奖提醒 getkjtixing.php
+export function getkjtixing (data) {
+  return request({
+    url: '/getkjtixing.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}
+
+//9、设置开奖提醒 setkjtixing.php 
+export function setkjtixing (data) {
+  return request({
+    url: '/setkjtixing.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}

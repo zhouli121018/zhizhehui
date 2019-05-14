@@ -78,6 +78,15 @@ export default [
                     }
                 ]
             },
+            {
+                path: 'openRemind',
+                name: 'openRemind',
+                component: _import('home/openRemind'),
+                meta: {
+                    title: '开奖提醒',
+                    cache: true
+                }
+            }
         ]
     },
     {
