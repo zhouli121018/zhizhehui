@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="aPlan_title">
-            <img src="~@/assets/returnpre.png" alt="">
+            <img @click="goBack" src="~@/assets/returnpre.png" alt="">
             <p>方案计划 </p>
             <div class="title_pop_up" @click="isShowClick">
                 {{chooseName}} 
@@ -26,6 +26,43 @@
             </van-col>
             <van-col span="6"><van-button size="small" class="no_border_btn" @click="jumpTo">方案描述</van-button></van-col>
         </van-row>
+        <div class="xian"></div>
+        <div class="pop_up_content">
+            <p>冠军计划 <img src="~@/assets/navigationarrow.png" alt=""></p>
+            <p>5码 <img src="~@/assets/navigationarrow.png" alt=""></p>
+            <p @click="chooseNum">2期 <img v-if="!isNum" src="~@/assets/navigationarrow.png" alt="">
+                <img v-else src="~@/assets/navigationup.png" alt="">
+            </p>
+            <ul v-if="isNum">
+                <li v-for="(item,index) in list" :class="index==activeNum?'active':''" :key="index" @click="numClick(index)">{{item.number}}期</li>
+            </ul>
+        </div>
+        <table>
+            <tr>
+                <th>期次</th>
+                <th>计划内容</th>
+                <th>几期中</th>
+                <th>开奖号</th>
+            </tr>
+            <tr>
+                <td>0911</td>
+                <td><van-button size="small" class="membership_privileges">会员权限</van-button></td>
+                <td>0</td>
+                <td>追号中</td>
+            </tr>
+            <tr>
+                <td>0911</td>
+                <td>1,6,2,3,4,5</td>
+                <td>1</td>
+                <td>10,9,3,4,8,5,4,6,7,4</td>
+            </tr>
+        </table>
+        <div class="for_more">
+            <van-button size="small" class="no_border_btn" @click="jumpTo">获取更多</van-button>
+        </div>
+        <div class="replication_solution">
+            <van-button size="large" style="background:#FC7953;color:#fff;width:90%">复制方案</van-button>
+        </div>
     </div>
 </template>
 
@@ -34,20 +71,38 @@ import { gethome } from '@/api/home'
 export default {
     data() {
         return {
-            lottypeList: [
-                {id: 0,name: '北京赛车'},
-                {id: 1,name: '重庆时时彩'},
-                {id: 2,name: '天津时时彩'}
-            ],
+            activeNum: 0,
+            lottypeList: [],
             active: 0,
             isShow: false,
             fangansList: [],
             lottypeList: [],
             noticesList: [],
-            yc_active: 0
+            yc_active: 0,
+            list: [
+                {id:0,number: '1'},
+                {id:0,number: '2'},
+                {id:0,number: '3'}
+            ],
+            isNum: false,
+            chooseName: ''
         }
     },
     methods: {
+        // 返回
+        goBack(){
+            this.$store.dispatch('set_isback',true)
+            setTimeout(() => {
+                this.$store.dispatch('set_isback',false)
+            }, 500);
+            this.$router.go(-1)
+        },
+        numClick(index) {
+            this.activeNum = index
+        },
+        chooseNum() {
+            this.isNum = !this.isNum
+        },
         isShowClick() {
             this.isShow = !this.isShow
         },
@@ -78,6 +133,65 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.replication_solution
+    background #EEEEEE
+    padding .5rem  0
+    text-align center
+.for_more
+    margin .2rem auto
+    text-align center
+/deep/ .membership_privileges
+    border:none;
+    background:#FFBD28!important
+    color:#FF0B60;
+    height:25px;
+    line-height:25px
+table 
+    font-size .28rem
+    width 100%
+    border 1px solid #cccccc
+    border-right none
+    tr,td,th 
+        border 1px solid #E5E5E5
+    tr 
+        border-right none
+    td,th   
+        color #A8A8A8
+    th,td 
+        background #F5F5F5
+        padding .3rem 0
+        text-align center
+    td  
+        color #2B2B2B
+    td:first-child
+        color #6B6B6B
+    td:first-child,th:first-child 
+        background #E5E5E5
+.pop_up_content
+    width 100%
+    display flex
+    justify-content space-around
+    align-items center
+    padding .3rem .2rem 
+    box-sizing border-box
+    position relative
+    p
+        color #6B6B6B
+    img 
+        width .3rem
+        height .18rem     
+    ul 
+        position absolute
+        top 99%
+        right 9%
+        background #fff
+        min-width 20%
+        padding .2rem 
+        box-sizing border-box  
+        li  
+            text-align center
+            padding .2rem 0
+            color #6B6B6B
 .van-button--danger
     background-color #FC7953
     border none

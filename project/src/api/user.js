@@ -6,11 +6,9 @@ import request from '@/utils/request'
 // 根据token获取用户信息
 export function getUserInfo () {
   return request({
-    url: '/Wxsite/User/api',
+    url: '/getaccount.php',
     method: 'post',
-    data:{
-      api_name: 'getUserInfo'
-    }
+    data: {...data}
   })
 }
 

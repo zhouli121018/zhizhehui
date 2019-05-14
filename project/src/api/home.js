@@ -47,7 +47,17 @@ export function getfanganlist (data) {
 //获取首页内容
 export function gethome (data) {
   return request({
-    url: '/gethome.php ',
+    url: '/gethome.php',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}
+//获取推荐页数据
+export function gettuijiancode (data) {
+  return request({
+    url: '/gettuijiancode.php',
     method: 'post',
     data:{
       ...data

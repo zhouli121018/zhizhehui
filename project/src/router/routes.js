@@ -111,6 +111,24 @@ export default [
                     cache: true
                 }
             },
+            {//我的推荐页
+                path: 'recommend',
+                name:'recommend',
+                component: _import('personal/recommend'),
+                meta:{
+                    title:'我的推荐页',
+                    cache: true
+                }
+            },
+            {//免费使用
+                path: 'freeUse',
+                name:'freeUse',
+                component: _import('personal/freeUse'),
+                meta:{
+                    title:'免费使用',
+                    cache: true
+                }
+            },
         ]
     },
     {//登录
