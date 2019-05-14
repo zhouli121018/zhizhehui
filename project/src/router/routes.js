@@ -54,6 +54,15 @@ export default [
                     cache: true
                 }
             },
+            {//某方案
+                path: 'singlePlan',
+                name: 'singlePlan',
+                component: _import('home/singlePlan'),
+                meta: {
+                    title: '方案',
+                    cache: true
+                }
+            },
             {//公告
                 path: 'announcement',
                 component: layout,
@@ -78,6 +87,15 @@ export default [
                     }
                 ]
             },
+            {
+                path: 'openRemind',
+                name: 'openRemind',
+                component: _import('home/openRemind'),
+                meta: {
+                    title: '开奖提醒',
+                    cache: true
+                }
+            }
         ]
     },
     {

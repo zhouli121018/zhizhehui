@@ -12,7 +12,7 @@
       <van-swipe :autoplay="3000" indicator-color="#007BC2">
         <van-swipe-item  v-for="(image, index) in advs" :key="index">
           <div class="swipe_img_box" @click="jumpTo(image.url)">
-            <img :src="image.pic" />
+            <img :src="$https+image.pic" />
           </div>
         </van-swipe-item>
       </van-swipe>
@@ -29,22 +29,33 @@
 
       <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
         <!-- <span class="left_border_ori">方案</span> -->
-        <van-cell value="更多"  is-link>
+        <van-cell value="更多"  is-link class="diy_font">
           <template slot="title">
             <span class=""><span class="left_border_ori"></span> 方案</span>
           </template>
         </van-cell>
-        <div class="fangan_item_box" v-for="(fa,k) in fa_list" :key="k">
-          <span>{{fa.title}} </span> 
-          <p>{{fa.text}}</p>
+        <div class="fangan_item_box" v-for="(fa,k) in fangans" :key="k" @click="goSinglePlan(fa)">
+          <span>{{fa.fangantitle}} </span> 
+          <p>{{fa.fangandes}}</p>
         </div>
       </div>
+
+      <div class="msg_box" style="padding:0.2rem 0.4rem 0.1rem">
+        <van-cell value="更多"  is-link class="diy_font">
+          <template slot="title">
+            <span class=""><span class="left_border_ori"></span> 信息</span>
+          </template>
+        </van-cell>
+        <van-cell class="msg_item" v-for="(m,k) in notices" :key="k" :title="m.title" :value="m.createtime" />
+      </div>
+
+      <div style="background:#F5F5F5;height:0.6rem;"></div>
 
     
 
     </div>
 
-    <div class="container" v-if="false" style="background:#F6F5F5;padding-top:0.4rem !important;position:absolute;top:0;z-index:1001;padding-bottom:2rem;">
+    <div class="container" v-if="is_ios" style="background:#F5F5F5;padding-top:0.4rem !important;position:absolute;top:0;z-index:1001;padding-bottom:2rem;">
         <!-- <title-bar title_name="添加到主屏幕" /> -->
         <div style="background:#EFEFEF;padding:0.2rem 0.15rem;margin:0 0.3rem 0.2rem;">
             <div style="text-align:center;font-size:0.5rem;color:#DB3030;font-weight:bold;padding:0.2rem 0;">温馨提示</div>
@@ -64,32 +75,27 @@
 
 <script>
 import { Dialog } from 'vant'
+import { gethome } from '@/api/home'
 export default {
   data () {
     return {
       list:[
-        {src:require('../../assets/fajh.png'),title:'方案计划',link:'',islink: false},
-        {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/awardSpredict',islink: false},
+        {src:require('../../assets/fajh.png'),title:'方案计划',link:'/home/aPlan',islink: false},
+        {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/openRemind',islink: false},
         {src:require('../../assets/gg.png'),title:'公告',link:'/personal/perdictRank',islink: localStorage.getItem('uid')?false:true},
         {src:require('../../assets/mfsy.png'),title:'免费使用',link:'/home/charts',islink: false},
         {src:require('../../assets/dlzq.png'),title:'代理赚钱',link:'/personal/simulateBetting',islink: localStorage.getItem('uid')?false:true}
         
       ],
       notice:'',
-      advs:[
-        {pic:require('../../assets/banner.png'),url:'http://www.baidu.com'},
-        {pic:require('../../assets/banner.png'),url:'http://www.baidu.com'},
-      ],
+      advs:[],
       left_text:'登录',
       left_path:'/login/index',
       banner_url:'#',
       is_ios:false,
       isFirstEnter:false,
-      fa_list:[
-        {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提'},
-        {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案'},
-        {title:'方案A',text:'该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供该方案有xxx提供'},
-      ]
+      fangans:[],
+      notices:[]
     }
   },
   methods: {
@@ -113,6 +119,26 @@ export default {
         })
       }
     },
+    goSinglePlan(p){
+      console.log(p)
+      this.$router.push({
+        path:'/home/singlePlan',
+        query:{
+          fanganid:p.fanganid
+        }
+      })
+    },
+    async gethome() {
+        const { data } = await gethome({
+            // sid: localStorage.getItem('sid'),
+            // uid: localStorage.getItem('uid')
+        })
+        this.fangans = data.fangans//方案
+        this.advs = data.advs 
+        // this.lottypeList = data.lottype//标题选择
+        this.notices = data.notices
+        // this.chooseName = this.lottypeList[0].lotname
+    }
   },
   created(){
     this.isFirstEnter=true;
@@ -134,8 +160,14 @@ export default {
     }else{
       sessionStorage['pid'] = ''
     }
+    this.gethome();
+    if(localStorage['uid'] && localStorage['uid']!=''){
+      this.left_text = '会员中心';
+      this.left_path = '/personal/index'
+    }
   },
-  activated(){
+  activated(){  
+    console.log(localStorage['uid'] && localStorage['uid']!='')
     if(localStorage['uid'] && localStorage['uid']!=''){
       this.left_text = '会员中心';
       this.left_path = '/personal/index'
@@ -145,6 +177,24 @@ export default {
 </script>
 
 <style scoped>
+.msg_box .van-cell{
+  padding:0.12rem 0;
+}
+.msg_box .msg_item .van-cell__title span{
+  color:#363636;
+  /* font-size:0.4rem; */
+}
+.van-cell:not(:last-child)::after{
+  content:"";
+  border:none;
+}
+.van-cell__value{
+  flex:unset;
+  padding-left:0.1rem;
+}
+.diy_font .van-cell__right-icon{
+  font-size:0.3rem;
+}
 .fangan_item_box{
   background:#fff;
   border-radius:0.2rem;
@@ -158,11 +208,11 @@ export default {
   font-size:0.3rem;
 }
 .van-cell .van-cell__title span{
-  font-size:0.4rem;
+  /* font-size:0.4rem; */
   color:#7D7D7D;
 }
 .van-cell__value span{
-  font-size:0.36rem;
+  font-size:0.3rem;
 }
 .van-cell{
   background:none;

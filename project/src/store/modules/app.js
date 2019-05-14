@@ -28,10 +28,16 @@ const app = {
     SET_SHARE_URL (state, url) {
       state.shareUrl = url
     },
+    SET_ISBACK(state,param){
+      state.isback = param;
+    },
   },
   actions: {
     set_sdk_url ({commit}, url) {
       commit('SET_SDK_URL', url)
+    },
+    set_isback ({commit}, param){
+      commit('SET_ISBACK',param)
     },
   }
 }

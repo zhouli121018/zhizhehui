@@ -31,7 +31,7 @@ export default {
         this.is_qqorwx = true;
     }
     //判断 浏览器类型
-     if (/(Android)/i.test(navigator.userAgent)) {
+     if (!this.is_qqorwx && /(Android)/i.test(navigator.userAgent)) {
       if(!localStorage.getItem('isdownload')){
         Dialog.confirm({
           title: '温馨提示',
@@ -69,6 +69,30 @@ export default {
 </script>
 
 <style lang='stylus'>
+.orange_btn{
+  background:#FC7953;
+  color:#fff;
+}
+.left_border_ori{
+  /* border-left:0.1rem solid #FC7953; */
+  display:inline-block;
+  /* padding:0; */
+  /* padding-left:0.2rem; */
+  /* font-size:0.4rem; */
+  /* color:#7D7D7D; */
+  background:#FC7953;
+  width:0.08rem;
+  height:0.4rem;
+  position:relative;
+  top:0.08rem;
+  margin-right:0.1rem;
+}
+.dis_flex{
+  display:flex;
+}
+.dis_flex .flex_grow_1{
+  flex-grow:1;
+}
 .full_sc
   background-color: rgba(25, 25, 25, .6);
   position: fixed;
