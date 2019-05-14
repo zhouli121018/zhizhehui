@@ -82,9 +82,9 @@ export default {
       list:[
         {src:require('../../assets/fajh.png'),title:'方案计划',link:'/home/aPlan',islink: false},
         {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/openRemind',islink: false},
-        {src:require('../../assets/gg.png'),title:'公告',link:'/personal/perdictRank',islink: localStorage.getItem('uid')?false:true},
+        {src:require('../../assets/gg.png'),title:'公告',link:'/home/announcement/index',islink: localStorage.getItem('uid')?false:true},
         {src:require('../../assets/mfsy.png'),title:'免费使用',link:'/home/charts',islink: false},
-        {src:require('../../assets/dlzq.png'),title:'代理赚钱',link:'/personal/simulateBetting',islink: localStorage.getItem('uid')?false:true}
+        {src:require('../../assets/dlzq.png'),title:'代理赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
         
       ],
       notice:'',

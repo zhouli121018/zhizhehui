@@ -97,3 +97,14 @@ export function getfangan (data) {
     }
   })
 }
+
+//15、获取推荐赚佣金内容 getearnmoneydesc.php
+export function getearnmoneydesc (data) {
+  return request({
+    url: '/getearnmoneydesc.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}

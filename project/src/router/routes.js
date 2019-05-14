@@ -95,6 +95,15 @@ export default [
                     title: '开奖提醒',
                     cache: true
                 }
+            },
+            {
+                path:'earnMoney',
+                name:'earnMoney',
+                component: _import('home/earnMoney'),
+                meta: {
+                    title: '推荐赚钱',
+                    cache: true
+                }
             }
         ]
     },

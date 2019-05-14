@@ -20,7 +20,7 @@
             <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通会员</van-button>
             <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button>
         </div>
-        <div class="my_title" style="border:none">
+        <div class="my_title" style="border:none" v-if="info">
             <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
             <div class="my_title_center my_centers">
                 <p>
@@ -73,7 +73,6 @@ export default {
     },
     created() {
         this.isFirstEnter=true;
-        
     },
     activated(){
         if(!this.$store.getters.isback || this.isFirstEnter){
