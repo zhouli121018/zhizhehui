@@ -114,6 +114,13 @@ export default {
         choose(name,i) {
             this.chooseName = name
             this.active = i
+            this.isShow = false
+            this.$router.replace({
+                path:'/home/aPlan',
+                query:{
+                    lottype:this.lottypeList[i].lottype
+                }
+            })
         },
         //点击方案
         change_yc(index){
@@ -143,13 +150,21 @@ export default {
             this.chooseName = this.lottypeList[0].lotname
             this.lottype = this.lottypeList[0].lottype
             this.fanganid = this.fangansList[0].fanganid
+            if(this.$route.query.lottype){
+                for(let i=0;i<this.lottypeList.length;i++){
+                    if(this.lottypeList[i].lottype == this.$route.query.lottype){
+                        this.active = i;
+                        this.chooseName = this.lottypeList[i].lotname
+                    }
+                }
+            }
         }
     },
     created() {
         this.isFirstEnter=true;
     },
     activated(){
-        
+        this.isShow = false
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.gethome()
         }

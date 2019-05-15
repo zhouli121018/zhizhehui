@@ -60,7 +60,7 @@ export default [
                 component: _import('home/singlePlan'),
                 meta: {
                     title: '方案',
-                    cache: false
+                    cache: true
                 }
             },
             {//公告

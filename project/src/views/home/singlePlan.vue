@@ -8,7 +8,7 @@
             </div>
             <div style="padding-top:0.6rem;padding-bottom:0.2rem"><span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">适用彩种</span> </div>
             <div class="btn_box">
-                <van-button v-for="l in lottype" :key="l.lottype"  class="orange_btn lot_btn">{{l.lotname}}</van-button>
+                <van-button v-for="l in lottype" :key="l.lottype"  class="orange_btn lot_btn" @click="jumpTo(l.lottype)">{{l.lotname}}</van-button>
             </div>
         </div>
         <div style="padding:0.6rem 0.2rem;">
@@ -45,11 +45,37 @@ export default {
             this.lottype = data.lottype;
             this.tips = data.tips;
         },
+        jumpTo(lottype){
+            this.$router.push({
+                path:'/home/aPlan',
+                query:{
+                    lottype:lottype
+                }
+            })
+        }
         
     },
     created() {
+        this.isFirstEnter=true;
+        
+    },
+    beforeRouteEnter(to, from, next) {
+      if (from.name == 'aPlan') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; 
+      }
+      next()
+    },
+    activated(){
         this.fanganid = this.$route.query.fanganid;
-        this.getfangan()
+        if(this.$route.meta.isBack){
+            this.$store.dispatch('set_isback',true)
+        }
+        this.$route.meta.isBack=false;
+        if(!this.$store.getters.isback || this.isFirstEnter){
+            this.getfangan()
+        }
+        this.isFirstEnter=false;
+        this.$store.dispatch('set_isback',false)
     }
 }
 </script>
