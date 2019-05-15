@@ -42,16 +42,18 @@ export function getYMD(o, format = '-') {
  * @param {string} [format=':'] 时间格式连接符
  * @returns String
  */
-export function getHMS(o, format = ':') {
+export function getHMS(o, format = '') {
   o = o.toString().length === 13 ? o : o * 1000
   let date = new Date(o),
-      h = date.getHours(),
-      m = date.getMinutes(),
-      s = date.getSeconds();
+      h = date.getHours()+':',
+      m = date.getMinutes()+':',
+      s = date.getSeconds(),
+      M = date.getMonth() + 1+'月',
+      D = date.getDate() + '日';
   h = h < 10 ? '0' + h : h
   m = m < 10 ? '0' + m : m
   s = s < 10 ? '0' + s : s
-  return [h, m, s].join(format)
+  return [M,D,h, m, s].join(format)
 }
 
 /**

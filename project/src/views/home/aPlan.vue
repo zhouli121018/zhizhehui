@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" v-if="planInfo">
         <div class="aPlan_title">
             <img @click="goBack" src="~@/assets/returnpre.png" alt="">
             <p>方案计划 </p>
@@ -9,32 +9,32 @@
                 <img v-else src="~@/assets/arrowon.png" alt="">
             </div>
             <ul class="pop_up_down" v-if="isShow">
-                <li v-for="(item,index) in lottypeList" :key="index" :class="active==index?'active':''" @click="choose(item.lotname,index)">{{item.lotname}}</li>
+                <li v-for="(item,index) in lottypeList" :key="index" :class="active==index?'active':''" @click="choose(item.lotname,index,item.lottype)">{{item.lotname}}</li>
             </ul>
         </div>
         <div class="lottery_time">
-            <div>距119期开奖: <span class="green"> 00:12:13</span></div>
-            <div>当前时间: <span class="blue"> 3月29日 09:22:30</span></div>
+            <div>距{{planInfo.curissue}}期开奖: <span class="green"> 00:12:13</span></div>
+            <div>当前时间: <span class="blue"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
-            <span>119期开奖号码:</span> <span class="lottery_number">01,02,03,04,05,06,07,08,09,10</span>
+            <span>{{planInfo.preissue}}期开奖号码:</span> <span class="lottery_number">{{planInfo.kjnum}}</span>
         </div>
         <div class="xian"></div>
         <van-row class="text_center btn_group" style="padding-bottom:0.2rem;">
             <van-col span="6" v-for="(y,index) in fangansList" :key="index">
-                <van-button :type="index==yc_active?'danger':'default'" size="small" @click="change_yc(index)">{{y.fangantitle}}</van-button>
+                <van-button :type="index==yc_active?'danger':'default'" size="small" @click="change_yc(index,y.fanganid)">{{y.fangantitle}}</van-button>
             </van-col>
-            <van-col span="6"><van-button size="small" class="no_border_btn" @click="jumpTo">方案描述</van-button></van-col>
+            <van-col span="6"><van-button size="small" class="no_border_btn" @click="jumpTo('/home/singlePlan')">方案描述</van-button></van-col>
         </van-row>
         <div class="xian"></div>
         <div class="pop_up_content">
-            <p>冠军计划 <img src="~@/assets/navigationarrow.png" alt=""></p>
-            <p>5码 <img src="~@/assets/navigationarrow.png" alt=""></p>
-            <p @click="chooseNum">2期 <img v-if="!isNum" src="~@/assets/navigationarrow.png" alt="">
+            <p>{{posname}} <img src="~@/assets/navigationarrow.png" alt=""></p>
+            <p>{{plannum}}码 <img src="~@/assets/navigationarrow.png" alt=""></p>
+            <p @click="chooseNum">{{issuenum}}期 <img v-if="!isNum" src="~@/assets/navigationarrow.png" alt="">
                 <img v-else src="~@/assets/navigationup.png" alt="">
             </p>
             <ul v-if="isNum">
-                <li v-for="(item,index) in list" :class="index==activeNum?'active':''" :key="index" @click="numClick(index)">{{item.number}}期</li>
+                <li v-for="(item,index) in lottList.nissues" :class="index==activeNum?'active':''" :key="index" @click="numClick(index,item)">{{item}}期</li>
             </ul>
         </div>
         <table>
@@ -44,21 +44,16 @@
                 <th>几期中</th>
                 <th>开奖号</th>
             </tr>
-            <tr>
-                <td>0911</td>
-                <td><van-button size="small" class="membership_privileges">会员权限</van-button></td>
-                <td>0</td>
-                <td>追号中</td>
-            </tr>
-            <tr>
-                <td>0911</td>
-                <td>1,6,2,3,4,5</td>
-                <td>1</td>
-                <td>10,9,3,4,8,5,4,6,7,4</td>
+            <tr v-for="(item,index) in planInfo.list" :key="index">
+                <td>{{item.issue}}</td>
+                <td v-if="item.content == '会员权限'"><van-button size="small" class="membership_privileges">{{item.content}}</van-button></td>
+                <td>{{item.content}}</td>
+                <td>{{item.hitnum}}</td>
+                <td>{{item.kjnum}}</td>
             </tr>
         </table>
         <div class="for_more">
-            <van-button size="small" class="no_border_btn" @click="jumpTo">获取更多</van-button>
+            <van-button size="small" class="no_border_btn" @click="getplans">获取更多</van-button>
         </div>
         <div class="replication_solution">
             <van-button size="large" style="background:#FC7953;color:#fff;width:90%">复制方案</van-button>
@@ -69,6 +64,7 @@
 <script>
 import { gethome } from '@/api/home'
 import { getplan } from '@/api'
+import { getdTime, getHMS } from '@/utils'
 export default {
     data() {
         return {
@@ -90,7 +86,14 @@ export default {
             isFirstEnter: false,
             lastid: 0,
             lottype: '',
-            fanganid: ''
+            fanganid: '',
+            plantype: '',
+            plannum: '',
+            issuenum: '',
+            planInfo: null,
+            curtime: '',
+            lottList: null,
+            posname: ''
         }
     },
     methods: {
@@ -102,8 +105,12 @@ export default {
             }, 500);
             this.$router.go(-1)
         },
-        numClick(index) {
+        //选中几期
+        numClick(index,num) {
             this.activeNum = index
+            this.issuenum = num
+            this.isNum = false
+            this.getplans()
         },
         chooseNum() {
             this.isNum = !this.isNum
@@ -111,33 +118,50 @@ export default {
         isShowClick() {
             this.isShow = !this.isShow
         },
-        choose(name,i) {
+        choose(name, i, lottype) {
             this.chooseName = name
             this.active = i
-            this.isShow = false
-            this.$router.replace({
-                path:'/home/aPlan',
-                query:{
-                    lottype:this.lottypeList[i].lottype
+            this.lottype = lottype
+            this.lottList = this.lottypeList.filter(item => {
+                if(item.lottype == this.lottype) {
+                    return {
+                        ...item
+                    }
                 }
-            })
+            })[0]
+            this.chooseName = this.lottList.lotname
+            this.lottype = this.lottList.lottype
+            this.plantype = this.lottList.plantypes[0].pos//计划类型id
+            this.posname = this.lottList.plantypes[0].posname//计划类型名称
+            this.plannum = this.lottList.nmaypes[0]//几码
+            this.issuenum = this.lottList.nissues[0]//几期
+            this.getplans()
         },
         //点击方案
-        change_yc(index){
+        change_yc(index,fanganid){
             this.yc_active = index
+            this.fanganid = fanganid
+            this.getplans()
         },
-        jumpTo() {},
+        jumpTo(url) {
+            this.$router.push(url)
+        },
         async getplans() {
             const { data } = await getplan({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
                 lottype: this.lottype,
                 fanganid: this.fanganid,
-                plantype: '',
-                plannum: '',
-                issuenum: '',
+                plantype: this.plantype,
+                plannum: this.plannum,
+                issuenum: this.issuenum,
                 lastid: this.lastid
             })
+            this.planInfo = data
+            this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
+            this.curtime = getHMS(this.planInfo.curtime)//开始时间
+            let endtime = this.planInfo.endtime//结束时间
+            // this.getdTime()
         },
         async gethome() {
             const { data } = await gethome({
@@ -147,26 +171,32 @@ export default {
             this.fangansList = data.fangans//方案
             this.lottypeList = data.lottype//标题选择
             this.noticesList = data.notices
-            this.chooseName = this.lottypeList[0].lotname
-            this.lottype = this.lottypeList[0].lottype
             this.fanganid = this.fangansList[0].fanganid
-            if(this.$route.query.lottype){
-                for(let i=0;i<this.lottypeList.length;i++){
-                    if(this.lottypeList[i].lottype == this.$route.query.lottype){
-                        this.active = i;
-                        this.chooseName = this.lottypeList[i].lotname
+            //上一个页面传彩种参数  去获取相关一系列参数
+            this.lottList = this.lottypeList.filter(item => {
+                if(item.lottype == this.lottype) {
+                    return {
+                        ...item
                     }
                 }
-            }
+            })[0]
+            this.chooseName = this.lottList.lotname
+            this.lottype = this.lottList.lottype
+            this.plantype = this.lottList.plantypes[0].pos//计划类型id
+            this.posname = this.lottList.plantypes[0].posname//计划类型名称
+            this.plannum = this.lottList.nmaypes[0]//几码
+            this.issuenum = this.lottList.nissues[0]//几期
         }
     },
     created() {
         this.isFirstEnter=true;
     },
     activated(){
-        this.isShow = false
         if(!this.$store.getters.isback || this.isFirstEnter){
-            this.gethome()
+            this.lottype = this.$route.query.lottype
+            this.gethome().then(() => {
+                this.getplans()
+            })
         }
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
@@ -200,15 +230,16 @@ table
     td,th   
         color #A8A8A8
     th,td 
-        background #F5F5F5
         padding .3rem 0
         text-align center
     td  
         color #2B2B2B
     td:first-child
         color #6B6B6B
-    td:first-child,th:first-child 
+    td:first-child
         background #E5E5E5
+    th
+        background #F5F5F5
 .pop_up_content
     width 100%
     display flex
