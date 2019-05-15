@@ -18,8 +18,10 @@ export default {
           const { data }    = await notice({
               noticeid:this.$route.query.noticeid
           });
-          this.title = data.title;
-          this.content = data.content;
+          if(data.errorcode==0){
+              this.title = data.title;
+            this.content = data.content;
+          }
         },
     },
     created(){

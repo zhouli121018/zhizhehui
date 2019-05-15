@@ -33,7 +33,7 @@ export default [
                 component: _import('home/openingMember'),
                 meta: {
                     title: '开通会员',
-                    cache: true
+                    cache: false
                 }
             },
             {//方案列表
@@ -60,7 +60,7 @@ export default [
                 component: _import('home/singlePlan'),
                 meta: {
                     title: '方案',
-                    cache: true
+                    cache: false
                 }
             },
             {//公告
@@ -93,6 +93,15 @@ export default [
                 component: _import('home/openRemind'),
                 meta: {
                     title: '开奖提醒',
+                    cache: false
+                }
+            },
+            {
+                path:'earnMoney',
+                name:'earnMoney',
+                component: _import('home/earnMoney'),
+                meta: {
+                    title: '推荐赚钱',
                     cache: true
                 }
             }
@@ -126,7 +135,7 @@ export default [
                 component: _import('personal/pay'),
                 meta:{
                     title:'微信二维码支付',
-                    cache: true
+                    cache: false
                 }
             },
             {//我的推荐页
@@ -135,7 +144,7 @@ export default [
                 component: _import('personal/recommend'),
                 meta:{
                     title:'我的推荐页',
-                    cache: true
+                    cache: false
                 }
             },
             {//免费使用
@@ -147,6 +156,15 @@ export default [
                     cache: true
                 }
             },
+            {
+                path: 'about',
+                name:'about',
+                component: _import('personal/about'),
+                meta:{
+                    title:'关于智者汇',
+                    cache: false
+                }
+            }
         ]
     },
     {//登录

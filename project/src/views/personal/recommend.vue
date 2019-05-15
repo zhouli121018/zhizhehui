@@ -8,11 +8,11 @@
             </div>
             <div class="title_center">
                 <img src="~@/assets/mfsy.png" alt="">
-                <div>
-                    <p>智者汇</p>
-                    <p>方案计划</p>
+                <div class="flex_grow_1" style="padding-left:0.2rem;letter-spacing: 0.1rem;">
+                    <p style="font-weight:bold;">智者汇</p>
+                    <p style="font-weight:bold;">方案计划</p>
                 </div>
-                <div>快速上岸</div>
+                <div style="font-weight:bold;letter-spacing: 0.1rem;">快速上岸</div>
             </div>
         </div>
         <div class="recommend_content">
@@ -65,14 +65,15 @@ export default {
     text-align left 
     line-height .6rem
 .fonts
-    margin-top 2rem
+    margin-top 1.6rem
+    font-size 0.4rem
 .recommend_content
     width 90%
     margin -.6rem auto 0 auto 
-    padding .4rem .2rem
+    padding .4rem .2rem 1rem
     box-sizing border-box
     background #ffffff
-    box-shadow .01rem .01rem .01rem .01rem #F8F8F8
+    box-shadow 0 0 0.2rem #ddd
     border-radius .25rem
     min-height 5rem
     text-align center
@@ -90,8 +91,11 @@ export default {
     align-items center
     padding .2rem .3rem
     box-sizing border-box
-    >div,p
-        font-size 20px
+    >div
+        font-size 0.6rem
+        color #ffffff
+    >div>p 
+        font-size 0.52rem
         color #ffffff
     p:last-child
         padding-top .2rem

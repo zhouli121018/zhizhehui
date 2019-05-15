@@ -8,7 +8,7 @@
                     <img src="../../assets/clock.png" alt="">
                     <span>{{item.lotname}}</span>
                 </div>
-                <van-icon name="checked" :color="item.status?'#FC7953':'#B5B5B5'"/>
+                <van-icon name="checked" :color="item.status=='1'?'#FC7953':'#B5B5B5'"/>
             </div>
         </div>
         <div style="padding:0.8rem;">
@@ -33,6 +33,7 @@ export default {
                 uid: localStorage.getItem('uid')
             })
             this.list = data.list
+            console.log(this.list)
         },
         async setkjtixing() {
             let str = '';
@@ -46,7 +47,7 @@ export default {
             })
         },
         changeStatus(item){
-            if(item.status){
+            if(item.status=='1'){
                 item.status = 0
             }else{
                 item.status = 1

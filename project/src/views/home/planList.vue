@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <title-bar title_name="方案列表" />
-        <div class="plan_list_box" v-for="(item,index) in list" :key="index">
+        <div class="plan_list_box" v-for="(item,index) in list" :key="index" @click="goSinglePlan(item)">
             <p>{{item.name}}</p>
             <p>{{item.fangantitle}}</p>
         </div>
@@ -13,7 +13,8 @@ import { getfanganlist } from '@/api/home'
 export default {
     data() {
         return {
-            list: []
+            list: [],
+            isFirstEnter:false
         }
     },
     methods: {
@@ -23,11 +24,36 @@ export default {
                 uid: localStorage.getItem('uid')
             })
             this.list = data.list
-        }
+        },
+        goSinglePlan(p){
+            this.$router.push({
+                path:'/home/singlePlan',
+                query:{
+                    fanganid:p.id
+                }
+            })
+        },
     },
     created() {
-        this.getfanganlists()
-    }
+        this.isFirstEnter=true;
+    },
+    beforeRouteEnter(to, from, next) {
+      if (from.name == 'singlePlan') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; 
+      }
+      next()
+    },
+    activated(){
+        if(this.$route.meta.isBack){
+            this.$store.dispatch('set_isback',true)
+        }
+        this.$route.meta.isBack=false;
+        if(!this.$store.getters.isback || this.isFirstEnter){
+            this.getfanganlists()
+        }
+        this.isFirstEnter=false;
+        this.$store.dispatch('set_isback',false)
+    },
 }
 </script>
 

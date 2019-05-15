@@ -85,7 +85,8 @@ export default {
                 {id:0,number: '3'}
             ],
             isNum: false,
-            chooseName: ''
+            chooseName: '',
+            isFirstEnter: false
         }
     },
     methods: {
@@ -127,7 +128,15 @@ export default {
         }
     },
     created() {
-        this.gethome()
+        this.isFirstEnter=true;
+    },
+    activated(){
+        
+        if(!this.$store.getters.isback || this.isFirstEnter){
+            this.gethome()
+        }
+        this.isFirstEnter=false;
+        this.$store.dispatch('set_isback',false)
     }
 }
 </script>
@@ -247,6 +256,7 @@ table
     right .3rem
     background #ffffff
     z-index 999
+    box-shadow: 0 0 0.1rem #ddd;
     li 
         color #2C2C2C
         padding .2rem .1rem
@@ -261,8 +271,8 @@ table
     background-size: 100%;
     position: fixed;
     width: 100%;
-    height 1.5rem
-    line-height 1.5rem
+    height 46px
+    line-height 46px
     left: 0;
     right: 0;
     z-index: 1000;

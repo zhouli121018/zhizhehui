@@ -167,6 +167,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.van-dialog  .van-dialog__content
+    border-bottom none
 .broughtGold_box
     width 100%
     box-sizing border-box   

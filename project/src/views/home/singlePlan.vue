@@ -61,7 +61,9 @@ export default {
         height 40px
         line-height 38px
     .lot_btn
-        margin-left 0.6rem
+        width 30%
+        margin-right 3%
+        // margin-left 0.6rem
     .lot_btn:first-child
-        margin 0   
+        // margin 0   
 </style>
