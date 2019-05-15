@@ -68,6 +68,7 @@
 
 <script>
 import { gethome } from '@/api/home'
+import { getplan } from '@/api'
 export default {
     data() {
         return {
@@ -86,7 +87,10 @@ export default {
             ],
             isNum: false,
             chooseName: '',
-            isFirstEnter: false
+            isFirstEnter: false,
+            lastid: 0,
+            lottype: '',
+            fanganid: ''
         }
     },
     methods: {
@@ -116,6 +120,18 @@ export default {
             this.yc_active = index
         },
         jumpTo() {},
+        async getplans() {
+            const { data } = await getplan({
+                sid: localStorage.getItem('sid'),
+                uid: localStorage.getItem('uid'),
+                lottype: this.lottype,
+                fanganid: this.fanganid,
+                plantype: '',
+                plannum: '',
+                issuenum: '',
+                lastid: this.lastid
+            })
+        },
         async gethome() {
             const { data } = await gethome({
                 sid: localStorage.getItem('sid'),
@@ -125,6 +141,8 @@ export default {
             this.lottypeList = data.lottype//标题选择
             this.noticesList = data.notices
             this.chooseName = this.lottypeList[0].lotname
+            this.lottype = this.lottypeList[0].lottype
+            this.fanganid = this.fangansList[0].fanganid
         }
     },
     created() {

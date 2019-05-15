@@ -80,3 +80,23 @@ export function getalipayorderinfor(data) {
         }
     })
 }
+//会员兑换天数
+export function submitduihuan(data) {
+    return request({
+        url: '/submitduihuan.php',
+        method: 'post',
+        data: {
+            ...data
+        }
+    })
+}
+//获取计划内容
+export function getplan(data) {
+    return request({
+        url: '/getplan.php',
+        method: 'post',
+        data: {
+            ...data
+        }
+    })
+}

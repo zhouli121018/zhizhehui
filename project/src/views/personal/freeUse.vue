@@ -34,6 +34,7 @@
 <script>
 import { Dialog } from 'vant'
 import { getfreeusedesc } from '@/api/home'
+import { submitduihuan } from '@/api'
 import Vue from 'vue'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
@@ -43,7 +44,8 @@ export default {
     },
     data() {
         return {
-            info: null
+            info: null,
+            vipticket: ''
         }
     },
     methods: {
@@ -74,15 +76,25 @@ export default {
             this.info = data
         },
         exchangeDay() {
+            let _this = this
             Dialog.confirm({
                 title: '兑换会员天数',
                 confirmButtonText:'兑换',
                 cancelButtonText:'取消',
                 className: 'dialog_content_input',
-                message: `会员券: <input class="dialog_input" type="number"/> 张`
-                }).then(() => {
+                message: `会员券: <input class="dialog_input" type="text"/> `
+                }).then(async () => {
                     // on confirm
-                
+                    if(!_this.vipticket) {
+                        _this.$toast('请输入会员券')
+                        return
+                    }
+                   const { data } = await submitduihuan({
+                       vipticket: _this.vipticket,
+                       uid: localStorage.getItem('uid'),
+                       sid: localStorage.getItem('sid')
+                   }) 
+                    _this.$toast(data.message)
                 }).catch(() => {
                     
                     // on cancel

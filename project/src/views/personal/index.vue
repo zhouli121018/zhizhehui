@@ -30,7 +30,7 @@
                     佣金金额
                 </p>
             </div>
-            <van-button type="danger" size="small" @click="jumpTo('/home/topUp')">返佣提款</van-button>
+            <van-button type="danger" size="small" @click="jumpTo('/home/earnMoney')">返佣提款</van-button>
         </div>
         <div class="xian"></div>        
         <div>
