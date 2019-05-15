@@ -28,6 +28,20 @@
             </div>
         </div>
         <p class="contact">如有疑问请联系微信:SNSN889922</p>
+
+        <van-dialog 
+            v-model="show"
+            title="兑换会员天数"
+            show-cancel-button
+            class="dialog_content_input"
+            :before-close="beforeClose"
+            >
+            <van-field
+                v-model.number.trim="vipticket"
+                clearable
+                label="会员券(张)："
+            /> 
+        </van-dialog>
     </div>
 </template>
 
@@ -45,10 +59,24 @@ export default {
     data() {
         return {
             info: null,
-            vipticket: ''
+            vipticket: '',
+            show:false,
+            isFirstEnter:false
         }
     },
     methods: {
+        beforeClose(action,done){
+            if(action == 'confirm'){
+                if(!this.vipticket){
+                    this.$toast('请输入会员券!')
+                    done(false)
+                    return;
+                }
+                this.submitexchangeDay();
+                this.vipticket = ''
+            }
+            done();
+        },
         //复制
         doCopy (text) {
             this.$copyText(text).then(function (e) {
@@ -75,7 +103,17 @@ export default {
             })
             this.info = data
         },
+        async submitexchangeDay() {
+            const { data } = await submitduihuan({
+                vipticket: this.vipticket,
+                uid: localStorage.getItem('uid'),
+                sid: localStorage.getItem('sid')
+            }) 
+            this.$toast(data.message)
+        },
         exchangeDay() {
+            this.show = true;
+            return;
             let _this = this
             Dialog.confirm({
                 title: '兑换会员天数',
@@ -105,7 +143,25 @@ export default {
         }
     },
     created() {
-        this.getfreeusedesc()
+        this.isFirstEnter=true;
+    },
+    beforeRouteEnter(to, from, next) {
+      if (from.name == 'recommend') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; 
+      }
+      next()
+    },
+    activated(){
+        this.show_tt = false
+        if(this.$route.meta.isBack){
+            this.$store.dispatch('set_isback',true)
+        }
+        this.$route.meta.isBack=false;
+        if(!this.$store.getters.isback || this.isFirstEnter){
+            this.getfreeusedesc()
+        }
+        this.isFirstEnter=false;
+        this.$store.dispatch('set_isback',false)
     }
 }
 </script>

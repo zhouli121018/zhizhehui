@@ -24,13 +24,13 @@
             <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
             <div class="my_title_center my_centers">
                 <p>
-                    {{info.income_cur}}元
+                    <b style="font-size:0.5rem;font-weight:bold;">{{info.income_cur}}元</b>
                 </p>
                 <p class="goldcoins_fans">
                     佣金金额
                 </p>
             </div>
-            <van-button type="danger" size="small" @click="jumpTo('/home/earnMoney')">返佣提款</van-button>
+            <van-button type="danger" size="small" @click="show = true">返佣提款</van-button>
         </div>
         <div class="xian"></div>        
         <div>
@@ -43,20 +43,57 @@
         <div>
             <van-cell title="关于智者汇" is-link icon="about"  @click="jumpTo('/personal/about')"/>
         </div>
+
+        <van-dialog 
+            v-model="show"
+            title="提款提示"
+            show-cancel-button
+            class="dialog_content_input"
+            :before-close="beforeClose"
+            >
+            <van-field
+                v-model.trim="alipay"
+                clearable
+                label="支付宝："
+            />
+        </van-dialog>
     </div>
 </template>
 
 <script>
 import { getaccount } from '@/api'
+import { submittikuan } from '@/api/home'
 import { Dialog } from 'vant'
 export default {
     data() {
         return {
             info: null,
-            isFirstEnter:false
+            isFirstEnter:false,
+            show:false,
+            alipay:'',
         }
     },
     methods:{
+        beforeClose(action,done){
+            if(action == 'confirm'){
+                if(!this.alipay){
+                    this.$toast('请输入支付宝账号！')
+                    done(false)
+                    return;
+                }
+                this.submittikuan();
+                this.alipay = ''
+            }
+            done();
+        },
+        async submittikuan() {
+            const { data } = await submittikuan({
+                sid: localStorage.getItem('sid'),
+                uid: localStorage.getItem('uid'),
+                alipay:this.alipay
+            })
+            this.info.income_cur = data.yongjin
+        },
         jumpTo(path){
             this.$router.push(path);
         },

@@ -2,23 +2,18 @@
     <div class="container">
         <title-bar title_name="推荐赚钱" />
         <div style="padding:0.4rem 0.2rem;" v-if="info">
-            <div style="line-height:1.6;padding-bottom:0.4rem;">
-                {{info.content}}
-            </div>
+            <div style="line-height:1.6;padding-bottom:0.4rem;" v-html="info.content"></div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">分享短链接内容</span> 
             </div>
-            <div style="line-height:1.6;padding-top:0.1rem;">
-                {{info.invitecontent}}
-            </div>
+            <div style="line-height:1.6;padding-top:0.1rem;" v-html="info.invitecontent"></div>
             <div class="text-center" style="padding:0.4rem 0;">
                 <van-button class="orange_btn" @click="doCopy(info.invitecontent)">分享内容复制</van-button>
             </div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">我的推荐页</span>
             </div>
-            <div  style="line-height:1.6;padding-top:0.1rem;">
-                {{info.tuijian}}
+            <div  style="line-height:1.6;padding-top:0.1rem;" v-html="info.tuijian">
             </div>
             <div class="text-center"  style="padding:0.4rem 0;">
                 <van-button class="orange_btn" @click="go_recommend">我的推荐页</van-button>
@@ -32,13 +27,29 @@
                 <van-button class="orange_btn tikuan" @click="show_tikuan" :disabled="info.yongjin < 50">提 款</van-button>
             </div>
             <div style="color:#A0A0A0;font-size:0.32rem;">*需满50元才能提款</div>
+
+            <van-dialog 
+                v-model="show_tt"
+                title="提款提示"
+                show-cancel-button
+                class="dialog_content_input"
+                :before-close="beforeClose"
+                >
+                <van-field
+                    v-model.trim="alipay"
+                    clearable
+                    label="支付宝："
+                />
+            </van-dialog>
             
         </div>
+
+        
     </div>
 </template>
 
 <script>
-import { getearnmoneydesc } from '@/api/home'
+import { getearnmoneydesc, submittikuan } from '@/api/home'
 import { Dialog } from 'vant'
 import Vue from 'vue'
 import VueClipboard from 'vue-clipboard2'
@@ -48,9 +59,23 @@ export default {
         return {
             isFirstEnter: false,
             info: null,
+            show_tt:false,
+            alipay:''
         }
     },
     methods: {
+        beforeClose(action,done){
+            if(action == 'confirm'){
+                if(!this.alipay){
+                    this.$toast('请输入支付宝账号！')
+                    done(false)
+                    return;
+                }
+                this.submittikuan();
+                this.alipay = ''
+            }
+            done();
+        },
         async getearnmoneydesc() {
             const { data } = await getearnmoneydesc({
                 sid: localStorage.getItem('sid'),
@@ -58,15 +83,26 @@ export default {
             })
             this.info = data
         },
+        async submittikuan() {
+            const { data } = await submittikuan({
+                sid: localStorage.getItem('sid'),
+                uid: localStorage.getItem('uid'),
+                alipay:this.alipay
+            })
+            this.info.yongjin = data.yongjin
+        },
         show_tikuan(){
+            this.show_tt = true;
+            return;
             Dialog.confirm({
                 title: '提款提示',
                 confirmButtonText:'确定',
                 cancelButtonText:'取消',
                 className: 'dialog_content_input',
-                message: `支付宝: <input class="dialog_input" type="text" />`
+                message: `<span style="white-space: nowrap;">支付宝:</span> <input class="dialog_input" type="text" />`
             }).then(() => {
                 // on confirm
+
             }).catch(() => {
                 // on cancel
             });
@@ -105,6 +141,7 @@ export default {
       next()
     },
     activated(){
+        this.show_tt = false
         if(this.$route.meta.isBack){
             this.$store.dispatch('set_isback',true)
         }

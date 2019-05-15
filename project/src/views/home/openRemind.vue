@@ -2,7 +2,7 @@
     <div class="container">
         <title-bar title_name="开奖提醒" />
         <div style="padding:0.2rem;">
-            <p style="padding:0.4rem 0;font-size:0.42rem;line-height:1.6;color:#6B6B6B;">设置彩种开奖提醒后，倒计时开奖后将有声音提醒用户查看开奖号码</p>
+            <p style="padding:0.4rem 0;font-size:0.42rem;line-height:1.6;color:#6B6B6B;" v-html="tips"></p>
             <div class="open_remind_item dis_flex" v-for="(item,k) in list" :key="k"  @click="changeStatus(item)">
                 <div class="flex_grow_1">
                     <img src="../../assets/clock.png" alt="">
@@ -23,7 +23,8 @@ import { getkjtixing, setkjtixing } from '@/api/home'
 export default {
     data() {
         return {
-            list: []
+            list: [],
+            tips: ''
         }
     },
     methods: {
@@ -33,7 +34,7 @@ export default {
                 uid: localStorage.getItem('uid')
             })
             this.list = data.list
-            console.log(this.list)
+            this.tips = data.tips
         },
         async setkjtixing() {
             let str = '';

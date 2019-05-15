@@ -118,3 +118,14 @@ export function getearnmoneydesc (data) {
     }
   })
 }
+
+//16、佣金提款 submittikuan.php
+export function submittikuan (data) {
+  return request({
+    url: '/submittikuan.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}

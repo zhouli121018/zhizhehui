@@ -39,7 +39,7 @@
   width 100%
   height .4rem 
   background #EEEEEE
-  margin-top .2rem
+  // margin-top .2rem
 .van-button
   border-radius .2rem
 .dialog_content .van-dialog__message
@@ -95,7 +95,7 @@
     flex: none;
     padding-left:0.2rem;
 }
-.van-dialog.dialog_content_input .dialog_input
+.van-dialog.dialog_content_input .dialog_input,.van-dialog.dialog_content_input input
     // width 80%
     background #F0F0F0
     height 1.1rem
@@ -108,3 +108,6 @@
 .dialog_content_input .van-dialog__message
   display: flex
   align-items: center
+.van-dialog.dialog_content_input .van-field__label
+  line-height 1rem
+  flex unset
