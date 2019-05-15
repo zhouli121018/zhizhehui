@@ -31,7 +31,7 @@
     },
     data() {
       return {
-        count: 300,  // 初始倒计时数
+        count: 120,  // 初始倒计时数
         isStart: false, // 是否开始
         timer: null   // 定时器
       }
@@ -50,7 +50,7 @@
       },
       start() {
         if (!this.count) {
-          this.count = 60
+          this.count = 120
           this.isStart = false
           clearTimeout(this.timer)
           return
