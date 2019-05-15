@@ -135,7 +135,7 @@ export default [
                 component: _import('personal/pay'),
                 meta:{
                     title:'微信二维码支付',
-                    cache: false
+                    cache: true
                 }
             },
             {//我的推荐页

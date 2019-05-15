@@ -2,18 +2,18 @@
     <div class="container">
         <title-bar title_name="推荐赚钱" />
         <div style="padding:0.4rem 0.2rem;" v-if="info">
-            <div style="line-height:1.6;padding-bottom:0.4rem;" v-html="info.content"></div>
+            <div style="line-height:1.6;padding-bottom:0.4rem;font-size:0.36rem" v-html="info.content"></div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">分享短链接内容</span> 
             </div>
-            <div style="line-height:1.6;padding-top:0.1rem;" v-html="info.invitecontent"></div>
+            <div style="line-height:1.6;padding-top:0.1rem;font-size:0.36rem" v-html="info.invitecontent"></div>
             <div class="text-center" style="padding:0.4rem 0;">
                 <van-button class="orange_btn" @click="doCopy(info.invitecontent)">分享内容复制</van-button>
             </div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">我的推荐页</span>
             </div>
-            <div  style="line-height:1.6;padding-top:0.1rem;" v-html="info.tuijian">
+            <div  style="line-height:1.6;padding-top:0.1rem;font-size:0.36rem" v-html="info.tuijian">
             </div>
             <div class="text-center"  style="padding:0.4rem 0;">
                 <van-button class="orange_btn" @click="go_recommend">我的推荐页</van-button>
@@ -23,10 +23,12 @@
             </div>
             <div>
                 <span>佣金：</span>
-                <b style="font-size:0.5rem;font-weight:bold;">{{info.yongjin}}元</b>
+                <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;padding-right:0.3rem;">{{info.yongjin}}元</b>
                 <van-button class="orange_btn tikuan" @click="show_tikuan" :disabled="info.yongjin < 50">提 款</van-button>
             </div>
-            <div style="color:#A0A0A0;font-size:0.32rem;">*需满50元才能提款</div>
+            <div style="color:#A0A0A0;font-size:0.32rem;padding-top:0.2rem">*需满50元才能提款</div>
+
+            <p class="contact text-center" style="color:#6E6E6E;font-size:0.35rem;padding-top:1.6rem;">如有疑问请联系微信:{{$store.getters.kfwecha}}</p>
 
             <van-dialog 
                 v-model="show_tt"
@@ -49,7 +51,7 @@
 </template>
 
 <script>
-import { getearnmoneydesc, submittikuan } from '@/api/home'
+import { getearnmoneydesc, submittikuan, gethome } from '@/api/home'
 import { Dialog } from 'vant'
 import Vue from 'vue'
 import VueClipboard from 'vue-clipboard2'
@@ -64,6 +66,13 @@ export default {
         }
     },
     methods: {
+        async gethome() {
+            const { data } = await gethome({
+                sid: localStorage.getItem('sid'),
+                uid: localStorage.getItem('uid')
+            })
+            this.$store.dispatch('set_kfwecha',data.kfwecha)
+        },
         beforeClose(action,done){
             if(action == 'confirm'){
                 if(!this.alipay){
@@ -151,6 +160,9 @@ export default {
         }
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
+        if(!this.$store.getters.kfwecha){
+            this.gethome();
+        }
     }
 }
 </script>

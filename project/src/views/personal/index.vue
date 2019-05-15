@@ -5,7 +5,7 @@
             <img class="my_title_photo" :src="$https_img+info.img" alt="">
             <div class="my_title_center">
                 <div>
-                    <span style="font-weight:bold;font-size:0.45rem;color:#4D4D4C;">{{info.uname}}</span>
+                    <span style="font-weight:bold;font-size:0.45rem;color:#232323;">{{info.uname}}</span>
                 </div>
                 <div class="goldcoins_fans">
                     <!-- <p><span>金币: </span><span class="red">{{info.coin}}</span></p>
@@ -24,13 +24,13 @@
             <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
             <div class="my_title_center my_centers">
                 <p>
-                    <b style="font-size:0.5rem;font-weight:bold;">{{info.income_cur}}元</b>
+                    <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{info.income_cur}}元</b>
                 </p>
                 <p class="goldcoins_fans">
                     佣金金额
                 </p>
             </div>
-            <van-button type="danger" size="small" @click="show = true">返佣提款</van-button>
+            <van-button type="danger" size="small" @click="show = true" >返佣提款</van-button>
         </div>
         <div class="xian"></div>        
         <div>
@@ -209,6 +209,7 @@ export default {
     height 1rem
     line-height 1rem
     padding 0 .3rem
+    font-size 0.36rem
 .title_photo
     width .88rem!important
     height .88rem!important

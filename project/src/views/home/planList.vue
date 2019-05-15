@@ -64,7 +64,7 @@ export default {
         width 94%
         background #ffffff
         border-radius .2rem
-        margin .2rem auto
+        margin .38rem auto
         padding .3rem
         box-sizing border-box
         p 

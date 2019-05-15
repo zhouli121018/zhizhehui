@@ -165,6 +165,7 @@ export default {
     },
     activated(){
         this.isShow = false
+        this.active = 0
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.gethome()
         }

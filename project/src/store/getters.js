@@ -6,6 +6,7 @@ const getters = {
     return state.user.userInfo && state.user.userInfo.mobile
   } ,
   isback:state=> state.app.isback,
+  kfwecha:state=> state.app.kfwecha,
 
 }
 export default getters
