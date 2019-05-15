@@ -147,6 +147,7 @@ export default {
         })
         this.fangans = data.fangans//方案
         this.advs = data.advs 
+        this.$store.dispatch('set_kfwecha',data.kfwecha)
         // this.lottypeList = data.lottype//标题选择
         this.notices = data.notices
         // this.chooseName = this.lottypeList[0].lotname
@@ -208,6 +209,9 @@ export default {
 .van-cell__value{
   flex:unset;
   padding-left:0.1rem;
+}
+.diy_font.van-cell{
+  padding-bottom:0.2rem;
 }
 .diy_font .van-cell__right-icon{
   font-size:0.3rem;

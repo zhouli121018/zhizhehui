@@ -3,13 +3,13 @@
         <title-bar title_name="免费使用" />
         <div class="freeUse_box">
             <div class="free_use_title"><i></i><span>免费使用说明</span><i></i></div>
-            <p>{{info.freeshuoming}}</p>
-            <div class="free_use_coupon"><i></i> 会员券</div>
+            <p v-html="info.freeshuoming" style="font-size:0.36rem;padding:0.1rem 0;"></p>
+            <div class="free_use_coupon" style="font-size:0.36rem;padding-top:0.1rem;"><i></i> 会员券</div>
             <div class="free_use_coupon">
-                <p>会员券: <span class="free_use_font">{{info.vipticket}}张</span></p>
+                <p style="font-size:0.36rem;margin-right:1rem;">会员券: <span class="free_use_font">{{info.vipticket}}张</span></p>
                 <van-button class="warning_btn" @click="exchangeDay">兑换会员天数</van-button>
             </div>
-            <p>{{info.vipticketdes}}</p>
+            <p v-html="info.vipticketdes" style="color:#7B7B7B;font-size:0.3rem;"></p>
         </div>
         <div class="xian"></div>
         <div class="freeUse_box">
@@ -185,7 +185,8 @@ export default {
     padding .4rem .3rem 
     box-sizing border-box
     background #ffffff
-    line-height .8rem
+    font-size 0.36rem
+    line-height .7rem
 .free_use_title
     width 100%
     display flex

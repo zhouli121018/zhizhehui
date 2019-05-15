@@ -192,6 +192,11 @@ export default {
         this.isFirstEnter=true;
     },
     activated(){
+<<<<<<< HEAD
+=======
+        this.isShow = false
+        this.active = 0
+>>>>>>> c0a03dfb2974e48a6a0120595df8bab0e4259c67
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {

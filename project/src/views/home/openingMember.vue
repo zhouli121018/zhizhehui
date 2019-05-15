@@ -16,7 +16,7 @@
             <p>1.购买会员3天内可以退款</p>
             <p class="goldcoins_fans">
                 2.邀请好友注册免费获取会员
-                <van-button class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">免费获取</van-button>
+                <van-button class="orange_btn" round @click="jumpTo('/personal/freeUse')" style="white-space:nowrap;">免费获取</van-button>
             </p>
         </div>
         <div class="xian"></div>
@@ -61,6 +61,9 @@ export default {
         }
     },
     methods: {
+        jumpTo(path){
+            this.$router.push(path)
+        },
         onClick(index,money) {
             this.active = index
             this.money = money

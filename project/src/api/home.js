@@ -129,3 +129,14 @@ export function submittikuan (data) {
     }
   })
 }
+
+//23、获取开奖提醒 getkjring.php
+export function getkjring (data) {
+  return request({
+    url: '/getkjring.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}

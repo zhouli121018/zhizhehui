@@ -14,6 +14,7 @@
 
 <script>
 import { Dialog } from 'vant'
+import { getkjring } from '@/api/home'
 export default {
   data(){
     return {
@@ -21,7 +22,12 @@ export default {
     }
   },
   methods:{
-
+    async getkjring() {
+      const { data } = await getkjring({
+          uid: localStorage.getItem('uid'),
+          sid: localStorage.getItem('sid')
+      }) 
+    }
   },
   created(){
     //判断是否微信或qq
@@ -46,8 +52,12 @@ export default {
           // on cancel
         });
       }
-        
     }
+    console.log(!this.is_qqorwx)
+    if(!this.is_qqorwx){
+      // this.getkjring();
+    }
+
   },
   computed: {
     loading () {
