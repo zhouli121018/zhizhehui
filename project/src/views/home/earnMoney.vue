@@ -1,24 +1,24 @@
 <template>
     <div class="container">
         <title-bar title_name="推荐赚钱" />
-        <div style="padding:0.4rem 0.2rem;">
+        <div style="padding:0.4rem 0.2rem;" v-if="info">
             <div style="line-height:1.6;padding-bottom:0.4rem;">
-                通过分享短链接内容和我的推荐页带来的用户开通会员都可以获取佣金。<br />佣金比例是40%。如果你是非会员，第一笔佣金作为开通会员使用，后面的佣金可以提款。
+                {{info.content}}
             </div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">分享短链接内容</span> 
             </div>
             <div style="line-height:1.6;padding-top:0.1rem;">
-                智者汇方案计划是一个经过验证的算法，让你跟号更放心。时时彩、PK10、11选5、分分彩都可以用。下载链接：';
+                {{info.invitecontent}}
             </div>
             <div class="text-center" style="padding:0.4rem 0;">
-                <van-button class="orange_btn" @click="doCopy('智者汇方案计划是')">分享内容复制</van-button>
+                <van-button class="orange_btn" @click="doCopy(info.invitecontent)">分享内容复制</van-button>
             </div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">我的推荐页</span>
             </div>
             <div  style="line-height:1.6;padding-top:0.1rem;">
-                通过截屏‘我的推荐页’分享到微信、QQ等平台，推荐页有你的专有二维码、链接和邀请码。
+                {{info.tuijian}}
             </div>
             <div class="text-center"  style="padding:0.4rem 0;">
                 <van-button class="orange_btn" @click="go_recommend">我的推荐页</van-button>
@@ -28,8 +28,8 @@
             </div>
             <div>
                 <span>佣金：</span>
-                <b style="font-size:0.5rem;font-weight:bold;">201.23元</b>
-                <van-button class="orange_btn tikuan" @click="show_tikuan">提 款</van-button>
+                <b style="font-size:0.5rem;font-weight:bold;">{{info.yongjin}}元</b>
+                <van-button class="orange_btn tikuan" @click="show_tikuan" :disabled="info.yongjin < 50">提 款</van-button>
             </div>
             <div style="color:#A0A0A0;font-size:0.32rem;">*需满50元才能提款</div>
             
@@ -46,7 +46,8 @@ Vue.use(VueClipboard)
 export default {
     data() {
         return {
-            list: [],
+            isFirstEnter: false,
+            info: null,
         }
     },
     methods: {
@@ -55,6 +56,7 @@ export default {
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid')
             })
+            this.info = data
         },
         show_tikuan(){
             Dialog.confirm({
@@ -62,7 +64,7 @@ export default {
                 confirmButtonText:'确定',
                 cancelButtonText:'取消',
                 className: 'dialog_content_input',
-                message: `支付宝: <input class="dialog_input" type="number" />`
+                message: `支付宝: <input class="dialog_input" type="text" />`
             }).then(() => {
                 // on confirm
             }).catch(() => {
@@ -93,7 +95,25 @@ export default {
         
     },
     created() {
-        this.getearnmoneydesc()
+        this.isFirstEnter=true;
+        
+    },
+    beforeRouteEnter(to, from, next) {
+      if (from.name == 'recommend') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; 
+      }
+      next()
+    },
+    activated(){
+        if(this.$route.meta.isBack){
+            this.$store.dispatch('set_isback',true)
+        }
+        this.$route.meta.isBack=false;
+        if(!this.$store.getters.isback || this.isFirstEnter){
+            this.getearnmoneydesc()
+        }
+        this.isFirstEnter=false;
+        this.$store.dispatch('set_isback',false)
     }
 }
 </script>

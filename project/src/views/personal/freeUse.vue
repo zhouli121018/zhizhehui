@@ -40,7 +40,7 @@ export default {
                 confirmButtonText:'兑换',
                 cancelButtonText:'取消',
                 className: 'dialog_content_input',
-                message: `会员券: <input class="dialog_input" type="number"/>`
+                message: `会员券: <input class="dialog_input" type="number"/> 张`
                 }).then(() => {
                     // on confirm
                 

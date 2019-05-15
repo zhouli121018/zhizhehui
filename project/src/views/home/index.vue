@@ -142,8 +142,8 @@ export default {
     },
     async gethome() {
         const { data } = await gethome({
-            // sid: localStorage.getItem('sid'),
-            // uid: localStorage.getItem('uid')
+            sid: localStorage.getItem('sid'),
+            uid: localStorage.getItem('uid')
         })
         this.fangans = data.fangans//方案
         this.advs = data.advs 
@@ -172,14 +172,19 @@ export default {
     }else{
       sessionStorage['pid'] = ''
     }
-    this.gethome();
+    
     if(localStorage['uid'] && localStorage['uid']!=''){
       this.left_text = '会员中心';
       this.left_path = '/personal/index'
     }
   },
   activated(){  
-    console.log(localStorage['uid'] && localStorage['uid']!='')
+    if(this.isFirstEnter){
+       this.gethome();
+    }
+    this.isFirstEnter=false;
+    this.$store.dispatch('set_isback',false)
+    
     if(localStorage['uid'] && localStorage['uid']!=''){
       this.left_text = '会员中心';
       this.left_path = '/personal/index'

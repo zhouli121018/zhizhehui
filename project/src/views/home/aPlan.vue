@@ -85,7 +85,8 @@ export default {
                 {id:0,number: '3'}
             ],
             isNum: false,
-            chooseName: ''
+            chooseName: '',
+            isFirstEnter: false
         }
     },
     methods: {
@@ -127,10 +128,15 @@ export default {
         }
     },
     created() {
-        this.gethome()
+        this.isFirstEnter=true;
     },
     activated(){
-        this.gethome()
+        
+        if(!this.$store.getters.isback || this.isFirstEnter){
+            this.gethome()
+        }
+        this.isFirstEnter=false;
+        this.$store.dispatch('set_isback',false)
     }
 }
 </script>

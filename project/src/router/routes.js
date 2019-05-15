@@ -102,7 +102,7 @@ export default [
                 component: _import('home/earnMoney'),
                 meta: {
                     title: '推荐赚钱',
-                    cache: false
+                    cache: true
                 }
             }
         ]

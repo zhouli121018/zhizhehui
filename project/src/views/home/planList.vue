@@ -37,7 +37,17 @@ export default {
     created() {
         this.isFirstEnter=true;
     },
+    beforeRouteEnter(to, from, next) {
+      if (from.name == 'singlePlan') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; 
+      }
+      next()
+    },
     activated(){
+        if(this.$route.meta.isBack){
+            this.$store.dispatch('set_isback',true)
+        }
+        this.$route.meta.isBack=false;
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.getfanganlists()
         }

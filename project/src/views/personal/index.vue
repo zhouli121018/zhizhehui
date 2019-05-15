@@ -34,14 +34,14 @@
         </div>
         <div class="xian"></div>        
         <div>
-            <van-cell title="我的推荐页" is-link icon="shop" @click="jumpTo('/personal/recommend')"/>
-            <van-cell title="代理赚钱" is-link icon="look"  @click="jumpTo('/home/earnMoney')"/>
-            <van-cell title="开奖提醒设置" is-link icon="look"  @click="jumpTo('/home/openRemind')"/>
-            <van-cell title="免费使用" is-link icon="look"  @click="jumpTo('/personal/freeUse')"/>
+            <van-cell title="我的推荐页" is-link icon="tj" @click="jumpTo('/personal/recommend')"/>
+            <van-cell title="代理赚钱" is-link icon="dlzq"  @click="jumpTo('/home/earnMoney')"/>
+            <van-cell title="开奖提醒设置" is-link icon="kjtx"  @click="jumpTo('/home/openRemind')"/>
+            <van-cell title="免费使用" is-link icon="free"  @click="jumpTo('/personal/freeUse')"/>
         </div>
         <div class="xian"></div>
         <div>
-            <van-cell title="关于智者汇" is-link icon="look"  @click="jumpTo('/personal/about')"/>
+            <van-cell title="关于智者汇" is-link icon="about"  @click="jumpTo('/personal/about')"/>
         </div>
     </div>
 </template>
@@ -74,7 +74,17 @@ export default {
     created() {
         this.isFirstEnter=true;
     },
+    beforeRouteEnter(to, from, next) {
+      if (from.name == 'openingMember' || from.name == 'recommend' || from.name == 'earnMoney' || from.name == 'openRemind' || from.name == 'freeUse' || from.name == 'about') { // 这个name是下一级页面的路由name
+        to.meta.isBack = true; 
+      }
+      next()
+    },
     activated(){
+        if(this.$route.meta.isBack){
+            this.$store.dispatch('set_isback',true)
+        }
+        this.$route.meta.isBack=false;
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.getaccount()
         }
@@ -95,35 +105,35 @@ export default {
             color #666
 /deep/ .van-cell
     line-height .88rem
-/deep/ .van-icon-shop::before
+/deep/ .van-icon-tj::before
     content ''
     width .88rem
     height .88rem
-    background url('~@/assets/myFocus.png') no-repeat
+    background url('~@/assets/tj_p.png') no-repeat
     background-size contain
-/deep/ .van-icon-look::before
+/deep/ .van-icon-dlzq::before
     content ''
     width .88rem
     height .88rem
-    background url('~@/assets/look.png') no-repeat
+    background url('~@/assets/dlzq_p.png') no-repeat
     background-size contain
-/deep/ .van-icon-message::before
+/deep/ .van-icon-kjtx::before
     content ''
     width .88rem
     height .88rem
-    background url('~@/assets/message.png') no-repeat
+    background url('~@/assets/kjtx_p.png') no-repeat
     background-size contain
-/deep/ .van-icon-feedback::before
+/deep/ .van-icon-free::before
     content ''
     width .88rem
     height .88rem
-    background url('~@/assets/feedback.png') no-repeat
+    background url('~@/assets/free.png') no-repeat
     background-size contain
 /deep/ .van-icon-about::before
     content ''
     width .88rem
     height .88rem
-    background url('~@/assets/about.png') no-repeat
+    background url('~@/assets/about_zzh.png') no-repeat
     background-size contain
 .my_title
     width: 100%
