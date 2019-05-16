@@ -13,7 +13,7 @@
             </ul>
         </div>
         <div class="lottery_time">
-            <div>距{{planInfo.curissue}}期开奖: <span class="green"> 00:12:13</span></div>
+            <div>距{{planInfo.curissue}}期开奖: <span class="green"> {{h+':'+m+':'+s}}</span></div>
             <div>当前时间: <span class="blue"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
@@ -28,13 +28,21 @@
         </van-row>
         <div class="xian"></div>
         <div class="pop_up_content">
-            <p>{{posname}} <img src="~@/assets/navigationarrow.png" alt=""></p>
-            <p>{{plannum}}码 <img src="~@/assets/navigationarrow.png" alt=""></p>
-            <p @click="chooseNum">{{issuenum}}期 <img v-if="!isNum" src="~@/assets/navigationarrow.png" alt="">
+            <p @click="chooseNum(3)">{{posname}} <img v-if="!isNum_top" src="~@/assets/navigationarrow.png" alt="">
+                <img v-else src="~@/assets/navigationup.png" alt=""></p>
+            <p @click="chooseNum(2)">{{plannum}}码 <img v-if="!isNum_center" src="~@/assets/navigationarrow.png" alt="">
+                <img v-else src="~@/assets/navigationup.png" alt=""></p>
+            <p @click="chooseNum(1)">{{issuenum}}期 <img v-if="!isNum" src="~@/assets/navigationarrow.png" alt="">
                 <img v-else src="~@/assets/navigationup.png" alt="">
             </p>
-            <ul v-if="isNum">
-                <li v-for="(item,index) in lottList.nissues" :class="index==activeNum?'active':''" :key="index" @click="numClick(index,item)">{{item}}期</li>
+            <ul v-if="isNum" class="up_content_last">
+                <li v-for="(item,index) in lottList.nissues" :class="index==activeNum?'active':''" :key="index" @click="numClick(1,index,item)">{{item}}期</li>
+            </ul>
+            <ul v-if="isNum_center" class="up_content_last up_content_center">
+                <li v-for="(item,index) in lottList.nmaypes" :class="index==activeNums?'active':''" :key="index" @click="numClick(2,index,item)">{{item}}码</li>
+            </ul>
+            <ul v-if="isNum_top" class="up_content_last up_content_top">
+                <li v-for="(item,index) in lottList.plantypes" :class="index==a_activeNum?'active':''" :key="index" @click="numClick(3,index,item)">{{item.posname}}</li>
             </ul>
         </div>
         <table>
@@ -69,6 +77,8 @@ export default {
     data() {
         return {
             activeNum: 0,
+            activeNums: 0,
+            a_activeNum: 0,
             lottypeList: [],
             active: 0,
             isShow: false,
@@ -76,12 +86,9 @@ export default {
             lottypeList: [],
             noticesList: [],
             yc_active: 0,
-            list: [
-                {id:0,number: '1'},
-                {id:0,number: '2'},
-                {id:0,number: '3'}
-            ],
             isNum: false,
+            isNum_center: false,
+            isNum_top: false,
             chooseName: '',
             isFirstEnter: false,
             lastid: 0,
@@ -93,7 +100,14 @@ export default {
             planInfo: null,
             curtime: '',
             lottList: null,
-            posname: ''
+            posname: '',
+            endtime: '',
+            _curtime: '',
+            h: '',
+            m: '',
+            s: '',
+            isCurtime: false,
+            timer: null
         }
     },
     methods: {
@@ -106,14 +120,33 @@ export default {
             this.$router.go(-1)
         },
         //选中几期
-        numClick(index,num) {
-            this.activeNum = index
-            this.issuenum = num
-            this.isNum = false
+        numClick(type,index,num) {
+            if(type == 1) {
+                this.activeNum = index
+                this.issuenum = num
+                this.isNum = false
+            }else if(type == 2) {
+                this.activeNums = index 
+                this.plannum = num
+                this.isNum_center = false
+            }else {
+                this.a_activeNum = index
+                this.posname = num.posname
+                this.plantype = num.plantype
+                this.isNum_top = false
+            }
+            clearTimeout(this.timer)
             this.getplans()
         },
-        chooseNum() {
-            this.isNum = !this.isNum
+        chooseNum(type) {
+            if(type == 1) {
+                this.isNum = !this.isNum
+            }else if(type == 2) {
+                this.isNum_center = !this.isNum_center
+            }else {
+                this.isNum_top = !this.isNum_top
+            }
+            
         },
         isShowClick() {
             this.isShow = !this.isShow
@@ -135,6 +168,7 @@ export default {
             this.posname = this.lottList.plantypes[0].posname//计划类型名称
             this.plannum = this.lottList.nmaypes[0]//几码
             this.issuenum = this.lottList.nissues[0]//几期
+            clearTimeout(this.timer)
             this.getplans()
         },
         //点击方案
@@ -147,6 +181,7 @@ export default {
             this.$router.push(url)
         },
         async getplans() {
+            clearTimeout(this.timer)
             const { data } = await getplan({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
@@ -160,8 +195,27 @@ export default {
             this.planInfo = data
             this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
-            let endtime = this.planInfo.endtime//结束时间
-            // this.getdTime()
+            this._curtime = this.planInfo.curtime*1000//当前时间
+            this.endtime = this.planInfo.endtime*1000//结束时间
+            this.isCurtime = false
+            this.countTime()
+        },
+        countTime () {
+            //时间差
+            let leftTime = this.endtime - this._curtime;
+            //定义变量 d,h,m,s保存倒计时的时间
+            if (leftTime >= 0) {
+                this._curtime = this._curtime + 1000
+                // this.d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+                this.h = Math.floor(leftTime / 1000 / 60 / 60 % 24)>=10?Math.floor(leftTime / 1000 / 60 / 60 % 24):'0'+Math.floor(leftTime / 1000 / 60 / 60 % 24);
+                this.m = Math.floor(leftTime / 1000 / 60 % 60)>=10?Math.floor(leftTime / 1000 / 60 % 60):'0'+Math.floor(leftTime / 1000 / 60 % 60);
+                this.s = Math.floor(leftTime / 1000 % 60)>=10?Math.floor(leftTime / 1000 % 60):'0'+Math.floor(leftTime / 1000 % 60);
+				//递归每秒调用countTime方法，显示动态时间效果
+				this.timer = setTimeout(this.countTime, 1000);
+            }else {
+                clearTimeout(this.timer)
+            }
+            
         },
         async gethome() {
             const { data } = await gethome({
@@ -192,11 +246,8 @@ export default {
         this.isFirstEnter=true;
     },
     activated(){
-<<<<<<< HEAD
-=======
         this.isShow = false
         this.active = 0
->>>>>>> c0a03dfb2974e48a6a0120595df8bab0e4259c67
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {
@@ -258,7 +309,7 @@ table
     img 
         width .3rem
         height .18rem     
-    ul 
+    ul.up_content_last 
         position absolute
         top 99%
         right 9%
@@ -266,6 +317,12 @@ table
         min-width 20%
         padding .2rem 
         box-sizing border-box  
+        z-index 999 
+        &.up_content_center
+            right 37%
+        &.up_content_top
+            min-width 23%
+            right 68%
         li  
             text-align center
             padding .2rem 0
