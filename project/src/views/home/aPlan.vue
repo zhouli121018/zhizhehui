@@ -248,6 +248,9 @@ export default {
     activated(){
         this.isShow = false
         this.active = 0
+        this.isNum = false
+        this.isNum_center = false
+        this.isNum_top = false
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {
