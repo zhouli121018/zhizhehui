@@ -8,7 +8,8 @@
     <div class='full_sc' v-show="loading">
       <rise-loader class="custom-class" color="#8adff4" :loading="loading" :size="15" sizeUnit="px"></rise-loader>
     </div>
-    
+    <audio id="myaudio" :src="dingdong" controls="controls" :loop="false" v-show="false"></audio>
+    <!-- <van-button @click="test">dingdong</van-button> -->
   </div>
 </template>
 
@@ -18,7 +19,11 @@ import { getkjring } from '@/api/home'
 export default {
   data(){
     return {
-      is_qqorwx:false
+      is_qqorwx:false,
+      endtime: '',
+      _curtime: '',
+      dingdong:'http://sscby.cn/zzh/dingdong.mp3',
+      timer:null
     }
   },
   methods:{
@@ -27,7 +32,26 @@ export default {
           uid: localStorage.getItem('uid'),
           sid: localStorage.getItem('sid')
       }) 
+      if(data.errorcode == 0){
+        let curtime = data.curtime;
+        this.dingdong = data.soundurl
+        let is_ring = false;
+        data.list.forEach(val => {
+          if(val.needring == '1'){
+            is_ring = true;
+          }
+        });
+        if(this.dingdong && is_ring){
+          this.$nextTick(()=>{
+            document.getElementById('myaudio').play()
+          })
+        }
+      }
+    },
+    test(){
+      document.getElementById('myaudio').play()
     }
+    
   },
   created(){
     //判断是否微信或qq
@@ -55,7 +79,11 @@ export default {
     }
     console.log(!this.is_qqorwx)
     if(!this.is_qqorwx){
-      // this.getkjring();
+      this.getkjring();
+      if(this.timer){
+        clearInterval(this.timer);
+      }
+      this.timer = setInterval(this.getkjring,3000)
     }
 
   },

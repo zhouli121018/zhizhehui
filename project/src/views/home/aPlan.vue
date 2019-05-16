@@ -224,6 +224,11 @@ export default {
             })
             this.fangansList = data.fangans//方案
             this.lottypeList = data.lottype//标题选择
+            if(this.$route.query.lottype){
+                this.lottype = this.$route.query.lottype
+            }else{
+                this.lottype = this.lottypeList[0].lottype
+            }
             this.noticesList = data.notices
             this.fanganid = this.fangansList[0].fanganid
             //上一个页面传彩种参数  去获取相关一系列参数
@@ -247,7 +252,6 @@ export default {
     },
     activated(){
         this.isShow = false
-        this.active = 0
         this.isNum = false
         this.isNum_center = false
         this.isNum_top = false

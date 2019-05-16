@@ -18,9 +18,10 @@ service.interceptors.request.use(config => {
         // 判断接口是否需要携带token , noAuth,
         let { noLoading = true } = config.data
         if (noLoading) {
-            store.commit('Change_Loading', true) // 显示全局loading图
+            if(config.url.indexOf('/getkjring.php')<0){
+                store.commit('Change_Loading', true) // 显示全局loading图
+            }
         }
-
         if (config) { //给所有请求加上 token 和 data 参数
             let now = new Date();
             let md5_data = md5('token=' + now.getTime() + '&key=lldu43d98382');
