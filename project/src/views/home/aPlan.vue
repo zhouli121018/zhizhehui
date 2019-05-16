@@ -13,11 +13,11 @@
             </ul>
         </div>
         <div class="lottery_time">
-            <div>距{{planInfo.curissue}}期开奖: <span class="green"> {{h+':'+m+':'+s}}</span></div>
-            <div>当前时间: <span class="blue"> {{curtime}}</span></div>
+            <div>距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
+            <div>当前时间：<span class="blue"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
-            <span>{{planInfo.preissue}}期开奖号码:</span> <span class="lottery_number">{{planInfo.kjnum}}</span>
+            <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
         </div>
         <div class="xian"></div>
         <van-row class="text_center btn_group" style="padding-bottom:0.2rem;">
