@@ -107,7 +107,9 @@ export default {
             m: '',
             s: '',
             isCurtime: false,
-            timer: null
+            timer: null,
+            current_time:'',
+            cur_timer:null
         }
     },
     methods: {
@@ -182,6 +184,7 @@ export default {
         },
         async getplans() {
             clearTimeout(this.timer)
+            if(this.cur_timer) clearTimeout(this.cur_timer)
             const { data } = await getplan({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
@@ -197,8 +200,11 @@ export default {
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
             this._curtime = this.planInfo.curtime*1000//当前时间
             this.endtime = this.planInfo.endtime*1000//结束时间
+            this.current_time = this.planInfo.curtime*1000//当前时间
             this.isCurtime = false
             this.countTime()
+            this.curTime();
+            this.cur_timer = setInterval(this.curTime,1000)
         },
         countTime () {
             //时间差
@@ -215,7 +221,22 @@ export default {
             }else {
                 clearTimeout(this.timer)
             }
-            
+        },
+        curTime () {
+            this.current_time = this.current_time + 1000
+            var date=new Date(this.current_time);
+            var year=date.getFullYear();
+            var month=date.getMonth()+1;
+            var day=date.getDate();
+            var hour="00"+date.getHours();
+            hour=hour.substr(hour.length-2);
+            var minute="00"+date.getMinutes();
+            minute=minute.substr(minute.length-2);
+            var second="00"+date.getSeconds();
+            second=second.substr(second.length-2);
+            // let str = year+"-"+month+"-"+day+" "+" "+hour+":"+minute+":"+second
+            let str = month+"月"+day+"日"+" "+hour+":"+minute+":"+second
+            this.curtime = str
         },
         async gethome() {
             const { data } = await gethome({

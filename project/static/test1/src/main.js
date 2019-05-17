@@ -34,6 +34,9 @@ import 'animate.css';
 import * as filters from './filters'  // 全局过滤器
 import './styles/index.styl'
 
+import audio from 'vue-mobile-audio'
+Vue.use(audio)  
+
 //注册全局title组件
 import TitleBar from '@/components/Title/index'
 Vue.component('title-bar',TitleBar)

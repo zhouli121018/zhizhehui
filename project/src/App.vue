@@ -8,7 +8,7 @@
     <div class='full_sc' v-show="loading">
       <rise-loader class="custom-class" color="#8adff4" :loading="loading" :size="15" sizeUnit="px"></rise-loader>
     </div>
-    <audio id="myaudio" :src="dingdong" controls="controls" :loop="false" v-show="false"></audio>
+    <audio id="myaudio" preload="load" src="/static/dingdong.mp3" controls="controls" :loop="false" v-show="false"></audio>
     <!-- <van-button @click="test">dingdong</van-button> -->
   </div>
 </template>
@@ -41,10 +41,11 @@ export default {
             is_ring = true;
           }
         });
-        if(this.dingdong && is_ring){
-          this.$nextTick(()=>{
-            document.getElementById('myaudio').play()
-          })
+        if(is_ring){
+          this.test();
+          // this.$nextTick(()=>{
+          //   document.getElementById('myaudio').play()
+          // })
         }
       }
     },
