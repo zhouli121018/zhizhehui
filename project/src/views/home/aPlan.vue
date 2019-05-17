@@ -325,6 +325,7 @@ table
         padding .2rem 
         box-sizing border-box  
         z-index 999 
+        box-shadow 0 0 0.1rem #ddd
         &.up_content_center
             right 37%
         &.up_content_top
