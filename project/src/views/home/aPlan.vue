@@ -272,6 +272,10 @@ export default {
         this.isFirstEnter=true;
     },
     activated(){
+        if(!this.$root.$children[0].timer){
+            this.$root.$children[0].getkjring();
+            this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
+        }
         this.isShow = false
         this.isNum = false
         this.isNum_center = false

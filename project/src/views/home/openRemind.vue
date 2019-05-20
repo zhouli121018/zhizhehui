@@ -57,6 +57,10 @@ export default {
     },
     created() {
         this.getkjtixing()
+        if(!this.$root.$children[0].timer){
+            this.$root.$children[0].getkjring();
+            this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
+        }
     }
 }
 </script>

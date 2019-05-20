@@ -120,6 +120,10 @@ export default {
         if (isIOS) {
             this.device = 1
         }
+        if(this.$root.$children[0].timer){
+            clearInterval(this.$root.$children[0].timer)
+            this.$root.$children[0].timer = null
+        }
     }
 }
 </script>

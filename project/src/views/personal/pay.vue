@@ -53,15 +53,13 @@ export default {
     },
     created() {
         this.isFirstEnter=true;
-    },
-    activated(){
-        if(!this.$store.getters.isback || this.isFirstEnter){
-            this.type = this.$route.query.type
-            this.money = this.$route.query.money
-            this.getwechatcode()
+        this.type = this.$route.query.type
+        this.money = this.$route.query.money
+        this.getwechatcode()
+        if(!this.$root.$children[0].timer){
+            this.$root.$children[0].getkjring();
+            this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
         }
-        this.isFirstEnter=false;
-        this.$store.dispatch('set_isback',false)
     },
 }
 </script>

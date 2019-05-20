@@ -78,6 +78,12 @@ export default {
                 ok: true,msg: 'ok'
             }
         }
+    },
+    activated(){
+        if(this.$root.$children[0].timer){
+            clearInterval(this.$root.$children[0].timer)
+            this.$root.$children[0].timer = null
+        }
     }
 }
 </script>

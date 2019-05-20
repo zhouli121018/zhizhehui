@@ -33,7 +33,7 @@ export default [
                 component: _import('home/openingMember'),
                 meta: {
                     title: '开通会员',
-                    cache: false
+                    cache: true
                 }
             },
             {//方案列表
@@ -135,7 +135,7 @@ export default [
                 component: _import('personal/pay'),
                 meta:{
                     title:'微信二维码支付',
-                    cache: true
+                    cache: false
                 }
             },
             {//我的推荐页

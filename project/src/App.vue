@@ -78,7 +78,6 @@ export default {
         });
       }
     }
-    console.log(!this.is_qqorwx)
     if(!this.is_qqorwx){
       this.getkjring();
       if(this.timer){

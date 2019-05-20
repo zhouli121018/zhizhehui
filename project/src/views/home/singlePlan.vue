@@ -66,6 +66,10 @@ export default {
       next()
     },
     activated(){
+        if(!this.$root.$children[0].timer){
+            this.$root.$children[0].getkjring();
+            this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
+        }
         this.fanganid = this.$route.query.fanganid;
         if(this.$route.meta.isBack){
             this.$store.dispatch('set_isback',true)
