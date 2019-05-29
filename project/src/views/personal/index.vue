@@ -196,7 +196,7 @@ export default {
         margin-right .5rem
     .goldcoins_fans
         display flex
-        padding-top .2rem
+        padding-top .1rem
         align-items center
         span 
             font-size .26rem

@@ -27,7 +27,7 @@
                 <van-button class="warning_btn" @click="toJump('/personal/recommend')">我的推荐页</van-button>
             </div>
         </div>
-        <p class="contact">如有疑问请联系微信:SNSN889922</p>
+        <p class="contact">如有疑问请联系微信:{{$store.getters.kfwecha}}</p>
 
         <van-dialog 
             v-model="show"

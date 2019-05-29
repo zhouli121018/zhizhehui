@@ -57,7 +57,7 @@ export default {
             payType: 1,
             chooseImg: require('../../assets/choose_checked.png'),
             normalImg: require('../../assets/choose_normal.png'),
-            money: 39.9
+            money: 99.9
         }
     },
     methods: {

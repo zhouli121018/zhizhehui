@@ -16,7 +16,7 @@
             <div class="qrcode">
                 <img :src="$https+info.barcodeurl" alt="">
             </div>
-            <p>充值失败联系微信:SNSN889922</p>
+            <p>充值失败联系微信:{{$store.getters.kfwecha}}</p>
         </div>
         <div class="xian"></div>
         <div class="simulate_rules">
@@ -78,10 +78,10 @@ export default {
     width 100%
     text-align center
     margin-top .3rem
+    padding-bottom .3rem
     .qrcode
         width 4rem
         height 4rem
-        // background red
         margin .3rem auto
     img 
         width 4rem

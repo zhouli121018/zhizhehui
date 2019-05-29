@@ -24,9 +24,9 @@
             <div>
                 <span>佣金：</span>
                 <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;padding-right:0.3rem;">{{info.yongjin}}元</b>
-                <van-button class="orange_btn tikuan" @click="show_tikuan" :disabled="info.yongjin < 50">提 款</van-button>
+                <van-button class="orange_btn tikuan" @click="show_tikuan" :disabled="info.yongjin < info.limitmoney">提 款</van-button>
             </div>
-            <div style="color:#A0A0A0;font-size:0.32rem;padding-top:0.2rem">*需满50元才能提款</div>
+            <div style="color:#A0A0A0;font-size:0.32rem;padding-top:0.2rem">*需满{{info.limitmoney}}元才能提款</div>
 
             <p class="contact text-center" style="color:#6E6E6E;font-size:0.35rem;padding-top:1.6rem;">如有疑问请联系微信:{{$store.getters.kfwecha}}</p>
 

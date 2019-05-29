@@ -70,7 +70,7 @@ export default {
     line-height .6rem
 .fonts
     margin-top 1.6rem
-    font-size 0.4rem
+    font-size 0.45rem
 .recommend_content
     width 90%
     margin -.6rem auto 0 auto 
@@ -86,8 +86,8 @@ export default {
         padding .4rem 0
         color #232323
     img 
-        width 4rem
-        height 4rem
+        width 5rem
+        height 5rem
 .title_center
     width 100%
     display flex
