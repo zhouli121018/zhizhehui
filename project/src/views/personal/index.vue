@@ -20,19 +20,33 @@
             <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通会员</van-button>
             <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button>
         </div>
-        <div class="my_title" style="border:none" v-if="info">
-            <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
-            <div class="my_title_center my_centers">
-                <p>
-                    <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{info.income_cur}}元</b>
-                </p>
-                <p class="goldcoins_fans">
-                    佣金金额
-                </p>
+        <div class="my_title_box">
+            <div class="my_title" style="border:none" v-if="info">
+                <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
+                <div class="my_title_center my_centers">
+                    <p>
+                        <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{info.income_cur}}元</b>
+                    </p>
+                    <p class="goldcoins_fans">
+                        佣金金额
+                    </p>
+                </div>
+                <van-button type="danger" size="small" @click="show = true" >返佣提款</van-button>
             </div>
-            <van-button type="danger" size="small" @click="show = true" >返佣提款</van-button>
+            <div class="my_title" style="border:none" v-if="info">
+                <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
+                <div class="my_title_center my_centers">
+                    <p>
+                        <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{info.ticketnum}}张</b>
+                    </p>
+                    <p class="goldcoins_fans">
+                        会员券数量
+                    </p>
+                </div>
+                <van-button type="danger" size="small" @click="isShow = true" >兑换会员</van-button>
+            </div>
         </div>
-        <div class="xian"></div>        
+        <!-- <div class="xian"></div>         -->
         <div>
             <van-cell title="我的推荐页" is-link icon="tj" @click="jumpTo('/personal/recommend')"/>
             <van-cell title="代理赚钱" is-link icon="dlzq"  @click="jumpTo('/home/earnMoney')"/>
@@ -57,11 +71,25 @@
                 label="支付宝："
             />
         </van-dialog>
+        <van-dialog 
+            v-model="isShow"
+            title="兑换会员天数"
+            show-cancel-button
+            class="dialog_content_input"
+            :before-close="beforeClose"
+            >
+            <van-field
+                v-model.trim="vipticket"
+                clearable
+                label="会员券(张)："
+                type="number"
+            /> 
+        </van-dialog>
     </div>
 </template>
 
 <script>
-import { getaccount } from '@/api'
+import { getaccount, submitduihuan } from '@/api'
 import { submittikuan } from '@/api/home'
 import { Dialog } from 'vant'
 export default {
@@ -71,6 +99,9 @@ export default {
             isFirstEnter:false,
             show:false,
             alipay:'',
+            isShow: false,
+            ticketnum: '',
+            vipticket: ''
         }
     },
     methods:{
@@ -106,7 +137,29 @@ export default {
         },
         goAbout(){
             this.$router.push('/personal/about');
-        }
+        },
+        beforeClose(action,done){
+            if(action == 'confirm'){
+                if(!this.vipticket){
+                    this.$toast('请输入会员券!')
+                    done(false)
+                    return;
+                }
+                this.submitexchangeDay();
+                this.vipticket = ''
+            }
+            done();
+        },
+        //兑换会员天数
+        async submitexchangeDay() {
+            const { data } = await submitduihuan({
+                vipticket: this.vipticket,
+                uid: localStorage.getItem('uid'),
+                sid: localStorage.getItem('sid')
+            }) 
+            this.ticketnum = data.ticketnum//兑换后剩余优惠券张数
+            this.$toast(data.message)
+        },
     },
     created() {
         this.isFirstEnter=true;
@@ -144,6 +197,7 @@ export default {
         line-height .6rem
         &:last-child
             color #666
+            font-size .18rem
 /deep/ .van-cell
     line-height .88rem
 /deep/ .van-icon-tj::before
@@ -193,7 +247,7 @@ export default {
         width 1.5rem
         height 1.5rem
         border-radius 50%
-        margin-right .5rem
+        margin-right .1rem
     .goldcoins_fans
         display flex
         padding-top .1rem
@@ -215,6 +269,26 @@ export default {
     padding 0 .3rem
     font-size 0.36rem
 .title_photo
-    width .88rem!important
-    height .88rem!important
+    width .77rem!important
+    height .77rem!important
+.my_title_box
+    width 100%
+    background #eee
+    padding .4rem 0
+    box-sizing border-box
+    display flex
+    justify-content space-between
+    align-items center
+    .my_title
+        width 49%
+        padding .3rem .1rem
+        .my_centers
+            width 45%!important
+    /deep/ .van-button--small {
+        padding: 0 6px;
+        height: 25px;
+        min-width: 45px;
+        font-size: 8px;
+        line-height: 25px;
+    }
 </style>

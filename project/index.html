@@ -9,9 +9,17 @@
     <link rel="apple-touch-icon" href="touch-icon-iphone120.png">
     <link rel="apple-touch-icon" sizes="180x180" href="touch-icon-iphone180.png">
     <title>智者汇方案计划</title>
+    <script src="https://hammerjs.github.io/dist/hammer.js"></script>
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script>
+      var myElement = document.getElementById('app');
+      var mc = new Hammer(myElement);
+      mc.on("panleft panright tap press", function(ev) {
+          myElement.textContent = ev.type +" gesture detected.";
+      });
+      </script>
   </body>
 </html>

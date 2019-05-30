@@ -6,7 +6,7 @@
             <p v-html="info.freeshuoming" style="font-size:0.36rem;padding:0.1rem 0;"></p>
             <div class="free_use_coupon" style="font-size:0.36rem;padding-top:0.1rem;"><i></i> 会员券</div>
             <div class="free_use_coupon">
-                <p style="font-size:0.36rem;margin-right:1rem;">会员券: <span class="free_use_font">{{info.vipticket}}张</span></p>
+                <p style="font-size:0.36rem;margin-right:1rem;">会员券: <span class="free_use_font">{{ticketnum?ticketnum:info.vipticket}}张</span></p>
                 <van-button class="warning_btn" @click="exchangeDay">兑换会员天数</van-button>
             </div>
             <p v-html="info.vipticketdes" style="color:#7B7B7B;font-size:0.3rem;"></p>
@@ -37,9 +37,10 @@
             :before-close="beforeClose"
             >
             <van-field
-                v-model.number.trim="vipticket"
+                v-model.trim="vipticket"
                 clearable
                 label="会员券(张)："
+                type="number"
             /> 
         </van-dialog>
     </div>
@@ -61,7 +62,8 @@ export default {
             info: null,
             vipticket: '',
             show:false,
-            isFirstEnter:false
+            isFirstEnter:false,
+            ticketnum: ''
         }
     },
     methods: {
@@ -109,6 +111,7 @@ export default {
                 uid: localStorage.getItem('uid'),
                 sid: localStorage.getItem('sid')
             }) 
+            this.ticketnum = data.ticketnum//兑换后剩余优惠券张数
             this.$toast(data.message)
         },
         exchangeDay() {

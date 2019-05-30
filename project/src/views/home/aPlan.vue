@@ -52,10 +52,10 @@
                 <th>几期中</th>
                 <th>开奖号</th>
             </tr>
-            <tr v-for="(item,index) in planInfo.list" :key="index">
+            <tr v-for="(item,index) in planInfoList" :key="index">
                 <td>{{item.issue}}</td>
                 <td v-if="item.content == '会员权限'"><van-button size="small" class="membership_privileges">{{item.content}}</van-button></td>
-                <td>{{item.content}}</td>
+                <td v-else>{{item.content}}</td>
                 <td>{{item.hitnum}}</td>
                 <td>{{item.kjnum}}</td>
             </tr>
@@ -109,7 +109,8 @@ export default {
             isCurtime: false,
             timer: null,
             current_time:'',
-            cur_timer:null
+            cur_timer:null,
+            planInfoList: []
         }
     },
     methods: {
@@ -138,20 +139,33 @@ export default {
                 this.isNum_top = false
             }
             clearTimeout(this.timer)
+            this.lastid = 0
             this.getplans()
         },
         chooseNum(type) {
             if(type == 1) {
                 this.isNum = !this.isNum
+                this.isNum_center = false
+                this.isNum_top = false
+                this.isShow = false
             }else if(type == 2) {
                 this.isNum_center = !this.isNum_center
+                this.isNum_top = false
+                this.isShow = false
+                this.isNum = false
             }else {
                 this.isNum_top = !this.isNum_top
+                this.isShow = false
+                this.isNum = false
+                this.isNum_center = false
             }
             
         },
         isShowClick() {
             this.isShow = !this.isShow
+            this.isNum = false
+            this.isNum_center = false
+            this.isNum_top = false
         },
         choose(name, i, lottype) {
             this.chooseName = name
@@ -171,12 +185,14 @@ export default {
             this.plannum = this.lottList.nmaypes[0]//几码
             this.issuenum = this.lottList.nissues[0]//几期
             clearTimeout(this.timer)
+            this.lastid = 0
             this.getplans()
         },
         //点击方案
         change_yc(index,fanganid){
             this.yc_active = index
             this.fanganid = fanganid
+            this.lastid = 0
             this.getplans()
         },
         jumpTo(url) {
@@ -196,6 +212,14 @@ export default {
                 lastid: this.lastid
             })
             this.planInfo = data
+            let planInfoList = data.list
+            if(this.lastid != 0) {
+                planInfoList = planInfoList.map(item => {
+                    this.planInfoList.push(item)
+                })
+            }else {
+                this.planInfoList = planInfoList
+            }
             this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
             this._curtime = this.planInfo.curtime*1000//当前时间

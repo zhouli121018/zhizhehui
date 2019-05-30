@@ -100,3 +100,14 @@ export function getplan(data) {
         }
     })
 }
+
+//开通会员
+export function getvipdata(data) {
+    return request({
+        url: '/getvipdata.php',
+        method: 'post',
+        data: {
+            ...data
+        }
+    })
+}

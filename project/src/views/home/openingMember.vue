@@ -1,23 +1,22 @@
 <template>
     <div class="container">
         <title-bar title_name="开通会员" />
-        <div class="openingMember_box" @click="onClick(index,item.money)" :class="active == index?'active':''" v-for="(item,index) in list" :key="index">
-            <p style="color:#333;">开通{{item.count}}天</p>
+        <div class="openingMember_box" @click="onClick(index,item.nowprice)" :class="active == index?'active':''" v-for="(item,index) in list" :key="index">
+            <p style="color:#333;">开通{{item.days}}天</p>
             <div>
                 <p class="red">
                     <img src="~@/assets/huo@2x.png" alt="" :style="{visibility: index==2?'hidden':'show'}"> 
-                    限时特惠: ¥{{item.money}}元</p>
-                <p>原价:{{item.oldMoney}}</p>
+                    限时特惠: ¥{{item.nowprice}}元</p>
+                <p>原价:{{item.oldprice}}</p>
             </div>
         </div>
         <div class="xian"></div>
         <div class="simulate_rules">
             <h4 class="rules_h">会员说明</h4>
-            <p>1.购买会员3天内可以退款</p>
-            <p class="goldcoins_fans">
-                2.邀请好友注册免费获取会员
+            <p  v-for="(dom,i) in shuomingList" :key="i" :class="i == 2?'goldcoins_fans':''">{{dom}} <van-button v-if="i == 2" class="orange_btn" round @click="jumpTo('/personal/freeUse')" style="white-space:nowrap;">免费获取</van-button></p>
+            <!-- <p class="goldcoins_fans">
                 <van-button class="orange_btn" round @click="jumpTo('/personal/freeUse')" style="white-space:nowrap;">免费获取</van-button>
-            </p>
+            </p> -->
         </div>
         <div class="xian"></div>
         <div class="member_pay">
@@ -44,20 +43,17 @@
 </template>
 
 <script>
-import { getalipayorderinfor } from '@/api'
+import { getalipayorderinfor, getvipdata } from '@/api'
 export default {
     data() {
         return {
-            list: [
-                {count:'30',money:68.8,oldMoney:99.9},
-                {count:'60',money:118.8,oldMoney:169.9},
-                {count:'90',money:168.8,oldMoney:199.9},
-            ],
+            list: [],
             active: 0,
             payType: 1,
             chooseImg: require('../../assets/choose_checked.png'),
             normalImg: require('../../assets/choose_normal.png'),
-            money: 99.9
+            money: 0,
+            shuomingList: []
         }
     },
     methods: {
@@ -78,13 +74,18 @@ export default {
                 this.getalipayorderinfor()
             }
         },
+        async getvipdata() {
+            const { data } = await getvipdata()
+            this.list = data.list
+            this.money = this.list[0].nowprice
+            this.shuomingList = data.shuoming
+        },
         //支付宝支付
         async getalipayorderinfor() {
             const { data } = await getalipayorderinfor({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
-                money: this.money,
-                type: 1
+                money: this.money
             })
             const div = document.createElement('div');
             div.innerHTML = data
@@ -97,6 +98,9 @@ export default {
             this.$root.$children[0].getkjring();
             this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
         }
+    },
+    mounted() {
+        this.getvipdata()
     }
 }
 </script>
@@ -104,7 +108,6 @@ export default {
 <style lang="stylus" scoped>
 .goldcoins_fans
     display flex
-    padding-top .2rem
     align-items center
 .orange_btn
     border-radius .6rem
@@ -116,6 +119,8 @@ export default {
     width:2.2rem
     font-size .22rem
     border none!important
+    margin 0
+    margin-left .2rem
 .member_content,.member_pay
     width 100%
     padding .3rem .2rem

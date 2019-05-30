@@ -10,7 +10,7 @@
         </div>
         <h4 style="text-align:center;font-weight:bold;font-size:0.5rem;margin-top:0.2rem;">付款备注: {{info.beizu}}</h4>
         <div class="red pay_prompt">
-            重要: 微信二维码支付只能从这里进入支付,不能使用已有保存的二维码支付。每次进来备注会变换!请尽快在三分钟内完成支付
+            {{info.noticedesc}}
         </div>
         <div class="pay_code">
             <div class="qrcode">
@@ -78,7 +78,7 @@ export default {
     width 100%
     text-align center
     margin-top .3rem
-    padding-bottom .3rem
+    padding-bottom .4rem
     .qrcode
         width 4rem
         height 4rem
