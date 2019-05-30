@@ -7,6 +7,8 @@ const getters = {
   } ,
   isback:state=> state.app.isback,
   kfwecha:state=> state.app.kfwecha,
+  issetkjtx:state=> state.app.issetkjtx,
+  apkurl:state=> state.app.apkurl,
 
 }
 export default getters

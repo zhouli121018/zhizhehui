@@ -33,7 +33,7 @@ export default [
                 component: _import('home/openingMember'),
                 meta: {
                     title: '开通会员',
-                    cache: true
+                    cache: false
                 }
             },
             {//方案列表

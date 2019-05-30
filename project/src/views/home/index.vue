@@ -96,8 +96,7 @@ export default {
       is_ios:false,
       isFirstEnter:false,
       fangans:[],
-      notices:[],
-      issetkjtx: ''
+      notices:[]
     }
   },
   methods: {
@@ -142,17 +141,35 @@ export default {
       })
     },
     async gethome() {
-        const { data } = await gethome({
-            sid: localStorage.getItem('sid'),
-            uid: localStorage.getItem('uid')
-        })
-        this.fangans = data.fangans//方案
-        this.advs = data.advs 
-        this.$store.dispatch('set_kfwecha',data.kfwecha)
-        this.issetkjtx = data.issetkjtx//首页协议返回issetkjtx 字段为0，不需要发getkjring.php 协议。为1的时候才发。
-        // this.lottypeList = data.lottype//标题选择
-        this.notices = data.notices
-        // this.chooseName = this.lottypeList[0].lotname
+      let obj = {};
+      if(localStorage.getItem('sid')){
+        obj.sid = localStorage.getItem('sid')
+      }
+      if(localStorage.getItem('uid')){
+        obj.uid = localStorage.getItem('uid')
+      }
+      const { data } = await gethome(obj)
+      this.fangans = data.fangans//方案
+      this.advs = data.advs 
+      this.$store.dispatch('set_kfwecha',data.kfwecha)
+      this.$store.dispatch('set_issetkjtx',data.issetkjtx)
+      this.$store.dispatch('set_apkurl',data.apkurl)
+      // this.lottypeList = data.lottype//标题选择
+      this.notices = data.notices
+      // this.chooseName = this.lottypeList[0].lotname
+      if(data.issetkjtx){
+        this.$root.$children[0].getkjring();
+        if(!this.$root.$children[0].timer){
+          this.$root.$children[0].getkjring();
+          this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
+        }
+      }else{
+        if(this.$root.$children[0].timer){
+            clearInterval(this.$root.$children[0].timer)
+            this.$root.$children[0].timer = null
+        }
+      }
+      
     }
   },
   created(){
@@ -182,12 +199,6 @@ export default {
     }
   },
   activated(){  
-    if(!this.$root.$children[0].timer){
-      if(this.issetkjtx == 1) {
-        this.$root.$children[0].getkjring();
-        this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
-      }
-    }
     if(this.isFirstEnter){
        this.gethome();
     }

@@ -27,10 +27,6 @@ export default {
     created(){
         // this.title_name = this.$route.query.title
         this.notice();
-        if(!this.$root.$children[0].timer){
-            this.$root.$children[0].getkjring();
-            this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
-        }
     }
 }
 </script>

@@ -15,8 +15,8 @@
             </ul>
         </div>
         <div class="lottery_time">
-            <div>距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
-            <div><span style="width:50%;display:inline-block">当前时间：</span><span class="blue"> {{curtime}}</span></div>
+            <div style="width:47%">距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
+            <div style="width:51%"><span style="width:50%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
             <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
@@ -315,10 +315,6 @@ export default {
         this.isFirstEnter=true;
     },
     activated(){
-        if(!this.$root.$children[0].timer){
-            this.$root.$children[0].getkjring();
-            this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
-        }
         this.isShow = false
         this.isNum = false
         this.isNum_center = false

@@ -7,7 +7,9 @@ const app = {
     system: systemType(),  // 0 为ios 1 为安卓
     shareUrl: '',
     isback: false,
-    kfwecha:''
+    kfwecha:'',
+    issetkjtx: null, 
+    apkurl: null, 
   },
   getters: {
     whiteList (state) {
@@ -18,6 +20,9 @@ const app = {
     },
   },
   mutations: {
+    SET_ISSETKJTX (state, param) {
+      state.issetkjtx = param
+    },
     SET_SDK_URL (state, url) {
       state.sdkUrl = url
     },
@@ -29,6 +34,9 @@ const app = {
     },
     SET_KFWECHA(state,param){
       state.kfwecha = param;
+    },
+    SET_APKURL(state,param){
+      state.apkurl = param;
     }
   },
   actions: {
@@ -40,6 +48,12 @@ const app = {
     },
     set_kfwecha ({commit}, param){
       commit('SET_KFWECHA',param)
+    },
+    set_issetkjtx ({commit}, param){
+      commit('SET_ISSETKJTX',param)
+    },
+    set_apkurl ({commit}, param){
+      commit('SET_APKURL',param)
     },
   }
 }

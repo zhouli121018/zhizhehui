@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <a href="http://sscby.cn/zzh/pred.apk" download v-show="false" id="download_btn">1</a>
+    <a :href="apkurl" download v-show="false" id="download_btn">1</a>
     <router-view v-if="!is_qqorwx"/>
     <div class="container" v-if="is_qqorwx" style="padding-top:0 !important;">
         <img src="./assets/jumpborwser.png" alt="" style="width:100%">
@@ -15,7 +15,7 @@
 
 <script>
 import { Dialog } from 'vant'
-import { getkjring } from '@/api/home'
+import { getkjring,gethome} from '@/api/home'
 export default {
   data(){
     return {
@@ -49,10 +49,34 @@ export default {
         }
       }
     },
+    async gethome() {
+      let obj = {};
+      if(localStorage.getItem('sid')){
+        obj.sid = localStorage.getItem('sid')
+      }
+      if(localStorage.getItem('uid')){
+        obj.uid = localStorage.getItem('uid')
+      }
+      const { data } = await gethome(obj)
+      this.$store.dispatch('set_kfwecha',data.kfwecha)
+      this.$store.dispatch('set_issetkjtx',data.issetkjtx)
+      this.$store.dispatch('set_apkurl',data.apkurl)
+      if(data.issetkjtx){
+        this.getkjring();
+        if(!this.timer){
+          this.getkjring();
+          this.timer = setInterval(this.getkjring, 3000);
+        }
+      }else{
+        if(this.timer){
+            clearInterval(this.timer)
+            this.timer = null
+        }
+      }
+    },
     test(){
       document.getElementById('myaudio').play()
-    }
-    
+    },
   },
   created(){
     //判断是否微信或qq
@@ -78,18 +102,19 @@ export default {
         });
       }
     }
-    if(!this.is_qqorwx){
-      this.getkjring();
-      if(this.timer){
-        clearInterval(this.timer);
+    console.log(this.$route.name)
+    if(!this.is_qqorwx && this.$route.name!='home' && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
+      if(this.$store.getters.issetkjtx == null){
+        this.gethome();
       }
-      this.timer = setInterval(this.getkjring,3000)
     }
-
   },
   computed: {
     loading () {
       return this.$store.state.loading
+    },
+    apkurl(){
+      return this.$store.getters.apkurl
     }
   },
   watch: {
