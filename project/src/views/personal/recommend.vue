@@ -2,7 +2,9 @@
     <div class="container" v-if="info">
         <div class="recommend_title">
             <div class="title_top">
-                <img @click="goBack" src="~@/assets/returnpre.png" alt="">
+                <div @click="goBack" style="width:1rem;height:1rem;line-height:1rem">
+                    <img src="~@/assets/returnpre.png" alt="">
+                </div>
                 <p>我的推荐页</p>
                 <span></span>
             </div>
@@ -68,9 +70,10 @@ export default {
     padding-top .3rem
     text-align left 
     line-height .6rem
+    letter-spacing: .02rem;
 .fonts
     margin-top 1.6rem
-    font-size 0.45rem
+    font-size 0.48rem
 .recommend_content
     width 90%
     margin -.6rem auto 0 auto 
@@ -122,7 +125,7 @@ export default {
     padding 0 .3rem
     box-sizing border-box
     p
-        width 93%
+        width 82%
         text-align center
         font-size 16px
     img 

@@ -96,7 +96,8 @@ export default {
       is_ios:false,
       isFirstEnter:false,
       fangans:[],
-      notices:[]
+      notices:[],
+      issetkjtx: ''
     }
   },
   methods: {
@@ -148,6 +149,7 @@ export default {
         this.fangans = data.fangans//方案
         this.advs = data.advs 
         this.$store.dispatch('set_kfwecha',data.kfwecha)
+        this.issetkjtx = data.issetkjtx//首页协议返回issetkjtx 字段为0，不需要发getkjring.php 协议。为1的时候才发。
         // this.lottypeList = data.lottype//标题选择
         this.notices = data.notices
         // this.chooseName = this.lottypeList[0].lotname
@@ -181,8 +183,10 @@ export default {
   },
   activated(){  
     if(!this.$root.$children[0].timer){
-      this.$root.$children[0].getkjring();
-      this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
+      if(this.issetkjtx == 1) {
+        this.$root.$children[0].getkjring();
+        this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
+      }
     }
     if(this.isFirstEnter){
        this.gethome();

@@ -173,6 +173,8 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.xian 
+    height .5rem
 .warning_btn
     margin-top .2rem
 .contact
@@ -194,6 +196,7 @@ export default {
     background #ffffff
     font-size 0.36rem
     line-height .7rem
+    margin-top: -.1rem
 .free_use_title
     width 100%
     display flex

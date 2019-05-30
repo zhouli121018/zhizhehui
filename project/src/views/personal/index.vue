@@ -179,9 +179,6 @@ export default {
             this.$store.dispatch('set_isback',true)
         }
         this.$route.meta.isBack=false;
-        if(!this.$store.getters.isback || this.isFirstEnter){
-            // this.getaccount()
-        }
         this.getaccount();
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
@@ -239,6 +236,7 @@ export default {
     align-items center
     border-bottom 1px solid #f0f0f0
     background #fff
+    margin-top:-.1rem
     .my_title_center
         width 53%
         span 

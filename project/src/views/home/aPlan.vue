@@ -1,7 +1,9 @@
 <template>
     <div class="container" v-if="planInfo">
         <div class="aPlan_title">
-            <img @click="goBack" src="~@/assets/returnpre.png" alt="">
+            <div style="width:1.5rem;height:1rem;line-height:1rem" @click="goBack">
+                <img class="aPlan_title_img" src="~@/assets/returnpre.png" alt="">
+            </div>
             <p>方案计划 </p>
             <div class="title_pop_up" @click="isShowClick">
                 {{chooseName}} 
@@ -14,7 +16,7 @@
         </div>
         <div class="lottery_time">
             <div>距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
-            <div>当前时间：<span class="blue"> {{curtime}}</span></div>
+            <div><span style="width:50%;display:inline-block">当前时间：</span><span class="blue"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
             <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
@@ -54,7 +56,7 @@
             </tr>
             <tr v-for="(item,index) in planInfoList" :key="index">
                 <td>{{item.issue}}</td>
-                <td v-if="item.content == '会员权限'"><van-button size="small" class="membership_privileges">{{item.content}}</van-button></td>
+                <td v-if="item.content == '会员权限'" @click="toOpeningMember"><van-button size="small" class="membership_privileges">{{item.content}}</van-button></td>
                 <td v-else>{{item.content}}</td>
                 <td>{{item.hitnum}}</td>
                 <td>{{item.kjnum}}</td>
@@ -114,6 +116,14 @@ export default {
         }
     },
     methods: {
+        //点击会员权限跳转开通会员页面
+        toOpeningMember() {
+            if(!localStorage.getItem('sid') || !localStorage.getItem('uid')) {
+                this.$router.push('/login/index')
+            }else {
+                this.$router.push('/home/openingMember')
+            }
+        },
         // 返回
         goBack(){
             this.$store.dispatch('set_isback',true)
@@ -135,7 +145,7 @@ export default {
             }else {
                 this.a_activeNum = index
                 this.posname = num.posname
-                this.plantype = num.plantype
+                this.plantype = num.pos
                 this.isNum_top = false
             }
             clearTimeout(this.timer)
@@ -267,12 +277,21 @@ export default {
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid')
             })
-            this.fangansList = data.fangans//方案
+            
             this.lottypeList = data.lottype//标题选择
+            //选择彩种  获取彩种下面对应的方案（两种情况：一种是重页面传参过来，一种直接从首页进来，最后都默认去第一个参数）
             if(this.$route.query.lottype){
                 this.lottype = this.$route.query.lottype
+                this.fangansList = this.lottypeList.filter(item => {
+                    if(this.lottype == item.lottype) {
+                        return {
+                            ...item
+                        }
+                    }
+                })[0].fangans
             }else{
                 this.lottype = this.lottypeList[0].lottype
+                this.fangansList = data.lottype[0].fangans//方案
             }
             this.noticesList = data.notices
             this.fanganid = this.fangansList[0].fanganid
@@ -469,7 +488,7 @@ table
         padding-left 1.1rem
         box-sizing border-box
         font-size 18px
-    >img 
+    .aPlan_title_img 
         width .25rem
         height .37rem
         z-index 99999

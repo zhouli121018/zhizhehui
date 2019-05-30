@@ -13,7 +13,7 @@
         <div class="xian"></div>
         <div class="simulate_rules">
             <h4 class="rules_h">会员说明</h4>
-            <p  v-for="(dom,i) in shuomingList" :key="i" :class="i == 2?'goldcoins_fans':''">{{dom}} <van-button v-if="i == 2" class="orange_btn" round @click="jumpTo('/personal/freeUse')" style="white-space:nowrap;">免费获取</van-button></p>
+            <p  v-for="(dom,i) in shuomingList" :key="i" :class="shuomingList.length-1 == i?'goldcoins_fans':''">{{dom}} <van-button v-if="shuomingList.length-1 == i" class="orange_btn" round @click="jumpTo('/personal/freeUse')" style="white-space:nowrap;">免费获取</van-button></p>
             <!-- <p class="goldcoins_fans">
                 <van-button class="orange_btn" round @click="jumpTo('/personal/freeUse')" style="white-space:nowrap;">免费获取</van-button>
             </p> -->
