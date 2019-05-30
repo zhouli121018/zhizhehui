@@ -180,8 +180,9 @@ export default {
         }
         this.$route.meta.isBack=false;
         if(!this.$store.getters.isback || this.isFirstEnter){
-            this.getaccount()
+            // this.getaccount()
         }
+        this.getaccount();
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
     },
