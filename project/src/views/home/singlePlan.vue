@@ -75,9 +75,9 @@ export default {
             this.$store.dispatch('set_isback',true)
         }
         this.$route.meta.isBack=false;
-        if(!this.$store.getters.isback || this.isFirstEnter){
+        // if(!this.$store.getters.isback || this.isFirstEnter){
             this.getfangan()
-        }
+        // }
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
     }

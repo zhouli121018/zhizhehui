@@ -24,7 +24,7 @@
             <van-col span="6" v-for="(y,index) in fangansList" :key="index">
                 <van-button :type="index==yc_active?'danger':'default'" size="small" @click="change_yc(index,y.fanganid)">{{y.fangantitle}}</van-button>
             </van-col>
-            <van-col span="6"><van-button size="small" class="no_border_btn" @click="jumpTo('/home/singlePlan')">方案描述</van-button></van-col>
+            <van-col span="6"><van-button size="small" class="no_border_btn" @click="jumpTo(`/home/singlePlan?fanganid=${fanganid}`)">方案描述</van-button></van-col>
         </van-row>
         <div class="xian"></div>
         <div class="pop_up_content">
