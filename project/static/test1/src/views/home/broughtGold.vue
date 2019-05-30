@@ -131,14 +131,12 @@ export default {
             textEle.select(); // 选择对象
             document.execCommand("Copy"); // 执行浏览器复制命令
             document.body.removeChild(textEle);
-            console.log('复制成功');
-            
         },
         doCopy (text) {
             this.$copyText(text).then(function (e) {
                 Dialog.alert({
                     title: '提示',
-                    message: '复制成功，请粘贴到微信QQ或其他地方'
+                    message: '复制成功，请粘贴分享到微信或QQ。'
                 }).then(() => {
                 // on close
                 });

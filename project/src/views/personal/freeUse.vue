@@ -84,7 +84,7 @@ export default {
             this.$copyText(text).then(function (e) {
                 Dialog.alert({
                     title: '提示',
-                    message: '复制成功，请粘贴到微信QQ或其他地方'
+                    message: '复制成功，请粘贴分享到微信或QQ。'
                 }).then(() => {
                 // on close
                 });
