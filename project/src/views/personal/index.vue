@@ -21,7 +21,7 @@
             <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button>
         </div>
         <div class="my_title_box">
-            <div class="my_title" style="border:none" v-if="info">
+            <div class="my_title" style="border:none;width:47.5%" v-if="info">
                 <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
                 <div class="my_title_center my_centers">
                     <p>
@@ -33,7 +33,7 @@
                 </div>
                 <van-button type="danger" size="small" @click="show = true" >返佣提款</van-button>
             </div>
-            <div class="my_title" style="border:none" v-if="info">
+            <div class="my_title" style="border:none;width:51%" v-if="info">
                 <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
                 <div class="my_title_center my_centers">
                     <p>
@@ -289,6 +289,6 @@ export default {
         height: 25px;
         min-width: 45px;
         font-size: 8px;
-        line-height: 25px;
+        line-height: 20px;
     }
 </style>
