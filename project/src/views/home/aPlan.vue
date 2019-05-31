@@ -278,6 +278,11 @@ export default {
             let leftTime = this.endtime - this._curtime;
             //定义变量 d,h,m,s保存倒计时的时间
             if (leftTime >= 0) {
+                if(leftTime == 0){
+                    this.getplans();
+                    clearTimeout(this.timer)
+                    return;
+                }
                 this._curtime = this._curtime + 1000
                 // this.d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
                 this.h = Math.floor(leftTime / 1000 / 60 / 60 % 24)>=10?Math.floor(leftTime / 1000 / 60 / 60 % 24):'0'+Math.floor(leftTime / 1000 / 60 / 60 % 24);
