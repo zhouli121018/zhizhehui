@@ -110,11 +110,11 @@ export default {
     border-radius .6rem
     background #FC7953
     color #fff
-    height .75rem
-    line-height .75rem
+    height .85rem
+    line-height .85rem
     padding 0 .1rem
     width:2.2rem
-    font-size .22rem
+    font-size 14px
     border none!important
     margin 0
     margin-left .2rem

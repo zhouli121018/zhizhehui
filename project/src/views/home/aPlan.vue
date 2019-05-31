@@ -287,6 +287,7 @@ export default {
             if (leftTime >= 0) {
                 if(leftTime == 0){
                     this.time_add = false;
+                    this.lastid = 0
                     this.getplans();
                     clearTimeout(this.timer)
                     return;
@@ -380,14 +381,22 @@ export default {
         this.yc_active = 0
         this.planInfoList = []
         this.lastid = 0
-        if(!this.$store.getters.isback || this.isFirstEnter){
+        // if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {
                 this.getplans()
             })
-        }
+        // }
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
+    },
+    beforeRouteLeave (to, from, next) {
+        // 导航离开该组件的对应路由时调用
+        // 可以访问组件实例 `this`
+        if(this.timer) {
+            clearTimeout(this.timer)
+            clearTimeout(this.cur_timer)
+        }
     }
 }
 </script>
