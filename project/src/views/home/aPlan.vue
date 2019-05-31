@@ -126,7 +126,6 @@ export default {
     methods: {
         //复制
         doCopy (text) {
-            console.log(text)
             let arr = []
             let txt = text.map(item => {
                 arr.push(`${item.issue}  ${item.content}  ${item.hitnum}  `)
@@ -317,10 +316,6 @@ export default {
             this.curtime = str
         },
         async gethome() {
-            // const { data } = await gethome({
-            //     sid: localStorage.getItem('sid'),
-            //     uid: localStorage.getItem('uid')
-            // })
             let data = JSON.parse(sessionStorage.getItem('aPlan_home'))
             this.lottypeList = data.lottype//标题选择
             //选择彩种  获取彩种下面对应的方案（两种情况：一种是重页面传参过来，一种直接从首页进来，最后都默认去第一个参数）
