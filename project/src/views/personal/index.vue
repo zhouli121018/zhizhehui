@@ -37,7 +37,7 @@
                 <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
                 <div class="my_title_center my_centers">
                     <p>
-                        <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{info.ticketnum}}张</b>
+                        <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{ticketnum}}张</b>
                     </p>
                     <p class="goldcoins_fans">
                         会员券数量
@@ -134,6 +134,7 @@ export default {
                 uid: localStorage.getItem('uid')
             })
             this.info = data
+            this.ticketnum = this.info.ticketnum
         },
         goAbout(){
             this.$router.push('/personal/about');

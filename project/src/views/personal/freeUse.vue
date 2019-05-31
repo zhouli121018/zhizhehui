@@ -160,9 +160,7 @@ export default {
             this.$store.dispatch('set_isback',true)
         }
         this.$route.meta.isBack=false;
-        if(!this.$store.getters.isback || this.isFirstEnter){
-            this.getfreeusedesc()
-        }
+        this.getfreeusedesc()
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
     }

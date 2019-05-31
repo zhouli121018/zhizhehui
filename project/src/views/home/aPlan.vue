@@ -66,7 +66,7 @@
             <van-button size="small" class="no_border_btn" @click="getplans">获取更多</van-button>
         </div>
         <div class="replication_solution">
-            <van-button size="large" style="background:#FC7953;color:#fff;width:90%">复制方案</van-button>
+            <van-button size="large" style="background:#FC7953;color:#fff;width:90%" @click="doCopy(planInfoList)">复制方案</van-button>
         </div>
     </div>
 </template>
@@ -75,6 +75,9 @@
 import { gethome } from '@/api/home'
 import { getplan } from '@/api'
 import { getdTime, getHMS } from '@/utils'
+import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 export default {
     data() {
         return {
@@ -116,6 +119,32 @@ export default {
         }
     },
     methods: {
+        //复制
+        doCopy (text) {
+            console.log(text)
+            let arr = []
+            let txt = text.map(item => {
+                arr.push(`${item.issue} ${item.content} ${item.hitnum} ${item.kjnum}; `)
+            })
+            console.log(txt)
+            console.log(arr.join(' '))
+            // this.$copyText(text).then(function (e) {
+            //     Dialog.alert({
+            //         title: '提示',
+            //         message: '复制成功，请粘贴分享到微信或QQ。'
+            //     }).then(() => {
+            //     // on close
+            //     });
+            // }, function (e) {
+            //     Dialog.alert({
+            //         title: '提示',
+            //         message: '复制失败，请手动复制！'
+            //     }).then(() => {
+            //     // on close
+            //     });
+            //     console.log(e)
+            // })
+        },
         //点击会员权限跳转开通会员页面
         toOpeningMember() {
             if(!localStorage.getItem('sid') || !localStorage.getItem('uid')) {
@@ -152,6 +181,7 @@ export default {
             this.lastid = 0
             this.getplans()
         },
+        //选择万位、几期、几码下拉框
         chooseNum(type) {
             if(type == 1) {
                 this.isNum = !this.isNum
@@ -171,16 +201,19 @@ export default {
             }
             
         },
+        //点击右上角彩种
         isShowClick() {
             this.isShow = !this.isShow
             this.isNum = false
             this.isNum_center = false
             this.isNum_top = false
         },
+        //选择右上角彩种
         choose(name, i, lottype) {
             this.chooseName = name
             this.active = i
             this.lottype = lottype
+            this.isShow = false
             this.lottList = this.lottypeList.filter(item => {
                 if(item.lottype == this.lottype) {
                     return {
@@ -361,12 +394,14 @@ table
         text-align center
     td  
         color #2B2B2B
+        font-size 14px
     td:first-child
         color #6B6B6B
     td:first-child
         background #E5E5E5
     th
         background #F5F5F5
+        font-size 16px
 .pop_up_content
     width 100%
     display flex
