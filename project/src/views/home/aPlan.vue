@@ -1,10 +1,11 @@
 <template>
     <div class="container" v-if="planInfo">
+        <title-bar title_name="方案计划" />
         <div class="aPlan_title">
-            <div style="width:1.5rem;height:1rem;line-height:1rem" @click="goBack">
+            <!-- <div style="width:1.5rem;height:1rem;line-height:1rem" @click="goBack">
                 <img class="aPlan_title_img" src="~@/assets/returnpre.png" alt="">
             </div>
-            <p>方案计划 </p>
+            <p>方案计划 </p> -->
             <div class="title_pop_up" @click="isShowClick">
                 {{chooseName}} 
                 <img v-if="!isShow" src="~@/assets/arrowdown.png" alt="">
@@ -16,7 +17,7 @@
         </div>
         <div class="lottery_time">
             <div style="width:47%">距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
-            <div style="width:51%"><span style="width:50%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
+            <div style="width:51%; text-align: center;"><span style="width:50%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
             <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
@@ -487,9 +488,9 @@ table
 .active
     color #FC8563!important
 .pop_up_down
-    width 30%
+    // width 30%
     position absolute
-    padding .2rem 0 .2rem .2rem
+    padding .2rem 0.1rem .2rem 0.3rem
     box-sizing border-box
     top 1.2rem
     right .3rem
@@ -502,21 +503,22 @@ table
         border-bottom 1px solid #DCDCDC
         height .7rem
         line-height .7rem
+        white-space: nowrap;
         &:last-child
             border none
 .aPlan_title
     color:#fff;
-    background:url(../../assets/title.png);
+    // background:url(../../assets/title.png);
     background-size: 100%;
     position: fixed;
-    width: 100%;
+    // width: 100%;
     height 46px
     line-height 46px
-    left: 0;
+    // left: 0;
     right: 0;
     z-index: 1000;
     top: 0
-    padding 0 .2rem
+    padding 0 6px 0 20px
     box-sizing border-box
     display flex
     justify-content space-between

@@ -63,7 +63,6 @@ export default {
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
       if(data.issetkjtx){
-        this.getkjring();
         if(!this.timer){
           this.getkjring();
           this.timer = setInterval(this.getkjring, 3000);
