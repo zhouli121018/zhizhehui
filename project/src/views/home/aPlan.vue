@@ -119,7 +119,8 @@ export default {
             timer: null,
             current_time:'',
             cur_timer:null,
-            planInfoList: []
+            planInfoList: [],
+            time_add:true
         }
     },
     methods: {
@@ -259,13 +260,14 @@ export default {
             })
             this.planInfo = data
             let planInfoList = data.list
-            if(this.lastid != 0) {
+            if(this.lastid != 0 && this.time_add) {
                 planInfoList = planInfoList.map(item => {
                     this.planInfoList.push(item)
                 })
             }else {
                 this.planInfoList = planInfoList
-            }
+            }  
+            this.time_add = true; 
             this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
             this._curtime = this.planInfo.curtime*1000//当前时间
@@ -281,6 +283,12 @@ export default {
             let leftTime = this.endtime - this._curtime;
             //定义变量 d,h,m,s保存倒计时的时间
             if (leftTime >= 0) {
+                if(leftTime == 0){
+                    this.time_add = false;
+                    this.getplans();
+                    clearTimeout(this.timer)
+                    return;
+                }
                 this._curtime = this._curtime + 1000
                 // this.d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
                 this.h = Math.floor(leftTime / 1000 / 60 / 60 % 24)>=10?Math.floor(leftTime / 1000 / 60 / 60 % 24):'0'+Math.floor(leftTime / 1000 / 60 / 60 % 24);
