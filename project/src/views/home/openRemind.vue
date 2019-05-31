@@ -46,6 +46,7 @@ export default {
                 uid: localStorage.getItem('uid'),
                 typenstatus:str
             })
+            this.$root.$children[0].gethome();
         },
         changeStatus(item){
             if(item.status=='1'){
