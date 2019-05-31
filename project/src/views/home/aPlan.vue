@@ -78,7 +78,11 @@ import { getdTime, getHMS } from '@/utils'
 import Vue from 'vue'
 import VueClipboard from 'vue-clipboard2'
 Vue.use(VueClipboard)
+import { Dialog } from 'vant'
 export default {
+    components: {
+        Dialog
+    },
     data() {
         return {
             activeNum: 0,
@@ -124,26 +128,25 @@ export default {
             console.log(text)
             let arr = []
             let txt = text.map(item => {
-                arr.push(`${item.issue} ${item.content} ${item.hitnum} ${item.kjnum}; `)
+                arr.push(`${item.issue}  ${item.content}  ${item.hitnum}  `)
             })
-            console.log(txt)
-            console.log(arr.join(' '))
-            // this.$copyText(text).then(function (e) {
-            //     Dialog.alert({
-            //         title: '提示',
-            //         message: '复制成功，请粘贴分享到微信或QQ。'
-            //     }).then(() => {
-            //     // on close
-            //     });
-            // }, function (e) {
-            //     Dialog.alert({
-            //         title: '提示',
-            //         message: '复制失败，请手动复制！'
-            //     }).then(() => {
-            //     // on close
-            //     });
-            //     console.log(e)
-            // })
+            arr = `--------------------------- \n ${arr.join('\n')} \n--------------------------- ` 
+            this.$copyText(arr).then(function (e) {
+                Dialog.alert({
+                    title: '提示',
+                    message: '复制成功，请粘贴分享到微信或QQ。'
+                }).then(() => {
+                // on close
+                });
+            }, function (e) {
+                Dialog.alert({
+                    title: '提示',
+                    message: '复制失败，请手动复制！'
+                }).then(() => {
+                // on close
+                });
+                console.log(e)
+            })
         },
         //点击会员权限跳转开通会员页面
         toOpeningMember() {
@@ -306,11 +309,11 @@ export default {
             this.curtime = str
         },
         async gethome() {
-            const { data } = await gethome({
-                sid: localStorage.getItem('sid'),
-                uid: localStorage.getItem('uid')
-            })
-            
+            // const { data } = await gethome({
+            //     sid: localStorage.getItem('sid'),
+            //     uid: localStorage.getItem('uid')
+            // })
+            let data = JSON.parse(sessionStorage.getItem('aPlan_home'))
             this.lottypeList = data.lottype//标题选择
             //选择彩种  获取彩种下面对应的方案（两种情况：一种是重页面传参过来，一种直接从首页进来，最后都默认去第一个参数）
             if(this.$route.query.lottype){
