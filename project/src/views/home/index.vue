@@ -151,6 +151,7 @@ export default {
       const { data } = await gethome(obj)
       this.fangans = data.fangans//方案
       this.advs = data.advs 
+      this.$store.dispatch('set_homedata',data)
       this.$store.dispatch('set_kfwecha',data.kfwecha)
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
@@ -183,14 +184,14 @@ export default {
     }
 
     if(this.$route.query.cid){
-      sessionStorage['cid'] = this.$route.query.cid;
+      localStorage['cid'] = this.$route.query.cid;
     }else{
-      sessionStorage['cid'] = ''
+      localStorage['cid'] = ''
     }
     if(this.$route.query.pid){
-      sessionStorage['pid'] = this.$route.query.pid;
+      localStorage['pid'] = this.$route.query.pid;
     }else{
-      sessionStorage['pid'] = ''
+      localStorage['pid'] = ''
     }
     
     if(localStorage['uid'] && localStorage['uid']!=''){

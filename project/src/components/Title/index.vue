@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed_title">
+  <div class="fixed_title left_width_box">
       <van-nav-bar
           :title="title_name"
           left-text=""

@@ -9,6 +9,7 @@ const getters = {
   kfwecha:state=> state.app.kfwecha,
   issetkjtx:state=> state.app.issetkjtx,
   apkurl:state=> state.app.apkurl,
+  homeData:state=> state.app.homeData,
 
 }
 export default getters

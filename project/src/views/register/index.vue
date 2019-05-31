@@ -12,7 +12,7 @@
             <CutDown @click="codeVerify" :disabled="disabled" :mobile="phone" ref="codeEl"></CutDown>
         </div>
         <div class="van_box">
-            <van-field label="邀请码" maxlength="11" type="number" :disabled="has_pid" class="van_field_code" clearable v-model="pid" placeholder="输入邀请码双方可得4金币" />
+            <van-field label="邀请码" maxlength="11" type="number" :disabled="has_pid" class="van_field_code" clearable v-model="pid" :placeholder="regpiddes" />
         </div>
         <van-button style="background:#FC7953;color:#fff" @click="regist">注册</van-button>
     </div>
@@ -22,6 +22,7 @@
 import { validatePhone } from '@/utils/validate'
 import CutDown from '@/components/CutDown'
 import { getvcode, regist } from '@/api'
+import { gethome } from '@/api/home'
 import { Toast } from 'vant';
 export default {
     components: {
@@ -34,10 +35,26 @@ export default {
             password: '',
             vcode: '', //验证码
             device: 0  ,//手机类型,
-            has_pid:false
+            has_pid:false,
+            regpiddes:''
         }
     },
     methods: {
+        async gethome() {
+            let obj = {};
+            if(localStorage.getItem('sid')){
+                obj.sid = localStorage.getItem('sid')
+            }
+            if(localStorage.getItem('uid')){
+                obj.uid = localStorage.getItem('uid')
+            }
+            const { data } = await gethome(obj)
+            this.$store.dispatch('set_homedata',data)
+            this.$store.dispatch('set_kfwecha',data.kfwecha)
+            this.$store.dispatch('set_issetkjtx',data.issetkjtx)
+            this.$store.dispatch('set_apkurl',data.apkurl)
+            this.regpiddes = data.regpiddes
+        },
         async codeVerify() {
             const { data } = await getvcode({
                 phone: this.phone
@@ -73,8 +90,8 @@ export default {
                 device: this.device,
                 pid: this.pid
             };
-            if(sessionStorage.getItem('cid')){ //渠道号
-                obj.cid = sessionStorage.getItem('cid')
+            if(localStorage.getItem('cid')){ //渠道号
+                obj.cid = localStorage.getItem('cid')
             }
             const { data } = await regist(obj)
             if(data.errorcode == 0) {
@@ -107,8 +124,8 @@ export default {
         }
     },
     created(){
-        this.pid = sessionStorage.getItem('pid');
-        if(sessionStorage.getItem('pid')){
+        this.pid = localStorage.getItem('pid');
+        if(localStorage.getItem('pid')){
             this.has_pid = true;
         }
         let u = navigator.userAgent, app = navigator.appVersion;
@@ -123,6 +140,11 @@ export default {
         if(this.$root.$children[0].timer){
             clearInterval(this.$root.$children[0].timer)
             this.$root.$children[0].timer = null
+        }
+        if(this.$store.getters.homeData == null){
+            this.gethome()
+        }else{
+            this.regpiddes = this.$store.getters.homeData.regpiddes
         }
     }
 }

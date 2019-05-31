@@ -58,6 +58,7 @@ export default {
         obj.uid = localStorage.getItem('uid')
       }
       const { data } = await gethome(obj)
+      this.$store.dispatch('set_homedata',data)
       this.$store.dispatch('set_kfwecha',data.kfwecha)
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
@@ -132,6 +133,10 @@ export default {
 </script>
 
 <style lang='stylus'>
+.left_width_box .van-nav-bar__left{
+  left: 0;
+  width: 1.5rem;
+}
 .orange_btn{
   background:#FC7953;
   color:#fff;
