@@ -201,11 +201,12 @@ h4
             height .6rem
             margin-right .1rem
     div>p:last-child
-        font-size .3rem
+        font-size .4rem
         color #666
         min-width 1rem
-        justify-content center
+        // justify-content center
         text-decoration:line-through
+        padding-left: 0.55rem;
 .simulate_rules
     width 100%
     padding .2rem

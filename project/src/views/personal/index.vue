@@ -191,7 +191,7 @@ export default {
         line-height .6rem
         &:last-child
             color #666
-            font-size .18rem
+            font-size .35rem
 /deep/ .van-cell
     line-height .88rem
 /deep/ .van-icon-tj::before
@@ -283,7 +283,7 @@ export default {
         padding: 0 6px;
         height: 25px;
         min-width: 45px;
-        font-size: 8px;
+        font-size: 13px;
         line-height: 20px;
     }
 </style>

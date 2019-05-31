@@ -90,6 +90,7 @@ button
     text-align center
 .van_box_right
     text-align right
+    float right
     padding .3rem
     box-sizing border-box
     color #14ADFF

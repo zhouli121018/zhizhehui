@@ -43,11 +43,11 @@ export default {
                 phone: this.mobile,
                 vcode: this.code
             };
-            if(sessionStorage.getItem('cid')){ //渠道号
-                obj.cid = sessionStorage.getItem('cid')
+            if(localStorage.getItem('cid')){ //渠道号
+                obj.cid = localStorage.getItem('cid')
             }
-            if(sessionStorage.getItem('pid')){ //推荐码
-                obj.pid = sessionStorage.getItem('pid')
+            if(localStorage.getItem('pid')){ //推荐码
+                obj.pid = localStorage.getItem('pid')
             }
             const { data }    = await loginbyvcode(obj)
             if(data.errorcode == 0) {

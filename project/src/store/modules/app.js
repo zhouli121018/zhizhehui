@@ -10,6 +10,7 @@ const app = {
     kfwecha:'',
     issetkjtx: null, 
     apkurl: null, 
+    homeData:null
   },
   getters: {
     whiteList (state) {
@@ -37,9 +38,15 @@ const app = {
     },
     SET_APKURL(state,param){
       state.apkurl = param;
-    }
+    },
+    SET_HOMEDATA(state,param){
+      state.homeData = param;
+    },
   },
   actions: {
+    set_homedata ({commit}, url) {
+      commit('SET_HOMEDATA', url)
+    },
     set_sdk_url ({commit}, url) {
       commit('SET_SDK_URL', url)
     },

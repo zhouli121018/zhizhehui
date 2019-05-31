@@ -63,13 +63,14 @@ export default {
 <style lang="stylus" scoped>
 .content_font
     color #7D7D7D
+    padding 0 .1rem
     padding-top .3rem
     text-align left 
     line-height .6rem
-    letter-spacing: .02rem;
+    text-align justify
 .fonts
     margin-top 1.6rem
-    font-size 0.48rem
+    font-size 0.5rem
 .recommend_content
     width 90%
     margin -.6rem auto 0 auto 
