@@ -366,6 +366,7 @@ export default {
         this.a_activeNum = 0
         this.active = 0
         this.yc_active = 0
+        this.planInfoList = []
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {
