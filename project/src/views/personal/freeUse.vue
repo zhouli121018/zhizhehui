@@ -112,6 +112,7 @@ export default {
                 sid: localStorage.getItem('sid')
             }) 
             this.ticketnum = data.ticketnum//兑换后剩余优惠券张数
+            this.info.vipticket = ''
             this.$toast(data.message)
         },
         exchangeDay() {

@@ -259,6 +259,7 @@ export default {
             })
             this.planInfo = data
             let planInfoList = data.list
+            console.log(planInfoList)
             if(this.lastid != 0 && this.time_add) {
                 planInfoList = planInfoList.map(item => {
                     this.planInfoList.push(item)
@@ -266,6 +267,7 @@ export default {
             }else {
                 this.planInfoList = planInfoList
             }  
+            console.log(this.planInfoList)
             this.time_add = true; 
             this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
