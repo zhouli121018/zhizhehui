@@ -17,7 +17,7 @@
         </div>
         <div class="lottery_time">
             <div style="width:47%">距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
-            <div style="width:51%; text-align: center;"><span style="width:50%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
+            <div style="width:51%; text-align: center;"><span style="width:35%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
             <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
@@ -226,7 +226,9 @@ export default {
                 }
             })[0]
             this.chooseName = this.lottList.lotname
+            sessionStorage.setItem('_chooseName',this.chooseName)
             this.lottype = this.lottList.lottype
+            sessionStorage.setItem('_lottype',this.lottype)
             this.plantype = this.lottList.plantypes[0].pos//计划类型id
             this.posname = this.lottList.plantypes[0].posname//计划类型名称
             this.plannum = this.lottList.nmaypes[0]//几码
@@ -260,7 +262,6 @@ export default {
             })
             this.planInfo = data
             let planInfoList = data.list
-            console.log(planInfoList)
             if(this.lastid != 0 && this.time_add) {
                 planInfoList = planInfoList.map(item => {
                     this.planInfoList.push(item)
@@ -268,7 +269,6 @@ export default {
             }else {
                 this.planInfoList = planInfoList
             }  
-            console.log(this.planInfoList)
             this.time_add = true; 
             this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
@@ -331,6 +331,15 @@ export default {
                         }
                     }
                 })[0].fangans
+            }else if(sessionStorage.getItem('_lottype')) {
+                this.lottype = sessionStorage.getItem('_lottype')
+                this.fangansList = this.lottypeList.filter(item => {
+                    if(this.lottype == item.lottype) {
+                        return {
+                            ...item
+                        }
+                    }
+                })[0].fangans
             }else{
                 this.lottype = this.lottypeList[0].lottype
                 this.fangansList = data.lottype[0].fangans//方案
@@ -345,7 +354,11 @@ export default {
                     }
                 }
             })[0]
-            this.chooseName = this.lottList.lotname
+            if(sessionStorage.getItem('_chooseName')){
+                this.chooseName = sessionStorage.getItem('_chooseName')
+            }else {
+                this.chooseName = this.lottList.lotname
+            }
             this.lottype = this.lottList.lottype
             this.plantype = this.lottList.plantypes[0].pos//计划类型id
             this.posname = this.lottList.plantypes[0].posname//计划类型名称
@@ -364,9 +377,9 @@ export default {
         this.activeNum = 0
         this.activeNums = 0
         this.a_activeNum = 0
-        this.active = 0
         this.yc_active = 0
         this.planInfoList = []
+        this.lastid = 0
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {
