@@ -7,7 +7,7 @@
             </div>
             <p>方案计划 </p> -->
             <div class="title_pop_up" @click="isShowClick">
-                {{chooseName}} 
+                {{chooseName}}
                 <img v-if="!isShow" src="~@/assets/arrowdown.png" alt="">
                 <img v-else src="~@/assets/arrowon.png" alt="">
             </div>
@@ -361,6 +361,11 @@ export default {
         this.isNum = false
         this.isNum_center = false
         this.isNum_top = false
+        this.activeNum = 0
+        this.activeNums = 0
+        this.a_activeNum = 0
+        this.active = 0
+        this.yc_active = 0
         if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
             this.gethome().then(() => {
