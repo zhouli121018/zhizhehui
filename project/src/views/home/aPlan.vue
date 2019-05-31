@@ -16,7 +16,7 @@
             </ul>
         </div>
         <div class="lottery_time">
-            <div style="width:47%">距{{planInfo.curissue}}期开奖：<span class="green"> {{h+':'+m+':'+s}}</span></div>
+            <div style="width:47%">距{{planInfo.curissue}}期开奖：<span class="green"> {{kjdjs}}</span></div>
             <div style="width:51%; text-align: center;"><span style="width:35%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
@@ -116,12 +116,14 @@ export default {
             h: '',
             m: '',
             s: '',
+            kjdjs:'',
             isCurtime: false,
             timer: null,
             current_time:'',
             cur_timer:null,
             planInfoList: [],
-            time_add:true
+            time_add:true,
+            kj_number_timer:null
         }
     },
     methods: {
@@ -181,7 +183,7 @@ export default {
                 this.plantype = num.pos
                 this.isNum_top = false
             }
-            clearTimeout(this.timer)
+            if(this.timer)clearTimeout(this.timer)
             this.lastid = 0
             this.getplans()
         },
@@ -211,6 +213,7 @@ export default {
             this.isNum = false
             this.isNum_center = false
             this.isNum_top = false
+           
         },
         //选择右上角彩种
         choose(name, i, lottype) {
@@ -225,15 +228,19 @@ export default {
                     }
                 }
             })[0]
+            console.log(this.lottList)
             this.chooseName = this.lottList.lotname
-            sessionStorage.setItem('_chooseName',this.chooseName)
+            localStorage.setItem('_chooseName',this.chooseName)
             this.lottype = this.lottList.lottype
-            sessionStorage.setItem('_lottype',this.lottype)
-            this.plantype = this.lottList.plantypes[0].pos//计划类型id
-            this.posname = this.lottList.plantypes[0].posname//计划类型名称
-            this.plannum = this.lottList.nmaypes[0]//几码
-            this.issuenum = this.lottList.nissues[0]//几期
-            clearTimeout(this.timer)
+            localStorage.setItem('_lottype',this.lottype)
+            this.a_activeNum = 0;
+            this.activeNums = 0;
+            this.activeNum = 0;
+            this.plantype = this.lottList.plantypes[this.a_activeNum].pos//计划类型id
+            this.posname = this.lottList.plantypes[this.a_activeNum].posname//计划类型名称
+            this.plannum = this.lottList.nmaypes[this.activeNums]//几码
+            this.issuenum = this.lottList.nissues[this.activeNum]//几期
+            if(this.timer)clearTimeout(this.timer)
             this.lastid = 0
             this.getplans()
         },
@@ -248,8 +255,8 @@ export default {
             this.$router.push(url)
         },
         async getplans() {
-            clearTimeout(this.timer)
-            if(this.cur_timer) clearTimeout(this.cur_timer)
+            if(this.timer)clearTimeout(this.timer)
+            if(this.cur_timer)clearInterval(this.cur_timer)
             const { data } = await getplan({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
@@ -271,6 +278,8 @@ export default {
             }  
             this.time_add = true; 
             this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
+
+            
             this.curtime = getHMS(this.planInfo.curtime)//开始时间
             this._curtime = this.planInfo.curtime*1000//当前时间
             this.endtime = this.planInfo.endtime*1000//结束时间
@@ -279,6 +288,17 @@ export default {
             this.countTime()
             this.curTime();
             this.cur_timer = setInterval(this.curTime,1000)
+
+            if(data.kjnum == '正在开奖...'){
+                if(this.kj_number_timer)clearInterval(this.kj_number_timer)
+                this.lastid = 0;
+                this.kj_number_timer = setInterval(this.getplans,3000);
+                return;
+            }else{
+                if(this.kj_number_timer){
+                    clearInterval(this.kj_number_timer)
+                }
+            }
         },
         countTime () {
             //时间差
@@ -289,7 +309,7 @@ export default {
                     this.time_add = false;
                     this.lastid = 0
                     this.getplans();
-                    clearTimeout(this.timer)
+                    if(this.timer)clearTimeout(this.timer)
                     return;
                 }
                 this._curtime = this._curtime + 1000
@@ -297,10 +317,11 @@ export default {
                 this.h = Math.floor(leftTime / 1000 / 60 / 60 % 24)>=10?Math.floor(leftTime / 1000 / 60 / 60 % 24):'0'+Math.floor(leftTime / 1000 / 60 / 60 % 24);
                 this.m = Math.floor(leftTime / 1000 / 60 % 60)>=10?Math.floor(leftTime / 1000 / 60 % 60):'0'+Math.floor(leftTime / 1000 / 60 % 60);
                 this.s = Math.floor(leftTime / 1000 % 60)>=10?Math.floor(leftTime / 1000 % 60):'0'+Math.floor(leftTime / 1000 % 60);
-				//递归每秒调用countTime方法，显示动态时间效果
+                this.kjdjs = this.h+':'+this.m+':'+this.s
+                //递归每秒调用countTime方法，显示动态时间效果
 				this.timer = setTimeout(this.countTime, 1000);
             }else {
-                clearTimeout(this.timer)
+                if(this.timer)clearTimeout(this.timer)
             }
         },
         curTime () {
@@ -320,7 +341,7 @@ export default {
             this.curtime = str
         },
         async gethome() {
-            let data = JSON.parse(sessionStorage.getItem('aPlan_home'))
+            let data = JSON.parse(localStorage.getItem('aPlan_home'))
             this.lottypeList = data.lottype//标题选择
             //选择彩种  获取彩种下面对应的方案（两种情况：一种是重页面传参过来，一种直接从首页进来，最后都默认去第一个参数）
             if(this.$route.query.lottype){
@@ -332,8 +353,8 @@ export default {
                         }
                     }
                 })[0].fangans
-            }else if(sessionStorage.getItem('_lottype')) {
-                this.lottype = sessionStorage.getItem('_lottype')
+            }else if(localStorage.getItem('_lottype')) {
+                this.lottype = localStorage.getItem('_lottype')
                 this.fangansList = this.lottypeList.filter(item => {
                     if(this.lottype == item.lottype) {
                         return {
@@ -346,7 +367,7 @@ export default {
                 this.fangansList = data.lottype[0].fangans//方案
             }
             this.noticesList = data.notices
-            this.fanganid = this.fangansList[0].fanganid
+            this.fanganid = this.fangansList[this.yc_active].fanganid
             //上一个页面传彩种参数  去获取相关一系列参数
             this.lottList = this.lottypeList.filter(item => {
                 if(item.lottype == this.lottype) {
@@ -355,16 +376,16 @@ export default {
                     }
                 }
             })[0]
-            if(sessionStorage.getItem('_chooseName')){
-                this.chooseName = sessionStorage.getItem('_chooseName')
+            if(localStorage.getItem('_chooseName')){
+                this.chooseName = localStorage.getItem('_chooseName')
             }else {
                 this.chooseName = this.lottList.lotname
             }
             this.lottype = this.lottList.lottype
-            this.plantype = this.lottList.plantypes[0].pos//计划类型id
-            this.posname = this.lottList.plantypes[0].posname//计划类型名称
-            this.plannum = this.lottList.nmaypes[0]//几码
-            this.issuenum = this.lottList.nissues[0]//几期
+            this.plantype = this.lottList.plantypes[this.a_activeNum].pos//计划类型id
+            this.posname = this.lottList.plantypes[this.a_activeNum].posname//计划类型名称
+            this.plannum = this.lottList.nmaypes[this.activeNums]//几码
+            this.issuenum = this.lottList.nissues[this.activeNum]//几期
         }
     },
     created() {
@@ -375,11 +396,7 @@ export default {
         this.isNum = false
         this.isNum_center = false
         this.isNum_top = false
-        this.activeNum = 0
-        this.activeNums = 0
-        this.a_activeNum = 0
-        this.yc_active = 0
-        this.planInfoList = []
+        
         this.lastid = 0
         // if(!this.$store.getters.isback || this.isFirstEnter){
             this.lottype = this.$route.query.lottype
@@ -395,8 +412,14 @@ export default {
         // 可以访问组件实例 `this`
         if(this.timer) {
             clearTimeout(this.timer)
-            clearTimeout(this.cur_timer)
         }
+        if(this.cur_timer){
+            clearInterval(this.cur_timer)
+        }
+        if(this.kj_number_timer){
+            clearInterval(this.kj_number_timer)
+        }
+        next();
     }
 }
 </script>

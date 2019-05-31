@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" @click.once="test">
     <a :href="apkurl" download v-show="false" id="download_btn">1</a>
     <router-view v-if="!is_qqorwx"/>
     <div class="container" v-if="is_qqorwx" style="padding-top:0 !important;">
@@ -42,7 +42,8 @@ export default {
           }
         });
         if(is_ring){
-          this.test();
+          document.getElementById('myaudio').play()
+          // this.test();
           // this.$nextTick(()=>{
           //   document.getElementById('myaudio').play()
           // })
@@ -76,6 +77,7 @@ export default {
     },
     test(){
       document.getElementById('myaudio').play()
+      document.getElementById('myaudio').pause()
     },
   },
   created(){

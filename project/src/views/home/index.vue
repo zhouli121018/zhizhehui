@@ -152,7 +152,7 @@ export default {
       this.fangans = data.fangans//方案
       this.advs = data.advs 
       this.$store.dispatch('set_homedata',data)
-      sessionStorage.setItem('aPlan_home',JSON.stringify(data))
+      localStorage.setItem('aPlan_home',JSON.stringify(data))
       this.$store.dispatch('set_kfwecha',data.kfwecha)
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
