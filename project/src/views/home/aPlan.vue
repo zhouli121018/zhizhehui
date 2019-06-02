@@ -16,8 +16,8 @@
             </ul>
         </div>
         <div class="lottery_time">
-            <div style="width:47%">距{{planInfo.curissue}}期开奖：<span class="green"> {{kjdjs}}</span></div>
-            <div style="width:51%; text-align: center;"><span style="width:35%;display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
+            <div style="width:47%; font-size: 0.38rem;white-space:nowrap;">距{{planInfo.curissue}}期开奖：<span class="green"> {{kjdjs}}</span></div>
+            <div style="width:51%; text-align: center;font-size: 0.38rem;"><span style="display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
         </div>
         <div class="lottery_time lottery_times">
             <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
@@ -67,8 +67,22 @@
             <van-button size="small" class="no_border_btn" @click="getplans">获取更多</van-button>
         </div>
         <div class="replication_solution">
-            <van-button size="large" style="background:#FC7953;color:#fff;width:90%" @click="doCopy(planInfoList)">复制方案</van-button>
+            <van-button size="large" style="background:#FC7953;color:#fff;width:90%" @click="show_tt = true">复制方案</van-button>
         </div>
+
+        <van-dialog 
+            v-model="show_tt"
+            title="复制方案提示"
+            show-cancel-button
+            class="dialog_content_input"
+            :before-close="beforeClose"
+            >
+            <van-field
+                v-model.trim.number="count_input"
+                clearable
+                label="最近条数："
+            />
+        </van-dialog>
     </div>
 </template>
 
@@ -86,6 +100,8 @@ export default {
     },
     data() {
         return {
+            show_tt: false,
+            count_input: 20,
             activeNum: 0,
             activeNums: 0,
             a_activeNum: 0,
@@ -127,21 +143,41 @@ export default {
         }
     },
     methods: {
+        beforeClose(action,done){
+            if(action == 'confirm'){
+                if(!this.count_input){
+                    this.$toast('请输入要复制的最近条数！')
+                    done(false)
+                    return;
+                }
+                this.doCopy(this.planInfoList);
+                this.count_input = 20
+            }
+            done();
+        },
         //复制
         doCopy (text) {
             let arr = []
-            let txt = text.map(item => {
+            // let txt = text.map(item => {
+            //     arr.push(`${item.issue}  ${item.content}  ${item.hitnum}  `)
+            // })
+            let len = this.count_input;
+            if(len > text.length){
+                len = text.length;
+            }
+            for(let i = 0;i<len;i++){
+                let item = text[i]
                 arr.push(`${item.issue}  ${item.content}  ${item.hitnum}  `)
-            })
+            }
             arr = `--------------------------- \n ${arr.join('\n')} \n--------------------------- ` 
-            this.$copyText(arr).then(function (e) {
+            this.$copyText(arr).then( (e) => {
                 Dialog.alert({
                     title: '提示',
                     message: '复制成功，请粘贴分享到微信或QQ。'
                 }).then(() => {
                 // on close
                 });
-            }, function (e) {
+            },  (e) => {
                 Dialog.alert({
                     title: '提示',
                     message: '复制失败，请手动复制！'
@@ -184,6 +220,16 @@ export default {
                 this.isNum_top = false
             }
             if(this.timer)clearTimeout(this.timer)
+            this.$router.replace({
+                path:'/home/aPlan',
+                query:{
+                    lottype:this.lottype,
+                    fanganid:this.fanganid,
+                    plantype: this.lottList.plantypes[this.a_activeNum].pos,
+                    plannum: this.lottList.nmaypes[this.activeNums],
+                    issuenum: this.lottList.nissues[this.activeNum]
+                }
+            })
             this.lastid = 0
             this.getplans()
         },
@@ -233,6 +279,7 @@ export default {
             localStorage.setItem('_chooseName',this.chooseName)
             this.lottype = this.lottList.lottype
             localStorage.setItem('_lottype',this.lottype)
+            this.yc_active = 0;
             this.a_activeNum = 0;
             this.activeNums = 0;
             this.activeNum = 0;
@@ -241,6 +288,16 @@ export default {
             this.plannum = this.lottList.nmaypes[this.activeNums]//几码
             this.issuenum = this.lottList.nissues[this.activeNum]//几期
             if(this.timer)clearTimeout(this.timer)
+            this.$router.replace({
+                path:'/home/aPlan',
+                query:{
+                    lottype: this.lottype,
+                    fanganid: this.fangansList[this.yc_active].fanganid,
+                    plantype: this.lottList.plantypes[this.a_activeNum].pos,
+                    plannum: this.lottList.nmaypes[this.activeNums],
+                    issuenum: this.lottList.nissues[this.activeNum]
+                }
+            })
             this.lastid = 0
             this.getplans()
         },
@@ -248,6 +305,16 @@ export default {
         change_yc(index,fanganid){
             this.yc_active = index
             this.fanganid = fanganid
+            this.$router.replace({
+                path:'/home/aPlan',
+                query:{
+                    lottype: this.lottype,
+                    fanganid: this.fangansList[this.yc_active].fanganid,
+                    plantype: this.lottList.plantypes[this.a_activeNum].pos,
+                    plannum: this.lottList.nmaypes[this.activeNums],
+                    issuenum: this.lottList.nissues[this.activeNum]
+                }
+            })
             this.lastid = 0
             this.getplans()
         },
@@ -344,44 +411,92 @@ export default {
             let data = JSON.parse(localStorage.getItem('aPlan_home'))
             this.lottypeList = data.lottype//标题选择
             //选择彩种  获取彩种下面对应的方案（两种情况：一种是重页面传参过来，一种直接从首页进来，最后都默认去第一个参数）
-            if(this.$route.query.lottype){
-                this.lottype = this.$route.query.lottype
-                this.fangansList = this.lottypeList.filter(item => {
-                    if(this.lottype == item.lottype) {
-                        return {
-                            ...item
+            
+            this.active = 0;
+            this.yc_active = 0;
+            this.a_activeNum = 0;
+            this.activeNums = 0;
+            this.activeNum = 0;
+                if(this.$route.query.lottype){
+                    for(let i=0;i<this.lottypeList.length;i++){
+                        if(this.lottypeList[i].lottype == this.$route.query.lottype){
+                            this.active = i;
                         }
-                    }
-                })[0].fangans
-            }else if(localStorage.getItem('_lottype')) {
-                this.lottype = localStorage.getItem('_lottype')
-                this.fangansList = this.lottypeList.filter(item => {
-                    if(this.lottype == item.lottype) {
-                        return {
-                            ...item
-                        }
-                    }
-                })[0].fangans
-            }else{
-                this.lottype = this.lottypeList[0].lottype
-                this.fangansList = data.lottype[0].fangans//方案
-            }
-            this.noticesList = data.notices
-            this.fanganid = this.fangansList[this.yc_active].fanganid
-            //上一个页面传彩种参数  去获取相关一系列参数
-            this.lottList = this.lottypeList.filter(item => {
-                if(item.lottype == this.lottype) {
-                    return {
-                        ...item
                     }
                 }
-            })[0]
+                this.lottype = this.lottypeList[this.active].lottype
+                this.chooseName = this.lottypeList[this.active].lotname
+                this.lottList = this.lottypeList.filter(item => {
+                    if(item.lottype == this.lottype) {
+                        return {
+                            ...item
+                        }
+                    }
+                })[0]
+                 this.fangansList = this.lottypeList.filter(item => {
+                    if(this.lottype == item.lottype) {
+                        return {
+                            ...item
+                        }
+                    }
+                })[0].fangans
+                if(this.$route.query.fanganid){
+                    for(let i=0;i<this.fangansList.length;i++){
+                        if(this.fangansList[i].fanganid == this.$route.query.fanganid){
+                            this.yc_active = i;
+                        }
+                    }
+                }
+                if(this.$route.query.plantype){
+                    for(let i=0;i<this.lottList.plantypes.length;i++){
+                        if(this.lottList.plantypes[i].pos == this.$route.query.plantype){
+                            this.a_activeNum = i;
+                        }
+                    }
+                }
+                if(this.$route.query.plannum){
+                    for(let i=0;i<this.lottList.nmaypes.length;i++){
+                        if(this.lottList.nmaypes[i] == this.$route.query.plannum){
+                            this.activeNums = i;
+                        }
+                    }
+                }
+                if(this.$route.query.issuenum){
+                    for(let i=0;i<this.lottList.nissues.length;i++){
+                        if(this.lottList.nissues[i] == this.$route.query.issuenum){
+                            this.activeNum = i;
+                        }
+                    }
+                }
+            // }else if(localStorage.getItem('_lottype')) {
+                // this.lottype = localStorage.getItem('_lottype')
+                // this.fangansList = this.lottypeList.filter(item => {
+                //     if(this.lottype == item.lottype) {
+                //         return {
+                //             ...item
+                //         }
+                //     }
+                // })[0].fangans
+                // this.fanganid = this.fangansList[this.yc_active].fanganid
+            // }else{
+                // this.lottype = this.lottypeList[0].lottype
+                // this.fangansList = data.lottype[0].fangans//方案
+                // this.fanganid = this.fangansList[this.yc_active].fanganid
+            // }
+            this.noticesList = data.notices
+            
+            //上一个页面传彩种参数  去获取相关一系列参数
+            
+
+           
+
             if(localStorage.getItem('_chooseName')){
-                this.chooseName = localStorage.getItem('_chooseName')
+                // this.chooseName = localStorage.getItem('_chooseName')
             }else {
-                this.chooseName = this.lottList.lotname
+                // this.chooseName = this.lottList.lotname
             }
-            this.lottype = this.lottList.lottype
+            
+            this.fanganid = this.fangansList[this.yc_active].fanganid
             this.plantype = this.lottList.plantypes[this.a_activeNum].pos//计划类型id
             this.posname = this.lottList.plantypes[this.a_activeNum].posname//计划类型名称
             this.plannum = this.lottList.nmaypes[this.activeNums]//几码

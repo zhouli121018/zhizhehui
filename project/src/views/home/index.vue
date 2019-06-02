@@ -1,58 +1,63 @@
 <template>
   <div >
     <div class="container" id="home_page">
-      <div class="fixed_title">
-        <van-nav-bar
-          title="智者汇方案计划"
-          :left-text="left_text"
-          right-text="关于"
-          @click-left="onClickLeft"
-          @click-right="onClickRight"
-        />
-      </div>
-      <van-swipe :autoplay="3000" indicator-color="#007BC2">
-        <van-swipe-item  v-for="(image, index) in advs" :key="index">
-          <div class="swipe_img_box" @click="jumpTo(image.url)">
-            <img :src="$https+image.pic" />
-          </div>
-        </van-swipe-item>
-      </van-swipe>
-      <a :href="banner_url" v-show="false" id="banner_a">1</a>
-      
-      <van-row :gutter="30" class="list_box text_center">
-        <van-col span="6" style="width:23%;padding-left:0;padding-right:0" v-for="(l,index) in list" :key="index">
-          <div class="item_box"  @click="jumpTo(l.link,l.islink)">
-            <img :src="l.src" alt="" class="max_width_100">
-            <span>{{l.title}}</span>
-          </div>
-        </van-col>
-      </van-row>
-
-      <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
-        <!-- <span class="left_border_ori">方案</span> -->
-        <van-cell value="更多"  is-link class="diy_font"  @click="jumpTo('/home/planList')">
-          <template slot="title">
-            <span class=""><span class="left_border_ori"></span> 方案</span>
-          </template>
-        </van-cell>
-        <div class="fangan_item_box" v-for="(fa,k) in fangans" :key="k" @click="goSinglePlan(fa)">
-          <span>{{fa.fangantitle}} </span> 
-          <p>{{fa.fangandes}}</p>
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <div class="fixed_title">
+          <van-nav-bar
+            title="智者汇方案计划"
+            :left-text="left_text"
+            right-text="关于"
+            @click-left="onClickLeft"
+            @click-right="onClickRight"
+          >
+            <span slot="title" @click="gethome">智者汇方案计划
+              <!-- <van-icon name="replay" /> -->
+            </span>
+          </van-nav-bar>
         </div>
-      </div>
+        <van-swipe :autoplay="3000" indicator-color="#007BC2">
+          <van-swipe-item  v-for="(image, index) in advs" :key="index">
+            <div class="swipe_img_box" @click="jumpTo(image.url)">
+              <img :src="$https+image.pic" />
+            </div>
+          </van-swipe-item>
+        </van-swipe>
+        <a :href="banner_url" v-show="false" id="banner_a">1</a>
+        
+        <van-row :gutter="30" class="list_box text_center">
+          <van-col span="6" style="width:23%;padding-left:0;padding-right:0" v-for="(l,index) in list" :key="index">
+            <div class="item_box"  @click="jumpTo(l.link,l.islink)">
+              <img :src="l.src" alt="" class="max_width_100">
+              <span>{{l.title}}</span>
+            </div>
+          </van-col>
+        </van-row>
 
-      <div class="msg_box" style="padding:0.2rem 0.4rem 0.1rem">
-        <van-cell value="更多"  is-link class="diy_font" @click="jumpTo('/home/announcement/index')">
-          <template slot="title">
-            <span class=""><span class="left_border_ori"></span> 信息</span>
-          </template>
-        </van-cell>
-        <van-cell class="msg_item" v-for="(m,k) in notices" :key="k" :title="m.title" :value="m.createtime" @click="goDetail(m)"/>
-      </div>
+        <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
+          <!-- <span class="left_border_ori">方案</span> -->
+          <van-cell value="更多"  is-link class="diy_font"  @click="jumpTo('/home/planList')">
+            <template slot="title">
+              <span class=""><span class="left_border_ori"></span> 方案</span>
+            </template>
+          </van-cell>
+          <div class="fangan_item_box" v-for="(fa,k) in fangans" :key="k" @click="goSinglePlan(fa)">
+            <span>{{fa.fangantitle}} </span> 
+            <p>{{fa.fangandes}}</p>
+          </div>
+        </div>
 
-      <div style="background:#F5F5F5;height:0.6rem;"></div>
+        <div class="msg_box" style="padding:0.2rem 0.4rem 0.1rem">
+          <van-cell value="更多"  is-link class="diy_font" @click="jumpTo('/home/announcement/index')">
+            <template slot="title">
+              <span class=""><span class="left_border_ori"></span> 信息</span>
+            </template>
+          </van-cell>
+          <van-cell class="msg_item" v-for="(m,k) in notices" :key="k" :title="m.title" :value="m.createtime" @click="goDetail(m)"/>
+        </div>
 
-    
+        <div style="background:#F5F5F5;height:0.6rem;"></div>
+
+      </van-pull-refresh>
 
     </div>
 
@@ -96,10 +101,14 @@ export default {
       is_ios:false,
       isFirstEnter:false,
       fangans:[],
-      notices:[]
+      notices:[],
+      isLoading:false
     }
   },
   methods: {
+    onRefresh() {
+      this.gethome();
+    },
     goDetail(data){
         this.$router.push({
             path: '/home/announcement/detail', 
@@ -124,6 +133,15 @@ export default {
     },
     jumpTo( path, islink ){
       if(path.indexOf('/')==0){
+        if(path == '/home/aPlan' && localStorage.getItem('_lottype')){
+          this.$router.push({
+            path:path,
+            query:{
+              lottype:localStorage.getItem('_lottype')
+            }
+          })
+          return;
+        }
         this.$router.push(path)
       }else{
         this.banner_url = path;
@@ -149,6 +167,7 @@ export default {
         obj.uid = localStorage.getItem('uid')
       }
       const { data } = await gethome(obj)
+      this.isLoading = false;
       this.fangans = data.fangans//方案
       this.advs = data.advs 
       this.$store.dispatch('set_homedata',data)
@@ -199,10 +218,17 @@ export default {
       this.left_text = '会员中心';
       this.left_path = '/personal/index'
     }
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+          
+        } else {
+          this.gethome();
+        }
+    })
   },
   activated(){  
     if(this.isFirstEnter){
-       this.gethome();
+      this.gethome();
     }
     this.isFirstEnter=false;
     this.$store.dispatch('set_isback',false)

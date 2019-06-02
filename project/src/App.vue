@@ -42,11 +42,11 @@ export default {
           }
         });
         if(is_ring){
-          document.getElementById('myaudio').play()
+          // document.getElementById('myaudio').play()
           // this.test();
-          // this.$nextTick(()=>{
-          //   document.getElementById('myaudio').play()
-          // })
+          this.$nextTick(()=>{
+            document.getElementById('myaudio').play()
+          })
         }
       }
     },
@@ -104,7 +104,6 @@ export default {
         });
       }
     }
-    console.log(this.$route.name)
     if(!this.is_qqorwx && this.$route.name!='home' && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
       if(this.$store.getters.issetkjtx == null){
         this.gethome();

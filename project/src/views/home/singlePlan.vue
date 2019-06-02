@@ -49,7 +49,8 @@ export default {
             this.$router.push({
                 path:'/home/aPlan',
                 query:{
-                    lottype:lottype
+                    lottype:lottype,
+                    fanganid:this.$route.query.fanganid
                 }
             })
         }
@@ -60,9 +61,9 @@ export default {
         
     },
     beforeRouteEnter(to, from, next) {
-      if (from.name == 'aPlan') { // 这个name是下一级页面的路由name
-        to.meta.isBack = true; 
-      }
+    //   if (from.name == 'aPlan') { // 这个name是下一级页面的路由name
+    //     to.meta.isBack = true; 
+    //   }
       next()
     },
     activated(){
@@ -71,9 +72,9 @@ export default {
             this.$store.dispatch('set_isback',true)
         }
         this.$route.meta.isBack=false;
-        // if(!this.$store.getters.isback || this.isFirstEnter){
+        if(!this.$store.getters.isback || this.isFirstEnter){
             this.getfangan()
-        // }
+        }
         this.isFirstEnter=false;
         this.$store.dispatch('set_isback',false)
     }

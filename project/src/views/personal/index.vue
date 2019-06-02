@@ -63,7 +63,7 @@
             title="提款提示"
             show-cancel-button
             class="dialog_content_input"
-            :before-close="beforeClose"
+            :before-close="beforeClose_tk"
             >
             <van-field
                 v-model.trim="alipay"
@@ -105,7 +105,7 @@ export default {
         }
     },
     methods:{
-        beforeClose(action,done){
+        beforeClose_tk(action,done){
             if(action == 'confirm'){
                 if(!this.alipay){
                     this.$toast('请输入支付宝账号！')
@@ -159,7 +159,10 @@ export default {
                 sid: localStorage.getItem('sid')
             }) 
             this.ticketnum = data.ticketnum//兑换后剩余优惠券张数
-            this.$toast(data.message)
+            // this.$toast(data.message)
+            if(data.errorcode == 0){
+                this.getaccount();
+            }
         },
     },
     created() {
