@@ -180,14 +180,17 @@ export default {
       // this.chooseName = this.lottypeList[0].lotname
       if(data.issetkjtx){
         this.$root.$children[0].getkjring();
-        if(!this.$root.$children[0].timer){
-          this.$root.$children[0].getkjring();
-          this.$root.$children[0].timer = setInterval(this.$root.$children[0].getkjring, 3000);
-        }
       }else{
         if(this.$root.$children[0].timer){
             clearInterval(this.$root.$children[0].timer)
             this.$root.$children[0].timer = null
+        }
+        if(this.$root.$children[0].timer_arr.length>0){
+          this.$root.$children[0].timer_arr.forEach(val=>{
+            clearInterval(val)
+            this.$root.$children[0].timer_arr = [];
+            this.$root.$children[0].curtime_arr = [];
+          })
         }
       }
       

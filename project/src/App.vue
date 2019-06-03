@@ -23,11 +23,29 @@ export default {
       endtime: '',
       _curtime: '',
       dingdong:'http://sscby.cn/zzh/dingdong.mp3',
-      timer:null
+      timer:null,
+      timer_arr:[],
+      curtime_arr:[],
     }
   },
   methods:{
+    countTime (endtime,len) {
+        //时间差
+        let leftTime = endtime - this.curtime_arr[len];
+        if (leftTime > 0) {
+          this.curtime_arr[len] = this.curtime_arr[len] +3000
+        }else {
+          this.getkjring();
+        }
+    },
     async getkjring() {
+      if(this.timer_arr.length>0){
+        this.timer_arr.forEach(val=>{
+          clearInterval(val)
+          this.timer_arr = [];
+          this.curtime_arr = [];
+        })
+      }
       const { data } = await getkjring({
           uid: localStorage.getItem('uid'),
           sid: localStorage.getItem('sid')
@@ -42,11 +60,20 @@ export default {
           }
         });
         if(is_ring){
-          // document.getElementById('myaudio').play()
-          // this.test();
+          console.log('ring')
           this.$nextTick(()=>{
-            document.getElementById('myaudio').play()
+            document.getElementById('myaudio').play();
+            setTimeout(this.getkjring,3000);
           })
+        }else{
+          data.list.forEach(val=>{
+            let len = this.timer_arr.length
+            this.curtime_arr[len] = data.curtime + 3000
+            this.timer_arr[len] = setInterval( () => {
+              this.countTime(val.endtime,len)
+            },3000)
+          })
+          
         }
       }
     },
@@ -64,14 +91,16 @@ export default {
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
       if(data.issetkjtx){
-        if(!this.timer){
+        if(this.timer_arr.length == 0){
           this.getkjring();
-          this.timer = setInterval(this.getkjring, 3000);
         }
       }else{
-        if(this.timer){
-            clearInterval(this.timer)
-            this.timer = null
+        if(this.timer_arr.length>0){
+          this.timer_arr.forEach(val=>{
+            clearInterval(val)
+            this.timer_arr = [];
+            this.curtime_arr = [];
+          })
         }
       }
     },
