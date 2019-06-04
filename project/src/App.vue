@@ -44,6 +44,7 @@ export default {
     async getkjring(len) {
       if(this.timer){
         clearInterval(this.timer);
+        this.timer = null;
       }
       const { data } = await getkjring({
           uid: localStorage.getItem('uid'),
@@ -57,14 +58,7 @@ export default {
           this.timer = setInterval(this.countTime,5000)
           console.log('ring')
           this.$nextTick(()=>{
-            let now_ring = new Date().getTime();
-            if(this.last_ring_time==null || now_ring-this.last_ring_time>100){
-              this.last_ring_time = now_ring;
-              if(document.getElementById('myaudio')){
-
-              }
-              document.getElementById('myaudio').play();
-            }            
+            document.getElementById('myaudio').play();           
           })
         }else{
           if(len){
@@ -93,21 +87,13 @@ export default {
           this.getkjring();
         }
       }else{
-        for(var key in this.timer_arr){
-          clearInterval(this.timer_arr[key]);
-          this.timer_arr[key] = null;
+        if(this.timer){
+          clearInterval(this.timer);
+          this.timer = null;
         }
-        for(var key in this.getring_timer_arr){
-          clearInterval(this.getring_timer_arr[key]);
-          this.getring_timer_arr[key] = null;
-        }
-        this.timer_arr = [];
-        this.getring_timer_arr = [];
-        this.curtime_arr = [];
       }
     },
     test(){
-      this.last_ring_time = new Date().getTime();
       document.getElementById('myaudio').play()
       document.getElementById('myaudio').pause()
     },
