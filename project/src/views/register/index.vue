@@ -137,13 +137,21 @@ export default {
         if (isIOS) {
             this.device = 1
         }
-        if(this.$root.$children[0].timer_arr.length>0){
-          this.$root.$children[0].timer_arr.forEach(val=>{
-            clearInterval(val)
-            this.$root.$children[0].timer_arr = [];
-            this.$root.$children[0].curtime_arr = [];
-          })
+
+        let appe = this.$root.$children[0];
+        for(var key in appe.timer_arr){
+          clearInterval(appe.timer_arr[key]);
+          appe.timer_arr[key] = null;
         }
+        for(var key in appe.getring_timer_arr){
+          clearInterval(appe.getring_timer_arr[key]);
+          appe.getring_timer_arr[key] = null;
+        }
+        appe.timer_arr = [];
+        appe.getring_timer_arr = [];
+        appe.curtime_arr = [];
+        appe.timer = null;
+
         if(this.$store.getters.homeData == null){
             this.gethome()
         }else{

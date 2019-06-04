@@ -26,25 +26,41 @@ export default {
       timer:null,
       timer_arr:[],
       curtime_arr:[],
+      last_ring_time:0,
+      getring_timer_arr:[],
     }
   },
   methods:{
     countTime (endtime,len) {
         //时间差
         let leftTime = endtime - this.curtime_arr[len];
+        console.log(len , leftTime > 0)
         if (leftTime > 0) {
           this.curtime_arr[len] = this.curtime_arr[len] +3
         }else {
-          this.getkjring();
+          this.getkjring(len);
         }
     },
-    async getkjring() {
-      if(this.timer_arr.length>0){
-        this.timer_arr.forEach(val=>{
-          clearInterval(val)
-          this.timer_arr = [];
-          this.curtime_arr = [];
-        })
+    async getkjring(len) {
+      if(len){
+        clearInterval(this.timer_arr[len])
+        this.timer_arr[len] = null;
+
+        clearInterval(this.getring_timer_arr[len]);
+        this.getring_timer_arr[len] = null;
+      }else{
+        for(var key in this.timer_arr){
+          clearInterval(this.timer_arr[key]);
+          this.timer_arr[key] = null;
+        }
+        for(var key in this.getring_timer_arr){
+          clearInterval(this.getring_timer_arr[key]);
+          this.getring_timer_arr[key] = null;
+        }
+        this.timer_arr = [];
+        this.getring_timer_arr = [];
+        this.curtime_arr = [];
+        this.timer = null
       }
       const { data } = await getkjring({
           uid: localStorage.getItem('uid'),
@@ -60,20 +76,24 @@ export default {
           }
         });
         if(is_ring){
-          console.log('ring')
+          setTimeout(this.getkjring,3000);
           this.$nextTick(()=>{
             document.getElementById('myaudio').play();
-            setTimeout(this.getkjring,3000);
           })
         }else{
-          data.list.forEach(val=>{
-            let len = this.timer_arr.length
-            this.curtime_arr[len] = data.curtime + 3
-            this.timer_arr[len] = setInterval( () => {
-              this.countTime(val.endtime,len)
-            },3000)
-          })
-          
+          if(len){
+            this.getring_timer_arr[len] = setInterval(()=>{this.getkjring(len)},3000);
+            this.timer = 1;
+          }else{
+            data.list.forEach(val=>{
+              this.timer = 1;
+              let len = val.lottype
+              this.curtime_arr['time_'+len] = data.curtime + 3
+              this.timer_arr['time_'+len] = setInterval( () => {
+                this.countTime(val.endtime,'time_'+len)
+              },3000)
+            })
+          }
         }
       }
     },
@@ -91,17 +111,21 @@ export default {
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
       if(data.issetkjtx){
-        if(this.timer_arr.length == 0){
+        if(this.timer == null){
           this.getkjring();
         }
       }else{
-        if(this.timer_arr.length>0){
-          this.timer_arr.forEach(val=>{
-            clearInterval(val)
-            this.timer_arr = [];
-            this.curtime_arr = [];
-          })
+        for(var key in this.timer_arr){
+          clearInterval(this.timer_arr[key]);
+          this.timer_arr[key] = null;
         }
+        for(var key in this.getring_timer_arr){
+          clearInterval(this.getring_timer_arr[key]);
+          this.getring_timer_arr[key] = null;
+        }
+        this.timer_arr = [];
+        this.getring_timer_arr = [];
+        this.curtime_arr = [];
       }
     },
     test(){
