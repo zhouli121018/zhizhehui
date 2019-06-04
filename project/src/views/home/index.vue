@@ -181,10 +181,6 @@ export default {
       if(data.issetkjtx){
         this.$root.$children[0].getkjring();
       }else{
-        if(this.$root.$children[0].timer){
-            clearInterval(this.$root.$children[0].timer)
-            this.$root.$children[0].timer = null
-        }
         if(this.$root.$children[0].timer_arr.length>0){
           this.$root.$children[0].timer_arr.forEach(val=>{
             clearInterval(val)
