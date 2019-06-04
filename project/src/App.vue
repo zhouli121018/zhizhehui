@@ -21,78 +21,56 @@ export default {
     return {
       is_qqorwx:false,
       endtime: '',
-      _curtime: '',
+      curtime: '',
       dingdong:'http://sscby.cn/zzh/dingdong.mp3',
       timer:null,
       timer_arr:[],
       curtime_arr:[],
-      last_ring_time:0,
+      last_ring_time:null,
       getring_timer_arr:[],
     }
   },
   methods:{
-    countTime (endtime,len) {
+    countTime () {
         //时间差
-        let leftTime = endtime - this.curtime_arr[len];
-        console.log(len , leftTime > 0)
+        let leftTime = this.endtime - this.curtime;
+        console.log(leftTime > 0)
         if (leftTime > 0) {
-          this.curtime_arr[len] = this.curtime_arr[len] +3
+          this.curtime = this.curtime +5
         }else {
-          this.getkjring(len);
+          this.getkjring(1);
         }
     },
     async getkjring(len) {
-      if(len){
-        clearInterval(this.timer_arr[len])
-        this.timer_arr[len] = null;
-
-        clearInterval(this.getring_timer_arr[len]);
-        this.getring_timer_arr[len] = null;
-      }else{
-        for(var key in this.timer_arr){
-          clearInterval(this.timer_arr[key]);
-          this.timer_arr[key] = null;
-        }
-        for(var key in this.getring_timer_arr){
-          clearInterval(this.getring_timer_arr[key]);
-          this.getring_timer_arr[key] = null;
-        }
-        this.timer_arr = [];
-        this.getring_timer_arr = [];
-        this.curtime_arr = [];
-        this.timer = null
+      if(this.timer){
+        clearInterval(this.timer);
       }
       const { data } = await getkjring({
           uid: localStorage.getItem('uid'),
           sid: localStorage.getItem('sid')
       }) 
       if(data.errorcode == 0){
-        let curtime = data.curtime;
-        this.dingdong = data.soundurl
-        let is_ring = false;
-        data.list.forEach(val => {
-          if(val.needring == '1'){
-            is_ring = true;
-          }
-        });
-        if(is_ring){
-          setTimeout(this.getkjring,3000);
+        // this.dingdong = data.soundurl
+        this.endtime = data.endtime;
+        this.curtime = data.curtime;
+        if(data.needring){
+          this.timer = setInterval(this.countTime,5000)
+          console.log('ring')
           this.$nextTick(()=>{
-            document.getElementById('myaudio').play();
+            let now_ring = new Date().getTime();
+            if(this.last_ring_time==null || now_ring-this.last_ring_time>100){
+              this.last_ring_time = now_ring;
+              if(document.getElementById('myaudio')){
+
+              }
+              document.getElementById('myaudio').play();
+            }            
           })
         }else{
           if(len){
-            this.getring_timer_arr[len] = setInterval(()=>{this.getkjring(len)},3000);
-            this.timer = 1;
+            setTimeout(()=>{this.getkjring(len)},5000);
           }else{
-            data.list.forEach(val=>{
-              this.timer = 1;
-              let len = val.lottype
-              this.curtime_arr['time_'+len] = data.curtime + 3
-              this.timer_arr['time_'+len] = setInterval( () => {
-                this.countTime(val.endtime,'time_'+len)
-              },3000)
-            })
+            this.timer = setInterval(this.countTime,5000)
           }
         }
       }
@@ -129,6 +107,7 @@ export default {
       }
     },
     test(){
+      this.last_ring_time = new Date().getTime();
       document.getElementById('myaudio').play()
       document.getElementById('myaudio').pause()
     },
