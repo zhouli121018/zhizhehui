@@ -33,7 +33,7 @@ export default {
         //时间差
         let leftTime = endtime - this.curtime_arr[len];
         if (leftTime > 0) {
-          this.curtime_arr[len] = this.curtime_arr[len] +3000
+          this.curtime_arr[len] = this.curtime_arr[len] +3
         }else {
           this.getkjring();
         }
@@ -68,7 +68,7 @@ export default {
         }else{
           data.list.forEach(val=>{
             let len = this.timer_arr.length
-            this.curtime_arr[len] = data.curtime + 3000
+            this.curtime_arr[len] = data.curtime + 3
             this.timer_arr[len] = setInterval( () => {
               this.countTime(val.endtime,len)
             },3000)
