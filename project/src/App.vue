@@ -67,8 +67,17 @@ export default {
           })
         }else{
           if(len){
+            if(this.settimeout_timer){
+              clearTimeout(this.settimeout_timer)
+              this.settimeout_timer = null;
+            }
             this.settimeout_timer = setTimeout(()=>{this.getkjring(len)},5000);
+            
           }else{
+            if(this.timer){
+              clearInterval(this.timer);
+              this.timer = null;
+            }
             this.timer = setInterval(this.countTime,1000)
           }
         }
@@ -127,14 +136,20 @@ export default {
         });
       }
     }
-    console.log(this.$route)
-    console.log(this.$route.path.indexOf('/home/index'))
-    console.log(!this.is_qqorwx && this.$route.path.indexOf('/home/index') == -1 && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex')
-    if(!this.is_qqorwx && this.$route.path.indexOf('/home/index') == -1 && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
-      if(this.$store.getters.issetkjtx == null){
-        this.gethome();
+    
+  },
+  mounted(){
+    this.$nextTick(()=>{
+      console.log(this.$route)
+      console.log(this.$route.path!='/')
+      console.log(this.$route.path.indexOf('/home/index'))
+      console.log(!this.is_qqorwx && this.$route.path.indexOf('/home/index') == -1 && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex')
+      if(!this.is_qqorwx && this.$route.path.indexOf('/home/index') == -1 && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
+        if(this.$store.getters.issetkjtx == null){
+          this.gethome();
+        }
       }
-    }
+    })
   },
   computed: {
     loading () {

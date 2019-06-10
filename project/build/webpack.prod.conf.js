@@ -10,6 +10,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+let nameArr = [
+  'a','b','c','d','e','f','g','h','i','j','k','l','n','m','o','p','q','r','s','t','u','v','w','x','y','z'
+]
 
 const env = require('../config/prod.env')
 
@@ -24,8 +27,8 @@ const webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? config.build.devtool : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/zzh[name].js?t=[chunkhash]'),
-    chunkFilename: utils.assetsPath('js/zzh[id].js?t=[chunkhash]')
+    filename: utils.assetsPath('js/[name].js?t=[chunkhash]'),
+    chunkFilename: utils.assetsPath('js/a[id]a.js?t=[chunkhash]')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
