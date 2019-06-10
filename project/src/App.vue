@@ -127,8 +127,10 @@ export default {
         });
       }
     }
-    console.log(!this.is_qqorwx && this.$route.name!='home' && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex')
-    if(!this.is_qqorwx && this.$route.name!='home' && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
+    console.log(this.$route)
+    console.log(this.$route.path.indexOf('/home/index'))
+    console.log(!this.is_qqorwx && this.$route.path.indexOf('/home/index') == -1 && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex')
+    if(!this.is_qqorwx && this.$route.path.indexOf('/home/index') == -1 && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
       if(this.$store.getters.issetkjtx == null){
         this.gethome();
       }
