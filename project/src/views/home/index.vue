@@ -187,6 +187,10 @@ export default {
           clearInterval(this.$root.$children[0].timer);
           this.$root.$children[0].timer = null;
         }
+        if(this.$root.$children[0].settimeout_timer){
+            clearTimeout(this.$root.$children[0].settimeout_timer)
+            this.$root.$children[0].settimeout_timer = null;
+        }
       }
       
     },
