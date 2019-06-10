@@ -107,7 +107,7 @@ export default {
   },
   methods: {
     onRefresh() {
-      this.gethome();
+      this.pull_refresh();
     },
     goDetail(data){
         this.$router.push({
@@ -189,7 +189,14 @@ export default {
         }
       }
       
-    }
+    },
+    pull_refresh(){
+        if(this.$root.$children[0].timer){
+            clearInterval(this.$root.$children[0].timer);
+            this.$root.$children[0].timer = null;
+        }
+        this.gethome();
+    },
   },
   created(){
     this.isFirstEnter=true;

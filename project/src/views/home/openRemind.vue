@@ -46,6 +46,10 @@ export default {
                 uid: localStorage.getItem('uid'),
                 typenstatus:str
             })
+            if(this.$root.$children[0].timer){
+                clearInterval(this.$root.$children[0].timer);
+                this.$root.$children[0].timer = null;
+            }
             this.$root.$children[0].gethome();
         },
         changeStatus(item){

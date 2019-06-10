@@ -28,6 +28,7 @@ export default {
       curtime_arr:[],
       last_ring_time:null,
       getring_timer_arr:[],
+      settimeout_timer :null
     }
   },
   methods:{
@@ -36,7 +37,7 @@ export default {
         let leftTime = this.endtime - this.curtime;
         console.log(leftTime > 0)
         if (leftTime > 0) {
-          this.curtime = this.curtime +5
+          this.curtime = this.curtime +1
         }else {
           this.getkjring(1);
         }
@@ -45,6 +46,10 @@ export default {
       if(this.timer){
         clearInterval(this.timer);
         this.timer = null;
+      }
+      if(this.settimeout_timer){
+        clearTimeout(this.settimeout_timer)
+        this.settimeout_timer = null;
       }
       const { data } = await getkjring({
           uid: localStorage.getItem('uid'),
@@ -55,16 +60,16 @@ export default {
         this.endtime = data.endtime;
         this.curtime = data.curtime;
         if(data.needring){
-          this.timer = setInterval(this.countTime,5000)
+          this.timer = setInterval(this.countTime,1000)
           console.log('ring')
           this.$nextTick(()=>{
             document.getElementById('myaudio').play();           
           })
         }else{
           if(len){
-            setTimeout(()=>{this.getkjring(len)},5000);
+            this.settimeout_timer = setTimeout(()=>{this.getkjring(len)},5000);
           }else{
-            this.timer = setInterval(this.countTime,5000)
+            this.timer = setInterval(this.countTime,1000)
           }
         }
       }
@@ -122,6 +127,7 @@ export default {
         });
       }
     }
+    console.log(!this.is_qqorwx && this.$route.name!='home' && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex')
     if(!this.is_qqorwx && this.$route.name!='home' && this.$route.name!='loginIndex' && this.$route.name!='verification' && this.$route.name!='registerIndex' ){
       if(this.$store.getters.issetkjtx == null){
         this.gethome();
