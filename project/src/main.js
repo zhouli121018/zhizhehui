@@ -4,6 +4,9 @@ import router from "./router"
 import store from "./store"
 import 'amfe-flexible' // 手淘rem适配方案
 // import Meta from 'vue-meta'
+import'babel-polyfill'
+import Es6Promise from 'es6-promise'
+Es6Promise.polyfill()
 import {
     Swipe,
     SwipeItem,
