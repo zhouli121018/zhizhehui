@@ -9,7 +9,7 @@ module.exports = {
         // Paths
         // baseUrl: '/h/',
         assetsSubDirectory: 'static',
-        assetsPublicPath: './',
+        assetsPublicPath: '/',
         proxyTable: {
             '/api': {
                 target: 'http://sscby.cn/zzh',
