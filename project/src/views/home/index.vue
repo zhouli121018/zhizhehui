@@ -33,29 +33,62 @@
           </van-col>
         </van-row>
 
-        <div style="background:#F5F5F5;line-height:0.4rem;padding:0.2rem 0.4rem 0.1rem">
-          <!-- <span class="left_border_ori">方案</span> -->
-          <van-cell value="更多"  is-link class="diy_font"  @click="jumpTo('/home/planList')">
-            <template slot="title">
-              <span class=""><span class="left_border_ori"></span> 方案</span>
-            </template>
-          </van-cell>
-          <div class="fangan_item_box" v-for="(fa,k) in fangans" :key="k" @click="goSinglePlan(fa)">
-            <span>{{fa.fangantitle}} </span> 
-            <p>{{fa.fangandes}}</p>
+        
+
+        <div style="background:#F5F5F5;height:0.2rem;"></div>
+        <div v-if="planInfo">
+          <div class="lottery_time flex">
+            <div style="font-size: 0.38rem;white-space:nowrap;">距{{planInfo.curissue}}期开奖：<span class="green"> {{kjdjs}}</span></div>
+            <div style="text-align: center;font-size: 0.38rem;"><span style="display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
+          </div>
+          <div class="lottery_time lottery_times">
+              <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
           </div>
         </div>
 
-        <div class="msg_box" style="padding:0.2rem 0.4rem 0.1rem">
-          <van-cell value="更多"  is-link class="diy_font" @click="jumpTo('/home/announcement/index')">
-            <template slot="title">
-              <span class=""><span class="left_border_ori"></span> 信息</span>
-            </template>
-          </van-cell>
-          <van-cell class="msg_item" v-for="(m,k) in notices" :key="k" :title="m.title" :value="m.createtime" @click="goDetail(m)"/>
+        <div style="background:#F5F5F5;height:0.2rem"></div>
+
+        <van-row :gutter="10" class="flex" style="padding-bottom:0.2rem;padding:.2rem;flex-wrap: wrap;" v-if="lottype.length>0 && lottype[active_lt].plantypes">
+            <van-col :span="6" v-for="(y,index) in lottype[active_lt].plantypes" :key="index" >
+                <van-button class="btn_fa" :class="{active_color:index==active_pt}" size="large" @click="change_pt(index,y.plantype)">{{y.planname}}</van-button>
+            </van-col>
+        </van-row>
+
+        <div style="background:#F5F5F5;padding:0.2rem .4rem;text-align:right;color:red;font-size:.35rem;" v-if="lottype.length>0 && lottype[active_lt].plantypes">
+          {{lottype[active_lt].plantypes[active_pt].plandesc}}
         </div>
 
-        <div style="background:#F5F5F5;height:0.6rem;"></div>
+        <van-row :gutter="10" class="flex" style="padding-bottom:0.2rem;padding:.2rem;flex-wrap: wrap;">
+            <van-col :span="6" v-for="(y,index) in fangansList" :key="index" >
+                <van-button class="btn_fa" :class="{active_color:index==active_fa}" size="large" @click="change_fa(index,y.fanganid)">{{y.fanganname}}</van-button>
+            </van-col>
+        </van-row>
+
+
+        <table>
+            <tr>
+                <th>期次</th>
+                <th>计划内容</th>
+                <th>几期中</th>
+                <th>盈亏</th>
+            </tr>
+            <tr v-for="(item,index) in planInfoList" :key="index">
+                <td>{{item.issue}}</td>
+                <td v-if="item.content == '会员权限'" @click="toOpeningMember"><van-button size="small" class="membership_privileges">{{item.content}}</van-button></td>
+                <td v-else>{{item.content}}</td>
+                <td>{{item.hitnum}}</td>
+                <td>{{item.kjnum}}</td>
+            </tr>
+        </table>
+
+        <div class="for_more">
+            <van-button size="small" class="no_border_btn" @click="getplans">获取更多</van-button>
+        </div>
+        
+
+
+
+
 
       </van-pull-refresh>
 
@@ -81,15 +114,43 @@
 
 <script>
 import { Dialog } from 'vant'
-import { gethome } from '@/api/home'
+import { gethome, getfanganrank } from '@/api/home'
+import { getplan } from '@/api'
+import { getdTime, getHMS } from '@/utils'
+import Vue from 'vue'
+import VueClipboard from 'vue-clipboard2'
+Vue.use(VueClipboard)
 export default {
   data () {
     return {
+      planInfo:null,
+      curtime:'12',
+      kjdjs:'',
+      lastid:0,
+      time_add:true,
+      _curtime: '',
+      planInfoList: [],
+      endtime: '',
+      current_time:'',
+      isCurtime: false,
+      cur_timer:null,
+      kj_number_timer:null,
+      timer: null,
+      h: '',
+      m: '',
+      s: '',
+      lottype:[],
+      active_fa:0,
+      active_lt:0,
+      active_pt:0,
+
+
       list:[
-        {src:require('../../assets/fajh.png'),title:'方案计划',link:'/home/aPlan',islink: false},
+        {src:require('../../assets/mfsy.png'),title:'免费使用',link:'/personal/freeUse',islink: false},
+        // {src:require('../../assets/fajh.png'),title:'方案计划',link:'/home/aPlan',islink: false},
         {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/openRemind',islink: false},
         {src:require('../../assets/gg.png'),title:'公告',link:'/home/announcement/index',islink: localStorage.getItem('uid')?false:true},
-        {src:require('../../assets/mfsy.png'),title:'免费使用',link:'/personal/freeUse',islink: false},
+        
         {src:require('../../assets/dlzq.png'),title:'代理赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
         
       ],
@@ -100,12 +161,128 @@ export default {
       banner_url:'#',
       is_ios:false,
       isFirstEnter:false,
-      fangans:[],
+      fangansList:null,
       notices:[],
       isLoading:false
     }
   },
   methods: {
+    //点击会员权限跳转开通会员页面
+    toOpeningMember() {
+        if(!localStorage.getItem('sid') || !localStorage.getItem('uid')) {
+            this.$router.push('/login/index')
+        }else {
+            this.$router.push('/home/openingMember')
+        }
+    },
+    change_fa(index,fanganid){
+        this.active_fa = index
+        this.lastid = 0
+        this.getplans()
+    },
+    change_pt(index,id){
+        this.active_fa = 0
+        this.active_pt = index
+        this.lastid = 0
+        this.getfanganrank().then(()=>{
+          this.getplans();
+        })
+    },
+    async getfanganrank(){
+      let obj = {
+        lottype: 801,
+        plantype: 0,
+      }
+      if(localStorage.getItem('sid')){obj.sid = localStorage.getItem('sid') }
+      if(localStorage.getItem('uid')){obj.uid = localStorage.getItem('uid') }
+      const { data } = await getfanganrank(obj)
+      this.fangansList = data.list
+    },
+    async getplans() {
+        if(this.timer)clearTimeout(this.timer)
+        if(this.cur_timer)clearInterval(this.cur_timer)
+        let obj = {
+          lottype: this.lottype[this.active_lt].lottype,
+          fanganid: this.fangansList[this.active_fa].fanganid,
+          plantype: this.lottype[this.active_lt].plantypes[this.active_pt].plantype,
+          lastid: this.lastid
+        }
+        if(localStorage.getItem('sid')){obj.sid = localStorage.getItem('sid') }
+        if(localStorage.getItem('uid')){obj.uid = localStorage.getItem('uid') }
+        const { data } = await getplan(obj)
+        this.planInfo = data
+        let planInfoList = data.list
+        if(this.lastid != 0 && this.time_add) {
+            planInfoList = planInfoList.map(item => {
+                this.planInfoList.push(item)
+            })
+        }else {
+            this.planInfoList = planInfoList
+        }  
+        this.time_add = true; 
+        this.lastid = this.planInfo.lastid  //获取更多传当前这个lastid 默认传0
+
+        
+        this.curtime = getHMS(this.planInfo.curtime)//开始时间
+        this._curtime = this.planInfo.curtime*1000//当前时间
+        this.endtime = this.planInfo.endtime*1000//结束时间
+        this.current_time = this.planInfo.curtime*1000//当前时间
+        this.isCurtime = false
+        this.countTime()
+        this.curTime();
+        this.cur_timer = setInterval(this.curTime,1000)
+
+        if(data.kjnum == '正在开奖...'){
+            if(this.kj_number_timer)clearInterval(this.kj_number_timer)
+            this.lastid = 0;
+            this.kj_number_timer = setInterval(this.getplans,3000);
+            return;
+        }else{
+            if(this.kj_number_timer){
+                clearInterval(this.kj_number_timer)
+            }
+        }
+    },
+    countTime () {
+        //时间差
+        let leftTime = this.endtime - this._curtime;
+        //定义变量 d,h,m,s保存倒计时的时间
+        if (leftTime >= 0) {
+            if(leftTime == 0){
+                this.time_add = false;
+                this.lastid = 0
+                this.getplans();
+                if(this.timer)clearTimeout(this.timer)
+                return;
+            }
+            this._curtime = this._curtime + 1000
+            // this.d = Math.floor(leftTime / 1000 / 60 / 60 / 24);
+            this.h = Math.floor(leftTime / 1000 / 60 / 60 % 24)>=10?Math.floor(leftTime / 1000 / 60 / 60 % 24):'0'+Math.floor(leftTime / 1000 / 60 / 60 % 24);
+            this.m = Math.floor(leftTime / 1000 / 60 % 60)>=10?Math.floor(leftTime / 1000 / 60 % 60):'0'+Math.floor(leftTime / 1000 / 60 % 60);
+            this.s = Math.floor(leftTime / 1000 % 60)>=10?Math.floor(leftTime / 1000 % 60):'0'+Math.floor(leftTime / 1000 % 60);
+            this.kjdjs = this.h+':'+this.m+':'+this.s
+            //递归每秒调用countTime方法，显示动态时间效果
+            this.timer = setTimeout(this.countTime, 1000);
+        }else {
+            if(this.timer)clearTimeout(this.timer)
+        }
+    },
+    curTime () {
+        this.current_time = this.current_time + 1000
+        var date=new Date(this.current_time);
+        var year=date.getFullYear();
+        var month=date.getMonth()+1;
+        var day=date.getDate();
+        var hour="00"+date.getHours();
+        hour=hour.substr(hour.length-2);
+        var minute="00"+date.getMinutes();
+        minute=minute.substr(minute.length-2);
+        var second="00"+date.getSeconds();
+        second=second.substr(second.length-2);
+        // let str = year+"-"+month+"-"+day+" "+" "+hour+":"+minute+":"+second
+        let str = month+"月"+day+"日"+" "+hour+":"+minute+":"+second
+        this.curtime = str
+    },
     onRefresh() {
       this.pull_refresh();
     },
@@ -168,7 +345,6 @@ export default {
       }
       const { data } = await gethome(obj)
       this.isLoading = false;
-      this.fangans = data.fangans//方案
       this.advs = data.advs 
       this.$store.dispatch('set_homedata',data)
       localStorage.setItem('aPlan_home',JSON.stringify(data))
@@ -176,6 +352,7 @@ export default {
       this.$store.dispatch('set_issetkjtx',data.issetkjtx)
       this.$store.dispatch('set_apkurl',data.apkurl)
       // this.lottypeList = data.lottype//标题选择
+      this.lottype = data.lottype;
       this.notices = data.notices
       // this.chooseName = this.lottypeList[0].lotname
       if(data.issetkjtx){
@@ -192,6 +369,8 @@ export default {
             this.$root.$children[0].settimeout_timer = null;
         }
       }
+
+
       
     },
     pull_refresh(){
@@ -203,6 +382,12 @@ export default {
     },
   },
   created(){
+    this.gethome().then(()=>{
+      this.getfanganrank().then(()=>{
+        this.getplans();
+      })
+    })
+    
     this.isFirstEnter=true;
 
     //判断 浏览器类型
@@ -250,7 +435,72 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="stylus">
+.for_more
+    margin .2rem auto
+    text-align center
+table 
+    font-size .28rem
+    width 100%
+    border 1px solid #cccccc
+    border-right none
+    tr,td,th 
+        border 1px solid #E5E5E5
+    tr 
+        border-right none
+    td,th   
+        color #A8A8A8
+    th,td 
+        padding .3rem 0
+        text-align center
+    td  
+        color #2B2B2B
+        font-size 14px
+    td:first-child
+        color #6B6B6B
+    td:first-child
+        background #E5E5E5
+    th
+        background #F5F5F5
+        font-size 16px
+.btn_fa
+  height:.8rem;
+  line-height:.6rem;
+  margin: .1rem 0
+  font-size .42rem
+.lottery_time
+    width 100%
+    display flex
+    justify-content space-around
+    align-items center
+    color #727272
+    border-bottom 1px solid #E5E5E5
+    box-sizing border-box
+    >div
+        display flex
+        width 49%
+        font-size .28rem
+        padding .5rem .1rem
+        box-sizing border-box
+        justify-content center
+        &:first-child
+            border-right 1px solid #E5E5E5
+.lottery_times
+    padding .5rem .2rem
+    font-size .28rem
+    border none!important
+    justify-content left 
+.lottery_number
+    display inline-block
+    padding-left .2rem
+    color #000
+    font-size .45rem
+    font-weight bold
+button.active_color{
+  background:#fc7953;
+  border-color:#fc7953;
+  color:#fff;
+}
 .msg_box .van-cell{
   padding:0.12rem 0;
 }

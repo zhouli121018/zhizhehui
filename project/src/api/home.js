@@ -140,3 +140,15 @@ export function getkjring (data) {
     }
   })
 }
+
+//2、 getfanganrank.php获取 方案列表，彩种、计划类型变，这个接口重新请求。 
+export function getfanganrank (data) {
+  return request({
+    url: '/getfanganrank.php ',
+    method: 'post',
+    data:{
+      ...data
+    }
+  })
+}
+
