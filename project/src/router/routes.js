@@ -36,33 +36,33 @@ export default [
                     cache: false
                 }
             },
-            {//方案列表
-                path: 'planList',
-                name: 'planList',
-                component: _import('home/planList'),
-                meta: {
-                    title: '方案列表',
-                    cache: true
-                }
-            },
-            {//方案计划
-                path: 'aPlan',
-                name: 'aPlan',
-                component: _import('home/aPlan'),
-                meta: {
-                    title: '方案计划',
-                    cache: true
-                }
-            },
-            {//某方案
-                path: 'singlePlan',
-                name: 'singlePlan',
-                component: _import('home/singlePlan'),
-                meta: {
-                    title: '方案',
-                    cache: true
-                }
-            },
+            // {//方案列表
+            //     path: 'planList',
+            //     name: 'planList',
+            //     component: _import('home/planList'),
+            //     meta: {
+            //         title: '方案列表',
+            //         cache: true
+            //     }
+            // },
+            // {//方案计划
+            //     path: 'aPlan',
+            //     name: 'aPlan',
+            //     component: _import('home/aPlan'),
+            //     meta: {
+            //         title: '方案计划',
+            //         cache: true
+            //     }
+            // },
+            // {//某方案
+            //     path: 'singlePlan',
+            //     name: 'singlePlan',
+            //     component: _import('home/singlePlan'),
+            //     meta: {
+            //         title: '方案',
+            //         cache: true
+            //     }
+            // },
             {//公告
                 path: 'announcement',
                 component: layout,

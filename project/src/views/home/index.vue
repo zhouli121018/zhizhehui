@@ -8,11 +8,19 @@
             :left-text="left_text"
             right-text="关于"
             @click-left="onClickLeft"
-            @click-right="onClickRight"
           >
             <span slot="title" @click="gethome">智者汇方案计划
               <!-- <van-icon name="replay" /> -->
             </span>
+            <div slot="right" v-if="lottype && lottype.length>0">
+              <span class="top_right_title" @click="show_ul">
+                {{lottype[active_lt].lotname}}
+                <van-icon name="arrow-down" style="vertical-align: text-top;"/>
+              </span>
+              <ul class="right_top_ul" v-show="show_lt">
+                <li :class="{active:k== active_lt}" v-for="(l,k) in lottype" @click="change_lt(k)" :key="k">{{l.lotname}}</li>
+              </ul>
+            </div>
           </van-nav-bar>
         </div>
         <van-swipe :autoplay="3000" indicator-color="#007BC2">
@@ -38,8 +46,8 @@
         <div style="background:#F5F5F5;height:0.2rem;"></div>
         <div v-if="planInfo">
           <div class="lottery_time flex">
-            <div style="font-size: 0.38rem;white-space:nowrap;">距{{planInfo.curissue}}期开奖：<span class="green"> {{kjdjs}}</span></div>
-            <div style="text-align: center;font-size: 0.38rem;"><span style="display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
+            <div style="width:47%;font-size: 0.38rem;white-space:nowrap;">距{{planInfo.curissue}}期开奖：<span class="green"> {{kjdjs}}</span></div>
+            <div style="width:51%;text-align: center;font-size: 0.38rem;"><span style="display:inline-block;white-space: nowrap;">当前时间：</span><span class="blue" style="white-space:nowrap;"> {{curtime}}</span></div>
           </div>
           <div class="lottery_time lottery_times">
               <span>{{planInfo.preissue}}期开奖号码:</span> <i class="lottery_number">{{planInfo.kjnum}}</i>
@@ -77,7 +85,7 @@
                 <td v-if="item.content == '会员权限'" @click="toOpeningMember"><van-button size="small" class="membership_privileges">{{item.content}}</van-button></td>
                 <td v-else>{{item.content}}</td>
                 <td>{{item.hitnum}}</td>
-                <td>{{item.kjnum}}</td>
+                <td>{{item.yingkui}}</td>
             </tr>
         </table>
 
@@ -85,7 +93,23 @@
             <van-button size="small" class="no_border_btn" @click="getplans">获取更多</van-button>
         </div>
         
+        <div class="replication_solution">
+            <van-button size="large" style="background:#FC7953;color:#fff;width:90%" @click="show_tt = true">复制方案</van-button>
+        </div>
 
+        <van-dialog 
+            v-model="show_tt"
+            title="复制方案提示"
+            show-cancel-button
+            class="dialog_content_input"
+            :before-close="beforeClose"
+            >
+            <van-field
+                v-model.trim.number="count_input"
+                clearable
+                label="最近条数："
+            />
+        </van-dialog>
 
 
 
@@ -123,6 +147,9 @@ Vue.use(VueClipboard)
 export default {
   data () {
     return {
+      show_tt:false,
+      count_input: 20,
+      show_lt:false,
       planInfo:null,
       curtime:'12',
       kjdjs:'',
@@ -167,6 +194,53 @@ export default {
     }
   },
   methods: {
+    beforeClose(action,done){
+        if(action == 'confirm'){
+            if(!this.count_input){
+                this.$toast('请输入要复制的最近条数！')
+                done(false)
+                return;
+            }
+            this.doCopy(this.planInfoList);
+            this.count_input = 20
+        }
+        done();
+    },
+    //复制
+    doCopy (text) {
+        let arr = []
+        // let txt = text.map(item => {
+        //     arr.push(`${item.issue}  ${item.content}  ${item.hitnum}  `)
+        // })
+        let len = this.count_input;
+        if(len > text.length){
+            len = text.length;
+        }
+        for(let i = 0;i<len;i++){
+            let item = text[i]
+            arr.push(`${item.issue}  ${item.content}  ${item.hitnum}  `)
+        }
+        arr = `--------------------------- \n ${arr.join('\n')} \n--------------------------- ` 
+        this.$copyText(arr).then( (e) => {
+            Dialog.alert({
+                title: '提示',
+                message: '复制成功，请粘贴分享到微信或QQ。'
+            }).then(() => {
+            // on close
+            });
+        },  (e) => {
+            Dialog.alert({
+                title: '提示',
+                message: '复制失败，请手动复制！'
+            }).then(() => {
+            // on close
+            });
+            console.log(e)
+        })
+    },
+    show_ul(){
+      this.show_lt = !this.show_lt;
+    },
     //点击会员权限跳转开通会员页面
     toOpeningMember() {
         if(!localStorage.getItem('sid') || !localStorage.getItem('uid')) {
@@ -175,12 +249,23 @@ export default {
             this.$router.push('/home/openingMember')
         }
     },
-    change_fa(index,fanganid){
+    change_lt(index){
+      this.show_lt = false;
+      this.lastid = 0
+      this.active_pt = 0
+      this.active_fa = 0
+      this.active_lt = index
+      this.getfanganrank().then(()=>{
+        this.getplans();
+      })
+
+    },
+    change_fa(index){
         this.active_fa = index
         this.lastid = 0
         this.getplans()
     },
-    change_pt(index,id){
+    change_pt(index){
         this.active_fa = 0
         this.active_pt = index
         this.lastid = 0
@@ -199,8 +284,14 @@ export default {
       this.fangansList = data.list
     },
     async getplans() {
-        if(this.timer)clearTimeout(this.timer)
-        if(this.cur_timer)clearInterval(this.cur_timer)
+        if(this.timer){
+          clearTimeout(this.timer)
+          this.timer = null
+        }
+        if(this.cur_timer){
+          clearInterval(this.cur_timer)
+          this.cur_timer = null
+        }
         let obj = {
           lottype: this.lottype[this.active_lt].lottype,
           fanganid: this.fangansList[this.active_fa].fanganid,
@@ -233,13 +324,17 @@ export default {
         this.cur_timer = setInterval(this.curTime,1000)
 
         if(data.kjnum == '正在开奖...'){
-            if(this.kj_number_timer)clearInterval(this.kj_number_timer)
+            if(this.kj_number_timer){
+              clearInterval(this.kj_number_timer)
+              this.kj_number_timer = null;
+            }
             this.lastid = 0;
             this.kj_number_timer = setInterval(this.getplans,3000);
             return;
         }else{
             if(this.kj_number_timer){
                 clearInterval(this.kj_number_timer)
+                this.kj_number_timer = null;
             }
         }
     },
@@ -252,7 +347,10 @@ export default {
                 this.time_add = false;
                 this.lastid = 0
                 this.getplans();
-                if(this.timer)clearTimeout(this.timer)
+                if(this.timer){
+                  clearTimeout(this.timer)
+                  this.timer = null
+                }
                 return;
             }
             this._curtime = this._curtime + 1000
@@ -264,7 +362,10 @@ export default {
             //递归每秒调用countTime方法，显示动态时间效果
             this.timer = setTimeout(this.countTime, 1000);
         }else {
-            if(this.timer)clearTimeout(this.timer)
+            if(this.timer){
+              clearTimeout(this.timer)
+              this.timer = null;
+            }
         }
     },
     curTime () {
@@ -382,14 +483,7 @@ export default {
     },
   },
   created(){
-    this.gethome().then(()=>{
-      this.getfanganrank().then(()=>{
-        this.getplans();
-      })
-    })
-    
     this.isFirstEnter=true;
-
     //判断 浏览器类型
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
       if(!localStorage.getItem('isadd')){
@@ -421,9 +515,13 @@ export default {
     })
   },
   activated(){  
-    if(this.isFirstEnter){
-      this.gethome();
-    }
+    this.lastid = 0;
+    this.show_lt = false;
+    this.gethome().then(()=>{
+      this.getfanganrank().then(()=>{
+        this.getplans();
+      })
+    })
     this.isFirstEnter=false;
     this.$store.dispatch('set_isback',false)
     
@@ -432,15 +530,65 @@ export default {
       this.left_path = '/personal/index'
     }
   },
+  beforeRouteLeave (to, from, next) {
+      // 导航离开该组件的对应路由时调用
+      // 可以访问组件实例 `this`
+      if(this.timer) {
+          clearTimeout(this.timer)
+          this.timer = null;
+      }
+      if(this.cur_timer){
+          clearInterval(this.cur_timer)
+          this.cur_timer = null;
+      }
+      if(this.kj_number_timer){
+          clearInterval(this.kj_number_timer)
+          this.kj_number_timer = null;
+      }
+      next();
+  }
 }
 </script>
 
 <style scoped lang="stylus">
+.replication_solution
+    background #EEEEEE
+    padding .5rem  0
+    text-align center
+.right_top_ul
+  background #fff
+  position absolute
+  top 1rem
+  right -0.2rem
+  box-shadow 0 0 .1rem #aaa
+  line-height 2
+  >li.active
+    color #ff5c0a
+  >li
+    padding .1rem .2rem
+    text-align left
+    white-space nowrap
+.top_right_title
+  color #ff5c0a
+  .van-icon
+    color #ff5c0a
+
+.green
+  color #2fc900
+.blue
+  color #0096ff
+/deep/ .membership_privileges
+    border:none;
+    background:#FFBD28!important
+    color:#FF0B60;
+    height:.6rem;
+    line-height:.4rem
+    font-size .32rem
 .for_more
     margin .2rem auto
     text-align center
 table 
-    font-size .28rem
+    font-size .32rem
     width 100%
     border 1px solid #cccccc
     border-right none
@@ -455,14 +603,14 @@ table
         text-align center
     td  
         color #2B2B2B
-        font-size 14px
+        font-size .4rem
     td:first-child
         color #6B6B6B
     td:first-child
         background #E5E5E5
     th
         background #F5F5F5
-        font-size 16px
+        font-size .42rem
 .btn_fa
   height:.8rem;
   line-height:.6rem;
@@ -545,6 +693,9 @@ button.active_color{
   background:none;
   padding:0;
   padding-bottom:0.1rem;
+}
+/deep/ .van-dialog__content .van-cell{
+  padding: 10px 15px;
 }
 .left_border_ori{
   /* border-left:0.1rem solid #FC7953; */
