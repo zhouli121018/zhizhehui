@@ -178,7 +178,7 @@ export default {
         {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/openRemind',islink: false},
         {src:require('../../assets/gg.png'),title:'公告',link:'/home/announcement/index',islink: localStorage.getItem('uid')?false:true},
         
-        {src:require('../../assets/dlzq.png'),title:'代理赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
+        {src:require('../../assets/dlzq.png'),title:'推荐赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
         
       ],
       notice:'',
@@ -275,8 +275,8 @@ export default {
     },
     async getfanganrank(){
       let obj = {
-        lottype: 801,
-        plantype: 0,
+        lottype: this.lottype[this.active_lt].lottype,
+        plantype: this.lottype[this.active_lt].plantypes[this.active_pt].plantype,
       }
       if(localStorage.getItem('sid')){obj.sid = localStorage.getItem('sid') }
       if(localStorage.getItem('uid')){obj.uid = localStorage.getItem('uid') }
@@ -291,6 +291,10 @@ export default {
         if(this.cur_timer){
           clearInterval(this.cur_timer)
           this.cur_timer = null
+        }
+        if(this.kj_number_timer){
+            clearTimeout(this.kj_number_timer)
+            this.kj_number_timer = null;
         }
         let obj = {
           lottype: this.lottype[this.active_lt].lottype,
@@ -325,15 +329,32 @@ export default {
 
         if(data.kjnum == '正在开奖...'){
             if(this.kj_number_timer){
-              clearInterval(this.kj_number_timer)
+              clearTimeout(this.kj_number_timer)
               this.kj_number_timer = null;
             }
             this.lastid = 0;
-            this.kj_number_timer = setInterval(this.getplans,3000);
+            this.kj_number_timer = setTimeout(()=>{
+              let fanganid = this.fangansList[this.active_fa].fanganid
+              this.getfanganrank().then(()=>{
+                if(this.fangansList.length>0){
+                  for(let i=0;i<this.fangansList.length;i++){
+                    if(this.fangansList[i].fanganid == fanganid){
+                      this.active_fa = i;
+                      break;
+                    }
+                  }
+                }
+                if(this.kj_number_timer){
+                  clearTimeout(this.kj_number_timer)
+                  this.kj_number_timer = null;
+                }
+                this.getplans();
+              })
+            },3000);
             return;
         }else{
             if(this.kj_number_timer){
-                clearInterval(this.kj_number_timer)
+                clearTimeout(this.kj_number_timer)
                 this.kj_number_timer = null;
             }
         }
@@ -346,7 +367,18 @@ export default {
             if(leftTime == 0){
                 this.time_add = false;
                 this.lastid = 0
-                this.getplans();
+                let fanganid = this.fangansList[this.active_fa].fanganid
+                this.getfanganrank().then(()=>{
+                  if(this.fangansList.length>0){
+                    for(let i=0;i<this.fangansList.length;i++){
+                      if(this.fangansList[i].fanganid == fanganid){
+                        this.active_fa = i;
+                        break;
+                      }
+                    }
+                  }
+                  this.getplans();
+                })
                 if(this.timer){
                   clearTimeout(this.timer)
                   this.timer = null
@@ -479,7 +511,7 @@ export default {
             clearInterval(this.$root.$children[0].timer);
             this.$root.$children[0].timer = null;
         }
-        this.gethome();
+        this.$router.go(0)
     },
   },
   created(){
@@ -510,7 +542,21 @@ export default {
         if (document.hidden) {
           
         } else {
-          this.gethome();
+          console.log(this.$route.name)
+          if(this.$route.name == 'home'){
+            let fanganid = this.fangansList[this.active_fa].fanganid
+            this.getfanganrank().then(()=>{
+              if(this.fangansList.length>0){
+                for(let i=0;i<this.fangansList.length;i++){
+                  if(this.fangansList[i].fanganid == fanganid){
+                    this.active_fa = i;
+                    break;
+                  }
+                }
+              }
+              this.getplans();
+            })
+          }
         }
     })
   },
@@ -542,7 +588,7 @@ export default {
           this.cur_timer = null;
       }
       if(this.kj_number_timer){
-          clearInterval(this.kj_number_timer)
+          clearTimeout(this.kj_number_timer)
           this.kj_number_timer = null;
       }
       next();

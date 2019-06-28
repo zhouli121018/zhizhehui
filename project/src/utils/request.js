@@ -18,7 +18,7 @@ service.interceptors.request.use(config => {
         // 判断接口是否需要携带token , noAuth,
         let { noLoading = true } = config.data
         if (noLoading) {
-            if(config.url.indexOf('/getkjring.php')<0 && config.url.indexOf('/getplan.php')<0){
+            if(config.url.indexOf('/getkjring.php')<0 && config.url.indexOf('/getplan.php')<0 && config.url.indexOf('/getfanganrank.php')<0 ){
                 store.commit('Change_Loading', true) // 显示全局loading图
             }
         }
