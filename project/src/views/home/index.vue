@@ -4,12 +4,12 @@
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <div class="fixed_title">
           <van-nav-bar
-            title="智者汇方案计划"
+            title="智者汇计划"
             :left-text="left_text"
             right-text="关于"
             @click-left="onClickLeft"
           >
-            <span slot="title" @click="gethome">智者汇方案计划
+            <span slot="title" @click="gethome">智者汇计划
               <!-- <van-icon name="replay" /> -->
             </span>
             <div slot="right" v-if="lottype && lottype.length>0">
@@ -544,6 +544,7 @@ export default {
         } else {
           console.log(this.$route.name)
           if(this.$route.name == 'home'){
+            this.lastid =  0
             let fanganid = this.fangansList[this.active_fa].fanganid
             this.getfanganrank().then(()=>{
               if(this.fangansList.length>0){

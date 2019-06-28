@@ -23,7 +23,7 @@ export default [
                 name:'home',
                 component: _import('home/index'),
                 meta:{
-                    title:'智者汇方案计划',
+                    title:'智者汇计划',
                     cache: true
                 }
             },
