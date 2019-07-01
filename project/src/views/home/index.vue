@@ -1,7 +1,7 @@
 <template>
   <div >
     <div class="container" id="home_page">
-      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+      <!-- <van-pull-refresh v-model="isLoading" @refresh="onRefresh"> -->
         <div class="fixed_title">
           <van-nav-bar
             title="智者汇方案计划"
@@ -114,7 +114,7 @@
 
 
 
-      </van-pull-refresh>
+      <!-- </van-pull-refresh> -->
 
     </div>
 
