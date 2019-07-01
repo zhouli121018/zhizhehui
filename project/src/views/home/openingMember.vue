@@ -88,7 +88,7 @@ export default {
                 money: this.money
             })
             const div = document.createElement('div');
-            div.innerHTML = data
+            div.innerHTML = data.content
             document.body.appendChild(div);
             document.forms.alipaysubmit.submit(); 
         }

@@ -25,7 +25,7 @@
                 <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
                 <div class="my_title_center my_centers">
                     <p>
-                        <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{info.income_cur}}元</b>
+                        <b style="font-size:0.5rem;font-weight:bold;">{{info.income_cur}}元</b>
                     </p>
                     <p class="goldcoins_fans">
                         佣金金额
@@ -37,7 +37,7 @@
                 <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
                 <div class="my_title_center my_centers">
                     <p>
-                        <b style="font-size:0.5rem;font-weight:bold;letter-spacing:0.08rem;">{{ticketnum}}张</b>
+                        <b style="font-size:0.5rem;font-weight:bold;">{{ticketnum}}张</b>
                     </p>
                     <p class="goldcoins_fans">
                         会员券数量
@@ -49,13 +49,19 @@
         <!-- <div class="xian"></div>         -->
         <div>
             <van-cell title="我的推荐页" is-link icon="tj" @click="jumpTo('/personal/recommend')"/>
-            <van-cell title="代理赚钱" is-link icon="dlzq"  @click="jumpTo('/home/earnMoney')"/>
+            <van-cell title="推荐赚钱" is-link icon="dlzq"  @click="jumpTo('/home/earnMoney')"/>
             <van-cell title="开奖提醒设置" is-link icon="kjtx"  @click="jumpTo('/home/openRemind')"/>
             <van-cell title="免费使用" is-link icon="free"  @click="jumpTo('/personal/freeUse')"/>
         </div>
         <div class="xian"></div>
         <div>
             <van-cell title="关于智者汇" is-link icon="about"  @click="jumpTo('/personal/about')"/>
+        </div>
+
+        <div class="xian"></div>
+
+        <div class="text_center">
+            <van-button @click="logout" type="danger" size="small" style="width:30%">退出账号</van-button>
         </div>
 
         <van-dialog 
@@ -105,6 +111,19 @@ export default {
         }
     },
     methods:{
+        logout(){
+            Dialog.confirm({
+                className:'small_padding',
+                message: '退出当前帐号？'
+            }).then(() => {
+                // on confirm
+                localStorage.clear();
+                this.$router.push('/home/index')
+            }).catch(() => {
+                // on cancel
+            });
+            
+        },
         beforeClose_tk(action,done){
             if(action == 'confirm'){
                 if(!this.alipay){
@@ -187,6 +206,9 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+.text_center
+    padding .2rem
+    text-align center
 .container
     background #F5F5F5
 .my_centers
