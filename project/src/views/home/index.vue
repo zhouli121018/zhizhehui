@@ -429,7 +429,6 @@ export default {
         })
     },
     addfn(){
-      localStorage['isadd'] = true;
       this.is_ios = false;
     },
     ignore(){
@@ -518,7 +517,13 @@ export default {
     this.isFirstEnter=true;
     //判断 浏览器类型
     if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
-      if(!localStorage.getItem('isadd')){
+      // if(!localStorage.getItem('isadd')){
+      //   this.is_ios = true;
+      // }
+      
+      if(window.navigator.standalone){
+        this.is_ios = false;
+      }else{
         this.is_ios = true;
       }
     }

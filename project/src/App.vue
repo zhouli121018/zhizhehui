@@ -121,17 +121,17 @@ export default {
     }
     //判断 浏览器类型
      if (!this.is_qqorwx && /(Android)/i.test(navigator.userAgent)) {
-      if(!localStorage.getItem('isdownload')){
+      if(!navigator.userAgent.match(/lotapkinstalled/i)){
         Dialog.confirm({
           title: '温馨提示',
-          confirmButtonText:'下载',
-          cancelButtonText:'已下载',
-          message: '请务必下载安卓App以便下次访问。点击下载进行安装，点击已下载不再提示。'
+          cancelButtonText:'关闭',
+          confirmButtonText:'安装/升级',
+          message: '请务必安装/升级APP以保持最新版本。'
         }).then(() => {
           // on confirm
           document.getElementById('download_btn').click();
         }).catch(() => {
-          localStorage['isdownload'] = true;
+          
           // on cancel
         });
       }
