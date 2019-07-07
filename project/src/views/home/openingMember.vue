@@ -90,6 +90,7 @@ export default {
             const div = document.createElement('div');
             div.innerHTML = data.content
             document.body.appendChild(div);
+            document.forms.alipaysubmit.setAttribute("target", "_blank");
             document.forms.alipaysubmit.submit(); 
         }
     },
