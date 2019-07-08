@@ -39,11 +39,12 @@
             </div>
         </div>
         <van-button size="large" style="background:#FC7953;color:#fff" @click="toPay">开通会员</van-button>
+        <a :href="zhifu_url" v-show="false" id="zhifu_jump" target="_blank">1</a>
     </div>
 </template>
 
 <script>
-import { getalipayorderinfor, getvipdata } from '@/api'
+import { getalipayorderinfor, getvipdata, getalipayorderinfor_ex } from '@/api'
 export default {
     data() {
         return {
@@ -53,7 +54,8 @@ export default {
             chooseImg: require('../../assets/choose_checked.png'),
             normalImg: require('../../assets/choose_normal.png'),
             money: 0,
-            shuomingList: []
+            shuomingList: [],
+            zhifu_url:''
         }
     },
     methods: {
@@ -82,16 +84,29 @@ export default {
         },
         //支付宝支付
         async getalipayorderinfor() {
-            const { data } = await getalipayorderinfor({
+            let ww = window.open();
+            const { data } = await getalipayorderinfor_ex({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
                 money: this.money
             })
+            if(data.errorcode == 0){
+                this.zhifu_url = data.content;
+                // document.getElementById('zhifu_jump').click();
+                ww.location = data.content
+            }
+            
+
+            return;
             const div = document.createElement('div');
             div.innerHTML = data.content
-            document.body.appendChild(div);
-            document.forms.alipaysubmit.setAttribute("target", "_blank");
-            document.forms.alipaysubmit.submit(); 
+            // document.body.appendChild(div);
+            // document.forms.alipaysubmit.setAttribute("target", "_blank");
+            // document.forms.alipaysubmit.submit(); 
+            
+            ww.document.body.appendChild(div);
+            ww.document.forms.alipaysubmit.submit(); 
+            console.log(ww)
         }
     },
     activated(){

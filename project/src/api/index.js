@@ -80,6 +80,17 @@ export function getalipayorderinfor(data) {
         }
     })
 }
+// getalipayorderinfor_ex.php
+export function getalipayorderinfor_ex(data) {
+    return request({
+        url: '/alipay_wap/getalipayorderinfor_ex.php',
+        method: 'post',
+        data: {
+            ...data
+        }
+    })
+}
+
 //会员兑换天数
 export function submitduihuan(data) {
     return request({

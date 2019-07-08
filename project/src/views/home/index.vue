@@ -123,7 +123,7 @@
         <div style="background:#EFEFEF;padding:0.2rem 0.15rem;margin:0 0.3rem 0.2rem;">
             <div style="text-align:center;font-size:0.5rem;color:#DB3030;font-weight:bold;padding:0.2rem 0;">温馨提示</div>
             <div style="line-height:1.6;padding-left:0.2rem;font-size:0.4rem;">
-              请务必添加本页面到主屏幕，以便下次访问，点击“已添加”不再提醒
+              请务必添加本页面到主屏幕，以便下次访问。
             </div>
             <div style="text-align:center;padding:0.4rem 0;">
               <van-button style="width:3rem;background-color:#D4D4D4;color:#1A1A1A;font-size:0.45rem;" @click="addfn">已添加</van-button>
