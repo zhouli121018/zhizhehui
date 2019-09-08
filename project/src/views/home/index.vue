@@ -805,6 +805,7 @@ button.active_color{
   }
   #home_page .van-swipe-item img{
     width:100%;
+    border-radius:.2rem;
   }
   .gonggao_box{
     background:#F5F5F5;

@@ -84,29 +84,15 @@ export default {
         },
         //支付宝支付
         async getalipayorderinfor() {
-            let ww = window.open();
-            const { data } = await getalipayorderinfor_ex({
+            const { data } = await getalipayorderinfor({
                 sid: localStorage.getItem('sid'),
                 uid: localStorage.getItem('uid'),
                 money: this.money
             })
-            if(data.errorcode == 0){
-                this.zhifu_url = data.content;
-                // document.getElementById('zhifu_jump').click();
-                ww.location = data.content
-            }
-            
-
-            return;
             const div = document.createElement('div');
             div.innerHTML = data.content
-            // document.body.appendChild(div);
-            // document.forms.alipaysubmit.setAttribute("target", "_blank");
-            // document.forms.alipaysubmit.submit(); 
-            
-            ww.document.body.appendChild(div);
-            ww.document.forms.alipaysubmit.submit(); 
-            console.log(ww)
+            document.body.appendChild(div);
+            document.forms.alipaysubmit.submit(); 
         }
     },
     activated(){
