@@ -37,13 +37,13 @@
                 <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
                 <div class="my_title_center my_centers">
                     <p>
-                        <b style="font-size:0.5rem;font-weight:bold;">{{ticketnum}}张</b>
+                        <b style="font-size:0.5rem;font-weight:bold;">{{info.invitenum}}人</b>
                     </p>
                     <p class="goldcoins_fans">
-                        会员券数量
+                        邀请人数
                     </p>
                 </div>
-                <van-button type="danger" size="small" @click="isShow = true" >兑换会员</van-button>
+                <van-button type="danger" size="small" @click="jumpTo('/personal/inviteDetail')" >邀请明细</van-button>
             </div>
         </div>
         <!-- <div class="xian"></div>         -->

@@ -122,3 +122,14 @@ export function getvipdata(data) {
         }
     })
 }
+
+//邀请明细 getinvitelist.php
+export function getinvitelist(data) {
+    return request({
+        url: '/getinvitelist.php',
+        method: 'post',
+        data: {
+            ...data
+        }
+    })
+}

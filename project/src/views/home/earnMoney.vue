@@ -4,11 +4,11 @@
         <div style="padding:0.4rem 0.2rem;" v-if="info">
             <div style="line-height:1.6;padding-bottom:0.4rem;font-size:0.36rem" v-html="info.content"></div>
             <div class="earn_money_item">
-                <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">分享短链接内容</span> 
+                <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">分享链接</span> 
             </div>
             <div style="line-height:1.6;padding-top:0.1rem;font-size:0.36rem" v-html="info.invitecontent"></div>
             <div class="text-center" style="padding:0.4rem 0;">
-                <van-button class="orange_btn" @click="doCopy(info.invitecontent)">分享内容复制</van-button>
+                <van-button class="orange_btn" @click="doCopy(info.invitecontent)">复制分享链接</van-button>
             </div>
             <div class="earn_money_item">
                 <span class="left_border_ori"></span> <span style="padding-left:0.1rem;font-size:0.4rem;color:#666666;">我的推荐页</span>

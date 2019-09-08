@@ -164,6 +164,15 @@ export default [
                     title:'关于智者汇',
                     cache: false
                 }
+            },
+            {
+                path:'inviteDetail',
+                name:'inviteDetail',
+                component:_import('personal/inviteDetail'),
+                meta:{
+                    title:'邀请明细',
+                    cache:false
+                }
             }
         ]
     },

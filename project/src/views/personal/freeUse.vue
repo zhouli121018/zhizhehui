@@ -4,19 +4,19 @@
         <div class="freeUse_box">
             <div class="free_use_title"><i></i><span>免费使用说明</span><i></i></div>
             <p v-html="info.freeshuoming" style="font-size:0.36rem;padding:0.1rem 0;"></p>
-            <div class="free_use_coupon" style="font-size:0.36rem;padding-top:0.1rem;"><i></i> 会员券</div>
+            <div class="free_use_coupon" style="font-size:0.36rem;padding-top:0.1rem;"><i></i> 邀请人数</div>
             <div class="free_use_coupon">
-                <p style="font-size:0.36rem;margin-right:1rem;">会员券: <span class="free_use_font">{{ticketnum?ticketnum:info.vipticket}}张</span></p>
-                <van-button class="warning_btn" @click="exchangeDay">兑换会员天数</van-button>
+                <p style="font-size:0.36rem;margin-right:1rem;">人数: <span class="free_use_font">{{info.invitenum}} 人</span></p>
+                <van-button class="warning_btn" @click="goInviteDetail">邀请明细</van-button>
             </div>
             <p v-html="info.vipticketdes" style="color:#7B7B7B;font-size:0.3rem;"></p>
         </div>
         <div class="xian"></div>
         <div class="freeUse_box">
-            <div class="free_use_title"><i></i><span>邀请内容</span><i></i></div>
+            <div class="free_use_title"><i></i><span>分享链接</span><i></i></div>
             <p>{{info.invitecontent}}</p>
             <div class="free_use_coupon" style="justify-content:center">
-                <van-button class="warning_btn" @click="doCopy(info.invitecontent)">复制分享内容</van-button>
+                <van-button class="warning_btn" @click="doCopy(info.invitecontent)">复制分享链接</van-button>
             </div>
         </div>
         <div class="xian"></div>
@@ -67,6 +67,9 @@ export default {
         }
     },
     methods: {
+        goInviteDetail(){
+            this.$router.push('/personal/inviteDetail');
+        },
         beforeClose(action,done){
             if(action == 'confirm'){
                 if(!this.vipticket){
