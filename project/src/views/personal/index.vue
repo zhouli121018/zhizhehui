@@ -21,29 +21,31 @@
             <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button>
         </div>
         <div class="my_title_box">
-            <div class="my_title" style="border:none;width:47.5%" v-if="info">
+            <div class="my_title flex" style="border:none;width:47.5%" v-if="info">
                 <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
-                <div class="my_title_center my_centers">
-                    <p>
+                <div class="my_title_center my_centers flex_grow_1" style="padding-left:.1rem;">
+                    <p style="padding-bottom:.1rem">
                         <b style="font-size:0.5rem;font-weight:bold;">{{info.income_cur}}元</b>
                     </p>
-                    <p class="goldcoins_fans">
+                    <!-- <p class="goldcoins_fans">
                         佣金金额
-                    </p>
+                    </p> -->
+                    <van-button type="danger" size="small" @click="show = true" >返佣提款</van-button>
                 </div>
-                <van-button type="danger" size="small" @click="show = true" >返佣提款</van-button>
+                
             </div>
-            <div class="my_title" style="border:none;width:51%" v-if="info">
+            <div class="my_title flex" style="border:none;width:51%" v-if="info">
                 <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
-                <div class="my_title_center my_centers">
-                    <p>
+                <div class="my_title_center my_centers flex_grow_1" style="padding-left:.1rem;">
+                    <p style="padding-bottom:.1rem">
                         <b style="font-size:0.5rem;font-weight:bold;">{{info.invitenum}}人</b>
                     </p>
-                    <p class="goldcoins_fans">
+                    <!-- <p class="goldcoins_fans">
                         邀请人数
-                    </p>
+                    </p> -->
+                    <van-button type="danger" size="small" @click="jumpTo('/personal/inviteDetail')" >邀请明细</van-button>
                 </div>
-                <van-button type="danger" size="small" @click="jumpTo('/personal/inviteDetail')" >邀请明细</van-button>
+                
             </div>
         </div>
         <!-- <div class="xian"></div>         -->

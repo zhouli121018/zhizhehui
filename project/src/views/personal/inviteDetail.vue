@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <title-bar title_name="推荐赚钱" />
+        <title-bar title_name="邀请明细" />
         <div>
             <table style="width:100%;" v-if="list.length>0">
                 <tr>
