@@ -17,7 +17,7 @@
                 {{lottype[active_lt].lotname}}
                 <van-icon name="arrow-down" style="vertical-align: text-top;"/>
               </span>
-              <ul class="right_top_ul" v-show="show_lt">
+              <ul class="right_top_ul" v-show="false && show_lt">
                 <li :class="{active:k== active_lt}" v-for="(l,k) in lottype" @click="change_lt(k)" :key="k">{{l.lotname}}</li>
               </ul>
             </div>
@@ -111,6 +111,17 @@
             />
         </van-dialog>
 
+        <van-popup v-model="show_lt" position="bottom" :overlay="true">
+            <van-picker :default-index="active_lt" v-if="show_lt"
+              show-toolbar
+              title=""
+              :columns="pick_list"
+              @confirm="onConfirm"
+              @cancel="onCancel"
+              @change="onChange"
+              />
+        </van-popup> 
+
 
 
 
@@ -194,6 +205,22 @@ export default {
     }
   },
   methods: {
+    onConfirm(val){
+      this.show_lt = false;
+      this.lastid = 0
+      this.active_pt = 0
+      this.active_fa = 0
+      this.active_lt = val.id
+      this.getfanganrank().then(()=>{
+        this.getplans();
+      })
+    },
+    onCancel(){
+      this.show_lt = false
+    },
+    onChange(){
+
+    },
     beforeClose(action,done){
         if(action == 'confirm'){
             if(!this.count_input){
@@ -598,6 +625,20 @@ export default {
           this.kj_number_timer = null;
       }
       next();
+  },
+  computed:{
+    pick_list(){
+      let arr= [];
+      for(let i=0;i<this.lottype.length;i++){
+        arr.push(
+          {
+            text:this.lottype[i].lotname,
+            lottype:this.lottype[i].lottype,
+            id:i
+          })
+      }
+      return arr
+    }
   }
 }
 </script>
