@@ -37,7 +37,7 @@ export function validateEmail(email) {
 
 /* 手机号码*/
 export function validatePhone(str) {
-  const reg = /^1[3|4|5|8|9|7][0-9]\d{8}$/
+  const reg = /^1\d{10}$/
   return reg.test(str)
 }
 
