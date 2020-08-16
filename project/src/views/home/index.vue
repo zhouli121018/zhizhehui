@@ -33,7 +33,7 @@
         <a :href="banner_url" v-show="false" id="banner_a">1</a>
         
         <van-row :gutter="30" class="list_box text_center">
-          <van-col span="6" style="width:23%;padding-left:0;padding-right:0" v-for="(l,index) in list" :key="index">
+          <van-col span="8" style="width:32%;padding-left:0;padding-right:0" v-for="(l,index) in list" :key="index">
             <div class="item_box"  @click="jumpTo(l.link,l.islink)">
               <img :src="l.src" alt="" class="max_width_100">
               <span>{{l.title}}</span>
@@ -189,7 +189,7 @@ export default {
         {src:require('../../assets/kjtx.png'),title:'开奖提醒',link:'/home/openRemind',islink: false},
         {src:require('../../assets/gg.png'),title:'公告',link:'/home/announcement/index',islink: localStorage.getItem('uid')?false:true},
         
-        {src:require('../../assets/dlzq.png'),title:'推荐赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
+        // {src:require('../../assets/dlzq.png'),title:'推荐赚钱',link:'/home/earnMoney',islink: localStorage.getItem('uid')?false:true}
         
       ],
       notice:'',
@@ -273,7 +273,7 @@ export default {
         if(!localStorage.getItem('sid') || !localStorage.getItem('uid')) {
             this.$router.push('/login/index')
         }else {
-            this.$router.push('/home/openingMember')
+            this.$router.push('/personal/freeUse')
         }
     },
     change_lt(index){

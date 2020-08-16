@@ -17,11 +17,11 @@
                     <span v-else class="red">(非会员)</span>
                 </div>
             </div>
-            <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通会员</van-button>
-            <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button>
+            <!-- <van-button v-if="info.isvip == 0" class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">开通会员</van-button>
+            <van-button v-else class="orange_btn" round @click="jumpTo('/home/openingMember')" style="white-space:nowrap;">会员续费</van-button> -->
         </div>
         <div class="my_title_box">
-            <div class="my_title flex" style="border:none;width:47.5%" v-if="info">
+            <div v-if="false" class="my_title flex" style="border:none;width:47.5%">
                 <img class="my_title_photo title_photo" src="~@/assets/icon.png" alt="">
                 <div class="my_title_center my_centers flex_grow_1" style="padding-left:.1rem;">
                     <p style="padding-bottom:.1rem">
@@ -34,7 +34,7 @@
                 </div>
                 
             </div>
-            <div class="my_title flex" style="border:none;width:51%" v-if="info">
+            <div class="my_title flex" style="border:none;" v-if="info">
                 <img class="my_title_photo title_photo" src="~@/assets/ticketnum.png" alt="">
                 <div class="my_title_center my_centers flex_grow_1" style="padding-left:.1rem;">
                     <p style="padding-bottom:.1rem">
@@ -50,10 +50,13 @@
         </div>
         <!-- <div class="xian"></div>         -->
         <div>
-            <van-cell title="我的推荐页" is-link icon="tj" @click="jumpTo('/personal/recommend')"/>
-            <van-cell title="推荐赚钱" is-link icon="dlzq"  @click="jumpTo('/home/earnMoney')"/>
-            <van-cell title="开奖提醒设置" is-link icon="kjtx"  @click="jumpTo('/home/openRemind')"/>
             <van-cell title="免费使用" is-link icon="free"  @click="jumpTo('/personal/freeUse')"/>
+            
+            <!-- <van-cell title="推荐赚钱" is-link icon="dlzq"  @click="jumpTo('/home/earnMoney')"/> -->
+            <van-cell title="开奖提醒设置" is-link icon="kjtx"  @click="jumpTo('/home/openRemind')"/>
+
+            <van-cell title="我的推荐页" is-link icon="tj" @click="jumpTo('/personal/recommend')"/>
+            
         </div>
         <div class="xian"></div>
         <div>
@@ -303,7 +306,7 @@ export default {
     justify-content space-between
     align-items center
     .my_title
-        width 49%
+        // width 49%
         padding .3rem .1rem
         .my_centers
             width 45%!important
