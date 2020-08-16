@@ -2,15 +2,15 @@
     <div class="container">
         <title-bar title_name="新用户注册" />
         <div class="van_box">
-            <van-field label="手机号" maxlength="11" type="number" clearable v-model="phone" placeholder="请输入手机号" />
+            <van-field label="帐号"  clearable v-model="phone" placeholder="请输入帐号" />
         </div>
         <div class="van_box">
             <van-field label="密码" type="number" maxlength="11" clearable v-model="password" placeholder="需6位数字密码" />
         </div>
-        <div class="van_box">
+        <!-- <div class="van_box">
             <van-field label="验证码" maxlength="11" type="number" class="van_field" clearable v-model="vcode" placeholder="请输入验证码" />
             <CutDown @click="codeVerify" :disabled="disabled" :mobile="phone" ref="codeEl"></CutDown>
-        </div>
+        </div> -->
         <div class="van_box">
             <van-field label="邀请码" maxlength="11" type="number" :disabled="has_pid" class="van_field_code" clearable v-model="pid" :placeholder="regpiddes" />
         </div>
@@ -68,25 +68,17 @@ export default {
         },
         async regist() {
             if(!this.phone){
-                Toast('请输入手机号！');
-                return;
-            }
-            if(this.phone && !(/^1\d{10}$/.test(this.phone))){
-                Toast('请输入正确的手机号！');
+                Toast('请输入帐号！');
                 return;
             }
             if(!this.password){
                 Toast('请输入密码！');
                 return;
             }
-            if(!this.vcode){
-                Toast('请输入验证码！');
-                return;
-            }
             let obj = {
                 phone: this.phone,
                 pass: this.password,
-                vcode: this.vcode,
+                // vcode: this.vcode,
                 device: this.device,
                 pid: this.pid
             };

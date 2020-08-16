@@ -2,13 +2,13 @@
     <div class="container">
         <title-bar title_name="密码登录" right_text="注册" right_url="/register/index"/>
         <div class="van_box">
-            <van-field label="手机号" maxlength="11" type="number" clearable v-model="mobile" placeholder="请输入手机号" />
+            <van-field label="帐号" clearable v-model="mobile" placeholder="请输入帐号" />
         </div>
         <div class="van_box">
             <van-field label="密码" maxlength="11" type="number" class="van_field" clearable v-model="code" placeholder="请输入密码" />
             <!-- <CutDown @click="codeVerify" :disabled="disabled" :moble="mobile"></CutDown> -->
         </div>
-        <router-link tag="div" to="/login/verification" class="van_box_right">验证码登录</router-link>
+        <!-- <router-link tag="div" to="/login/verification" class="van_box_right">验证码登录</router-link> -->
         <van-button  style="background:#FC7953;color:#fff"  @click="loginbypass">登录</van-button>
         <router-link tag="div" to="/register/index" class="van_box_right">注册</router-link>
     </div>
@@ -30,6 +30,10 @@ export default {
     },
     methods: {
         async loginbypass () {
+            if(!this.mobile || !this.code) {
+                this.$toast('请输入完整信息！')
+                return 
+            }
             const { data }    = await loginbypass({
                 phone: this.mobile,
                 pass: this.code
@@ -52,12 +56,6 @@ export default {
                 return {
                     ok: false,
                     msg: '请填写完整信息'
-                }
-            }
-            if(!validatePhone(this.mobile)) {
-                return {
-                    ok: false,
-                    msg: '请输入正确手机号'
                 }
             }
             return {

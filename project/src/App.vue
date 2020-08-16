@@ -22,7 +22,7 @@ export default {
       is_qqorwx:false,
       endtime: '',
       curtime: '',
-      dingdong:'http://sscby.cn/zzh/dingdong.mp3',
+      dingdong:'http://zzh.sscjh8.com/dingdong.mp3',
       timer:null,
       timer_arr:[],
       curtime_arr:[],

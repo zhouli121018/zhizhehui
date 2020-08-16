@@ -47,8 +47,8 @@ Vue.component('detail', Detail)
 
 import md5 from 'js-md5';
 Vue.prototype.$md5 = md5;
-Vue.prototype.$https = 'http://sscby.cn/zzh/'
-Vue.prototype.$https_img = 'http://sscby.cn/zzh/'
+Vue.prototype.$https = 'http://zzh.sscjh8.com/'
+Vue.prototype.$https_img = 'http://zzh.sscjh8.com/'
 
 //  注册全局过滤器
 Object.keys(filters).forEach(key => {
