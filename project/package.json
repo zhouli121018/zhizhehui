@@ -14,7 +14,7 @@
     "@saeris/vue-spinners": "^1.0.8",
     "amfe-flexible": "^2.2.1",
     "animate.css": "^3.7.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "css-loader": "^0.28.11",
     "es6-promise": "^4.2.8",
